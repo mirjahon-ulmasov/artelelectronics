@@ -1,0 +1,53 @@
+@font-face {
+    font-family: "StyreneALC";
+    font-weight: 700;
+    src: url("../fonts/StyreneALC/StyreneALC-Bold.otf") format("truetype");
+}
+@font-face {
+    font-family: "StyreneALC";
+    font-weight: 500;
+    src: url("../fonts/StyreneALC/StyreneALC-Medium.otf") format("truetype");
+}
+
+@font-face {
+    font-family: "StyreneALC";
+    font-weight: 400;
+    src: url("../fonts/StyreneALC/StyreneALC-Regular.otf") format("truetype");
+}
+
+@font-face {
+    font-family: "StyreneALC";
+    font-weight: 300;
+    src: url("../fonts/StyreneALC/StyreneALC-Light.otf") format("truetype");
+}
+
+@font-face {
+    font-family: "StyreneALC";
+    font-weight: 100;
+    src: url("../fonts/StyreneALC/StyreneALC-Thin.otf") format("truetype");
+}
+
+// Font Size
+.fs-14 {
+    font-size: 14px;
+}
+.fs-16 {
+    font-size: 16px;
+}
+.fs-18 {
+    font-size: 18px;
+}
+.fs-20 {
+    font-size: 20px;
+}
+
+// Font Weight
+.fw-400 {
+    font-weight: 400;
+}
+.fw-500 {
+    font-weight: 500;
+}
+.fw-600 {
+    font-weight: 600;
+}

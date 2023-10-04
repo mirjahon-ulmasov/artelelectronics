@@ -1,0 +1,64 @@
+import { useEffect, useMemo, useState } from 'react'
+import { Typography, Row, Col, DatePicker, Divider } from 'antd'
+import { Line, Bar } from '@ant-design/plots'
+import { CustomBreadcrumb } from 'components'
+import { getBarConfig, getLineConfig } from 'utils/config'
+import barData from "./data/bar.json"
+
+const { Title } = Typography
+const { RangePicker } = DatePicker
+
+export default function Users() {
+    const [lineData, setLineData] = useState([])
+
+    useEffect(() => {
+        asyncFetch()
+    }, [])
+
+    const asyncFetch = () => {
+        fetch(
+            'https://gw.alipayobjects.com/os/bmw-prod/1d565782-dde4-4bb6-8946-ea6a38ccf184.json'
+        )
+            .then(response => response.json())
+            .then(json => setLineData(json))
+            .catch(error => {
+                console.log('fetch data failed', error)
+            })
+    }
+
+    const lineConfig = useMemo(() => getLineConfig(lineData), [lineData])
+    const barConfig = useMemo(() => getBarConfig(barData), [])
+
+    return (
+        <>
+            <CustomBreadcrumb
+                items={[
+                    { title: 'Moliyaviy hisobotlar', link: '/admin/report' },
+                    { title: 'Gorentyga qo’shilganlar' },
+                ]}
+            />
+            <Title level={3}>Gorentyga qo’shilganlar</Title>
+            <Row gutter={[0, 32]}>
+                <Col span={24}>
+                    <div className='d-flex jc-sb ai-center mt-2'>
+                        <Title level={5}>
+                            Vaqt bo’yicha barcha Gorentyga qo’shilganlar
+                        </Title>
+                        <RangePicker />
+                    </div>
+                    <Line color='#FF561F' {...lineConfig} className='mt-2' />
+                </Col>
+                <Divider style={{ margin: '10px 0'}}/>
+                <Col span={24}>
+                    <div className='d-flex jc-sb ai-center mt-2'>
+                        <Title level={5}>
+                            Gorentyga qo’shilganlar reytingi
+                        </Title>
+                        <RangePicker />
+                    </div>
+                    <Bar color='#1BBE72' {...barConfig} className='mt-2' />
+                </Col>
+            </Row>
+        </>
+    )
+}

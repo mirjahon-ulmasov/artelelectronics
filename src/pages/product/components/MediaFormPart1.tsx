@@ -1,0 +1,211 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { Fragment, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { 
+    Button, Checkbox, Col, Divider, Form, 
+    Row, Space, UploadFile 
+} from 'antd'
+import toast from 'react-hot-toast'
+import _, { isArray } from 'lodash'
+import { v4 as uuid } from 'uuid'
+import { useFetchColorsQuery, useCreateProductVariantsMutation, useAdd360ViewMutation } from 'services'
+import { 
+    CustomSelect, BorderBox, StyledText, 
+    FormItem, StyledTextL2, CustomUpload, FileUpload 
+} from 'components'
+import { ID } from 'types/api'
+import { Product, Variant } from 'types/product';
+import { PlusOutlined } from '@ant-design/icons';
+
+
+interface MedieFormProps {
+    onClick: () => void
+    product: Product.DTO
+}
+
+export function MediaFormPart1({ onClick, product }: MedieFormProps) {
+    const navigate = useNavigate();
+    
+    
+    const [view360, setView360] = useState<UploadFile[]>([])
+    const [variants, setVariants] = useState<Variant.DTOLocal[]>([
+        { product: product.id, color: '', default_image: [], is_default: false, uuid: uuid() }
+    ])
+
+    const [add360View, { isLoading: createLoading1 }] = useAdd360ViewMutation()
+    const [createProductVariants, { isLoading: createLoading2 }] = useCreateProductVariantsMutation()
+    const { data: colors, isLoading: colorsLoading } = useFetchColorsQuery()
+
+    // ---------------- Product Variants ----------------
+
+    function addNewVariant() {
+        setVariants(prev => [
+            ...prev, 
+            { product: product.id, color: '', default_image: [], is_default: false, uuid: uuid() }
+        ])
+    }
+
+    function changeVariant(key: string, value: unknown, uuid: string) {
+        setVariants(prev => prev.map(variant => {
+            if(variant.uuid === uuid) {
+                return {
+                    ...variant,
+                    [key]: value
+                }
+            }
+            return variant
+        }))
+    }
+
+    // ---------------- Submit ----------------
+    const onFinish = () => {
+
+        const hasError = 
+        variants.some(variant => 
+            !variant.color || 
+            !variant.product ||
+            !isArray(variant.default_image) ||
+            !variant.default_image.length
+        ) 
+        || !isArray(view360) 
+        || !view360.length
+
+        if(hasError) {
+            toast.error("Пожалуйста заполните поля")
+            return;
+        }
+
+        const data360: Product.View360 = {
+            id: product.id,
+            dynamic_file: view360[0]?.response?.id as ID
+        }
+
+        const dataVariants: Variant.DTOUpload[] = variants.map(variant => ({
+            product: variant.product,
+            color: variant.color,
+            is_default: variant.is_default,
+            default_image: (variant.default_image as UploadFile[])[0]?.response?.id as ID
+        }))
+
+        const promises = [
+            add360View(data360).unwrap(),
+            createProductVariants(dataVariants).unwrap(),
+        ];
+
+        Promise.all(promises)
+            .then(() => {
+                toast.success("Варианты продукта и видео успешно добавлены.");
+                onClick();
+            })
+            .catch(() => {
+                toast.error("Что-то пошло не так");
+            });
+    };
+
+    const onFinishFailed = (errorInfo: any) => {
+        console.log('Failed: ', errorInfo)        
+    }
+
+    return (
+        <Form
+            autoComplete="off"
+            onFinish={onFinish}
+            onFinishFailed={onFinishFailed}
+        >
+            <Row gutter={[0, 20]}>
+                <Col span={24}>
+                    <BorderBox>
+                        <StyledTextL2>Видео продукта</StyledTextL2>
+                        <FileUpload
+                            label='Загрузить видео'
+                            fileList={view360} 
+                            onChange={(info) => setView360(info.fileList)}
+                        />
+                    </BorderBox>
+                </Col>
+
+                <Col span={24}>
+                    <BorderBox>
+                        <StyledTextL2>Изображение каталога</StyledTextL2>
+                        {variants.map((variant) => (
+                            <Fragment key={variant.uuid}>
+                                <FormItem
+                                    label="Выбрать цвет продукта"
+                                    style={{ maxWidth: 300 }}
+                                    wrapperCol={{ span: 24 }}
+                                    labelCol={{ span: 24 }}
+                                >
+                                    <CustomSelect
+                                        allowClear
+                                        size="large"
+                                        value={variant.color}
+                                        placeholder="Выберите"
+                                        loading={colorsLoading}
+                                        onChange={(value: ID) => changeVariant('color', value, variant.uuid)}
+                                        options={colors?.map(color => ({
+                                            value: color.id,
+                                            label: color.code,
+                                        }))}
+                                    ></CustomSelect>
+                                </FormItem>
+                                <CustomUpload
+                                    maxCount={1}
+                                    fileList={variant.default_image as UploadFile[]} 
+                                    onChange={(info) => changeVariant('default_image', info.fileList, variant.uuid)}
+                                />
+                                <StyledText>Загрузить основное фото каталога</StyledText>
+                                <Form.Item
+                                    valuePropName="checked"
+                                    labelCol={{ span: 24 }}
+                                    wrapperCol={{ span: 24 }}
+                                >
+                                    <Checkbox 
+                                        checked={variant.is_default} 
+                                        onChange={(e) => changeVariant('is_default', e.target.checked, variant.uuid)}
+                                    >
+                                        <StyledText>По умолчанию</StyledText>
+                                    </Checkbox>
+                            </Form.Item>
+                                <Divider style={{ margin: '5px 0'}} />
+                            </Fragment>
+                        ))}
+                    </BorderBox>
+                    <div className='d-flex mt-1'>
+                        <Button 
+                            type='text' 
+                            size='large'
+                            shape='round'
+                            onClick={addNewVariant}
+                            icon={<PlusOutlined />} 
+                            style={{ fontWeight: 400 }} 
+                        >
+                            Добавить еще
+                        </Button>
+                    </div>
+                </Col>
+                <Col span={24} className='mt-2'>
+                    <Space size="large">
+                        <Button
+                            size="large"
+                            type="primary"
+                            htmlType="submit"
+                            shape="round"
+                            loading={createLoading1 || createLoading2}
+                            style={{ background: '#25A55A' }}
+                        >
+                            Сохранить
+                        </Button>
+                        <Button
+                            shape="round"
+                            size="large"
+                            type="primary"
+                            onClick={() => navigate('/client/list')}
+                        >
+                            Сохранить и продолжить
+                        </Button>
+                    </Space>
+                </Col>
+            </Row>
+        </Form>
+    )
+}

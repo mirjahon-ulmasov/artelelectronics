@@ -1,0 +1,57 @@
+import { ID } from 'types/api'
+import { api } from './baseQuery'
+import { Color } from 'types/color'
+
+const colorWithTags = api.enhanceEndpoints({
+    addTagTypes: ['Color'],
+})
+
+export const colorAPI = colorWithTags.injectEndpoints({
+    endpoints: build => ({
+        fetchColors: build.query<Color.List, void>({
+            query: () => ({
+                url: '/color/admin_view/',
+                method: 'GET',
+            }),
+            providesTags: () => ['Color'],
+        }),
+        createColor: build.mutation<unknown, Color.DTOCreation>({
+            query: data => ({
+                url: '/color/',
+                method: 'POST',
+                body: data,
+            }),
+            invalidatesTags: ['Color'],
+        }),
+        updateColor: build.mutation<unknown, Color.DTOCreation>({
+            query: data => ({
+                url: `/color/${data.id}/`,
+                method: 'PUT',
+                body: data,
+            }),
+            invalidatesTags: ['Color'],
+        }),
+        deleteColor: build.mutation<unknown, ID>({
+            query: id => ({
+                url: `/color/${id}/`,
+                method: 'DELETE',
+            }),
+            invalidatesTags: ['Color'],
+        }),
+        activateColor: build.mutation<unknown, ID>({
+            query: id => ({
+                url: `/color/${id}/activate/`,
+                method: 'PATCH',
+            }),
+            invalidatesTags: ['Color'],
+        }),
+    }),
+})
+
+export const {
+    useFetchColorsQuery,
+    useCreateColorMutation,
+    useUpdateColorMutation,
+    useDeleteColorMutation,
+    useActivateColorMutation
+} = colorAPI
