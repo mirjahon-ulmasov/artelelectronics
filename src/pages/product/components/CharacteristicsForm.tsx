@@ -1,94 +1,182 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { ChangeEvent, useState } from 'react'
-import { useLocation, useNavigate } from 'react-router-dom'
+import { useCallback, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { 
-    Button, Checkbox, Col, Form, Input, 
+    Button, Col, Form,
+    Input,
     Row, Space, UploadFile 
 } from 'antd'
 import toast from 'react-hot-toast'
-import type { Dayjs } from 'dayjs';
 import _ from 'lodash'
-import { useFetchBranchesQuery, useCreateClientMutation } from 'services'
-import { CustomSelect, BorderBox, LanguageToggle, Language, StyledText, FormItem, StyledTextL2, CustomUpload, FileUpload } from 'components'
-import { Client } from 'types/api'
-import { formatDate } from 'utils/index';
+import { useCreateInstructionMutation, useUploadExcelCharacteristicsMutation } from 'services'
+import { 
+    BorderBox, LanguageToggle, Language, 
+    StyledText, FormItem, StyledTextL2, 
+    ImageUpload, FileUpload 
+} from 'components'
+import { ID } from 'types/api'
 import { LANGUAGE } from 'types/index';
-import { Product } from 'types/product';
+import { Characteristic, Instruction, Product } from 'types/product';
+import { useQuery } from 'hooks/useQuery';
 
 interface CharacteristicsFormProps {
     product: Product.DTO
 }
 
-export function CharacteristicsForm(props: CharacteristicsFormProps) {
+const languages: Language[] = [
+    { label: 'Ru', value: LANGUAGE.RU },
+    { label: 'Uz', value: LANGUAGE.UZ },
+    { label: 'En', value: LANGUAGE.EN }
+]
 
-    const { state } = useLocation()
+
+export function CharacteristicsForm({ product }: CharacteristicsFormProps) {
     const navigate = useNavigate();
-    const [imageFiles, setImageFiles] = useState<UploadFile[]>([])
+    const query = useQuery();
+    const category = query.get("category") ?? undefined
+    
+    const [language, setLanguage] = useState<LANGUAGE>(LANGUAGE.RU)
+    const [fileCharacteristics, setFileCharacteristics] = useState<UploadFile[]>([])
+    const [instruction, setInstruction] = useState<Instruction.DTOLocal>({ 
+        file: [], 
+        image: [], 
+        languages: [
+            { title: '', description: '', language: LANGUAGE.UZ },
+            { title: '', description: '', language: LANGUAGE.RU },
+            { title: '', description: '', language: LANGUAGE.EN },
+        ],
+    })
 
-    const [titleLanguage, setTitleLanguage] = useState<LANGUAGE>(LANGUAGE.RU)
+    const [uploadExcelCharacteristics, { isLoading: loading1 }] = useUploadExcelCharacteristicsMutation()
+    const [createInstruction, { isLoading: loading2 }] = useCreateInstructionMutation()
 
-    const [createClient, { isLoading: createLoading }] = useCreateClientMutation()
+    // ---------------- Product Instruction ----------------
+
+    const changeInstruction = useCallback((key: keyof Instruction.DTOLocal, value: unknown) => {
+        setInstruction(prev => ({
+            ...prev,
+            [key]: value
+        }))
+    }, [])
+
+    const changeInstructionInfo = useCallback((key: keyof Instruction.Language, value: string) => {
+        setInstruction(prev => ({
+            ...prev,
+            languages: prev.languages.map(el => {
+                if(el.language === language) {
+                    return {
+                        ...el,
+                        [key]: value
+                    }
+                }
+                return el
+            })
+        }))
+    }, [language])
+
+    const getValue = useCallback((key: keyof Instruction.Language) => {
+        const foundIdx = instruction.languages.findIndex(el => el.language === language)
+        if(foundIdx !== -1) {
+            return instruction.languages[foundIdx][key]
+        }
+        return ''
+    }, [instruction.languages, language])
 
     // ---------------- Submit ----------------
-    const onFinish = (values: Client.DTO) => {
+    const onFinish = () => {
 
-        const data: Client.DTO = {
-            ...values,
-            customer_images: imageFiles.map(file => file.response.id),
-            birth_date: (values?.birth_date as Dayjs)?.format(formatDate),
-            customer_records: clientRecords
-                .filter(record => record.birth_date && record.full_name)
-                .map(record => ({
-                    full_name: record.full_name,
-                    birth_date: (record.birth_date as Dayjs).format(formatDate)
-                })),
-            phone_number: _.replace(values.phone_number ?? '', /\D/g, '')
+        const dataCharacteristics: Characteristic.UploadExcel = {
+            product: product.id,
+            file: fileCharacteristics[0]?.response?.id as ID
         }
 
-        createClient(data)
-            .unwrap()
+        const dataInstruction: Instruction.DTOUpload = {
+            product: product.id,
+            title: instruction.languages[2].title,
+            description: instruction.languages[2].description,
+            file: instruction.file[0]?.response?.id as ID,
+            image: instruction.image[0]?.response?.id as ID
+        }
+
+        const promises = [
+            uploadExcelCharacteristics(dataCharacteristics).unwrap(),
+            createInstruction(dataInstruction).unwrap(),
+        ];
+
+        Promise.all(promises)
             .then(() => {
-                toast.success("Клиент успешно создан")
-                
-                if(state?.order) navigate('/order/add')
-                else navigate('/client/list')
+                toast.success("Варианты продукта и видео успешно добавлены.");
+                navigate({
+                    pathname: '/product/list',
+                    search: `?category=${category}`
+                })
             })
-            .catch(() => toast.error("Не удалось создать клиент"))
+            .catch(() => {
+                toast.error("Что-то пошло не так");
+            });
     };
 
-    const onFinishFailed = (errorInfo: any) => {
-        console.log('Failed: ', errorInfo)        
-    }
-
     return (
-        <Form
-            autoComplete="off"
-            onFinish={onFinish}
-            onFinishFailed={onFinishFailed}
-        >
+        <Form autoComplete="off" onFinish={onFinish}>
             <Row gutter={[0, 20]}>
                 <Col span={24}>
                     <BorderBox>
                         <StyledTextL2>Характеристики</StyledTextL2>
                         <FileUpload
                             label='Загрузить Excel'
-                            fileList={imageFiles} 
-                            onChange={(info) => setImageFiles(info.fileList)}
+                            fileList={fileCharacteristics} 
+                            onChange={(info) => setFileCharacteristics(info.fileList)}
                         />
                     </BorderBox>
                 </Col>
                 <Col span={24}>
                     <BorderBox>
                         <StyledTextL2>Руководство пользователя</StyledTextL2>
-                        <CustomUpload
-                            fileList={imageFiles} 
-                            onChange={(info) => setImageFiles(info.fileList)}
+                        <LanguageToggle
+                            languages={languages}
+                            currentLanguage={language}
+                            onChange={lang => {
+                                setLanguage(lang)
+                            }}
                         />
-                        <StyledText>Загрузить фото</StyledText>
+                        <FormItem 
+                            label="Заголовок" 
+                            labelCol={{ span: 24 }} 
+                            wrapperCol={{ span: 24 }}
+                        >
+                            <Input
+                                size="large" 
+                                placeholder="Заголовок"
+                                value={getValue('title')}
+                                onChange={e => changeInstructionInfo('title', e.target.value)}
+                            />
+                        </FormItem>
+                        <FormItem
+                            label="Описание"
+                            labelCol={{ span: 24 }}
+                            wrapperCol={{ span: 24 }}
+                        >
+                            <Input.TextArea
+                                showCount
+                                maxLength={100}
+                                style={{ height: 120 }}
+                                placeholder="Описание"
+                                value={getValue('description')}
+                                onChange={e => changeInstructionInfo('description', e.target.value)}
+                            />
+                        </FormItem>
+                        <div>
+                            <ImageUpload
+                                maxCount={1}
+                                fileList={instruction.image} 
+                                onChange={(info) => changeInstruction('image', info.fileList)}
+                            />
+                            <StyledText>Загрузить фото</StyledText>
+                        </div>
                         <FileUpload
                             label='Загрузить Pdf'
-                            fileList={imageFiles} 
-                            onChange={(info) => setImageFiles(info.fileList)}
+                            fileList={instruction.file} 
+                            onChange={(info) => changeInstruction('file', info.fileList)}
                         />
                     </BorderBox>
                 </Col>
@@ -99,7 +187,7 @@ export function CharacteristicsForm(props: CharacteristicsFormProps) {
                             type="primary"
                             htmlType="submit"
                             shape="round"
-                            loading={createLoading}
+                            loading={loading1 || loading2}
                             style={{ background: '#25A55A' }}
                         >
                             Сохранить

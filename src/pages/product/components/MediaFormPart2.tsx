@@ -3,13 +3,13 @@ import { Fragment, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { 
     Button, Col, Divider, Form, 
-    Input, Row, Space, UploadFile 
+    Input, Row, Space 
 } from 'antd'
 import toast from 'react-hot-toast'
 import _ from 'lodash'
 import { v4 as uuid } from 'uuid'
 import { useCreateProductVariantImagesMutation, useFetchProductVariantsQuery } from 'services'
-import { CustomSelect, BorderBox, FormItem, StyledTextL2, CustomUpload } from 'components'
+import { CustomSelect, BorderBox, FormItem, StyledTextL2, ImageUpload, StyledText } from 'components'
 import { Product, VariantImage } from 'types/product';
 import { PlusOutlined } from '@ant-design/icons';
 import { ID } from 'types/api'
@@ -89,8 +89,13 @@ export function MediaFormPart2({ onClick, product }: MedieFormProps) {
                 <Col span={24}>
                     <BorderBox>
                         <StyledTextL2>Изображения продукта</StyledTextL2>
-                        {variantImages.map((variantImage) => (
+                        {variantImages.map((variantImage, index) => (
                             <Fragment key={variantImage.uuid}>
+                                {!!index && (
+                                    <Divider style={{ margin: '15px 0'}}>
+                                        <StyledText>{index + 1}</StyledText>
+                                    </Divider>
+                                )}
                                 <FormItem
                                     label="Выбрать цвет продукта"
                                     style={{ maxWidth: 300 }}
@@ -112,14 +117,13 @@ export function MediaFormPart2({ onClick, product }: MedieFormProps) {
                                         }))}
                                     ></CustomSelect>
                                 </FormItem>
-                                <CustomUpload
+                                <ImageUpload
                                     maxCount={8}
-                                    fileList={variantImage.images as UploadFile[]} 
+                                    fileList={variantImage.images} 
                                     onChange={(info) => changeVariantImage(
                                         'images', info.fileList, variantImage.uuid
                                     )}
                                 />
-                                <Divider style={{ margin: '5px 0'}} />
                             </Fragment>
                         ))}
                     </BorderBox>

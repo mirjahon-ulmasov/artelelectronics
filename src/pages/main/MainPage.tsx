@@ -1,14 +1,13 @@
+import { Fragment, useEffect, useMemo, useState } from 'react'
 import { Typography, Row, Col, DatePicker, Space, Select, Divider } from 'antd'
 import { Line, Bar } from '@ant-design/plots'
-import { CustomBreadcrumb } from 'components'
-import { useEffect, useMemo, useState } from 'react'
 import { getBarConfig, getLineConfig } from 'utils/config'
-import barData from "./data/bar.json"
+import barData from "./bar.json"
 
 const { Title } = Typography
 const { RangePicker } = DatePicker
 
-export default function Orders() {
+export function MainPage() {
     const [lineData, setLineData] = useState([])
 
     useEffect(() => {
@@ -30,19 +29,13 @@ export default function Orders() {
     const barConfig = useMemo(() => getBarConfig(barData), [])
 
     return (
-        <>
-            <CustomBreadcrumb
-                items={[
-                    { title: 'Moliyaviy hisobotlar', link: '/admin/report' },
-                    { title: 'Buyurtmalar soni' },
-                ]}
-            />
-            <Title level={3}>Buyurtmalar soni</Title>
+        <Fragment>
+            <Title level={3}>Главная</Title>
             <Row gutter={[0, 32]}>
                 <Col span={24}>
                     <div className='d-flex jc-sb ai-center mt-2'>
                         <Title level={5}>
-                            Vaqt bo’yicha barcha buyurtmalar soni
+                            Финансовые отчеты
                         </Title>
                         <RangePicker />
                     </div>
@@ -51,7 +44,7 @@ export default function Orders() {
                 <Divider style={{ margin: '10px 0'}}/>
                 <Col span={24}>
                     <Title level={5}>
-                        Kategoriya bo’yicha barcha buyurtmalar soni
+                        Отчеты о продажах
                     </Title>
                     <div className='d-flex jc-sb ai-center mt-2'>
                         <Space size='middle'>
@@ -75,7 +68,7 @@ export default function Orders() {
                 <Divider style={{ margin: '10px 0'}}/>
                 <Col span={24}>
                     <Title level={5}>
-                        Buyurtmalar soni reytingi
+                        Отчет о рекламе в социальных сетях
                     </Title>
                     <div className='d-flex jc-sb ai-center mt-2'>
                         <Select
@@ -89,6 +82,6 @@ export default function Orders() {
                     <Bar color='#1BBE72' {...barConfig} className='mt-2' />
                 </Col>
             </Row>
-        </>
+        </Fragment>
     )
 }

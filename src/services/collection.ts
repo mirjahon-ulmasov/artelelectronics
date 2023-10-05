@@ -1,5 +1,5 @@
 import { ID } from 'types/api'
-import { api } from './baseQuery'
+import { api } from './auth/baseQuery'
 import { Collection } from 'types/collection'
 
 const collectionWithTags = api.enhanceEndpoints({

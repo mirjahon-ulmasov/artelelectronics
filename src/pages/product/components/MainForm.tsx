@@ -31,7 +31,7 @@ export function MainForm({ onClick, onSetID }: MainFormProps) {
     const category = query.get("category") ?? undefined
 
     const [form] = Form.useForm()
-    const [titleLanguage, setTitleLanguage] = useState<LANGUAGE>(LANGUAGE.RU)
+    const [language, setLanguage] = useState<LANGUAGE>(LANGUAGE.RU)
 
     const [createProduct, { isLoading: createLoading }] = useCreateProductMutation()
     const { data: brands, isLoading: brandsLoading } = useFetchBrandsQuery({})
@@ -62,10 +62,6 @@ export function MainForm({ onClick, onSetID }: MainFormProps) {
                 toast.success("Продукт успешно создан")
                 onClick()
                 onSetID(response.id)
-                // navigate({
-                //     pathname: '/product/list',
-                //     search: `?category=${category}`
-                // })
             })
             .catch(() => toast.error("Не удалось создать продукт"))
     };
@@ -86,14 +82,14 @@ export function MainForm({ onClick, onSetID }: MainFormProps) {
                     <BorderBox>
                         <LanguageToggle
                             languages={languages}
-                            currentLanguage={titleLanguage}
+                            currentLanguage={language}
                             onChange={lang => {
-                                setTitleLanguage(lang)
+                                setLanguage(lang)
                             }}
                         />
                         <FormItem
-                            key={`title_${titleLanguage}`}
-                            name={`title_${titleLanguage}`}
+                            key={`title_${language}`}
+                            name={`title_${language}`}
                             label="Название продукта"
                             labelCol={{ span: 24 }}
                             wrapperCol={{ span: 24 }}

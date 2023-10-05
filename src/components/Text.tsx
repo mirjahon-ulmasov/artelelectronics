@@ -36,27 +36,6 @@ export const StyledLink = styled(Link)<{ color?: string, underline?: number }>`
     }
 `
 
-export const IDTag = styled.div`
-    background: rgba(27, 16, 5, 0.06);
-    border-radius: 4px;
-    padding: 5px 8px;
-    min-width: max-content;
-    color: var(--black-88);
-`
-
-export const Label = styled.div`
-    border-radius: 4px;
-    padding: 8px;
-    font-size: 16px;
-    color: rgba(27, 16, 5, 0.65);
-    background: rgba(27, 16, 5, 0.02);
-`
-
-export const LargeLabel = styled(Label)`
-    border-radius: 8px;
-    padding: 24px;
-`
-
 export const BorderBox = styled.div<{ bg?: string; p?: string; gap?: string }>`
     display: flex;
     flex-direction: column;
@@ -86,20 +65,6 @@ export const BorderBox = styled.div<{ bg?: string; p?: string; gap?: string }>`
     }
 `
 
-export const BillingHistory = styled.div`
-    height: 100%;
-    padding: 24px;
-    border-radius: 8px;
-    background: rgba(27, 16, 5, 0.02);
-`
-
-export const OrderCard = styled(BillingHistory)`
-    height: max-content;
-    border-radius: 4px;
-    box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.03),
-        0px 1px 6px -1px rgba(0, 0, 0, 0.02), 0px 2px 4px rgba(0, 0, 0, 0.02);
-`
-
 export const SmallImg = styled(Image)<{ w?: number; h?: number }>`
     width: ${props => props.w ? `${props.w}px` : '90px' };
     height: ${props => props.h ? `${props.h}px` : '90px' };
@@ -115,6 +80,7 @@ export const Card = styled.div<{ w?: number, p?: string, gap?: number, ai?: stri
     flex-direction: column;
     gap: ${props => props.gap ? `${props.gap}px` : '8px'};
     align-items: ${props => props.ai ? props.ai : 'flex-start'};
+    text-align: center;
     border-radius: 16px;
     background: #FFF3EB;
     transition: 0.2s ease-in;

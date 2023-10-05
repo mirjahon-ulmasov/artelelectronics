@@ -1,5 +1,5 @@
 import { ID } from 'types/api'
-import { api } from '../baseQuery'
+import { api } from '../auth/baseQuery'
 import { Product } from 'types/product'
 
 const productWithTags = api.enhanceEndpoints({

@@ -1,5 +1,5 @@
 import { ID } from 'types/api'
-import { api } from '../baseQuery'
+import { api } from '../auth/baseQuery'
 import { Variant } from 'types/product'
 
 const productVariantsWithTags = api.enhanceEndpoints({
@@ -59,4 +59,5 @@ export const {
     useCreateProductVariantMutation,
     useCreateProductVariantsMutation,
     useUpdateProductVariantMutation,
+    useDeleteProductVariantMutation
 } = productVariantsAPI

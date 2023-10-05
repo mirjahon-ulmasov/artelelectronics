@@ -38,7 +38,7 @@ function Sidebar({ userRole }: SiderProps) {
         <StyledSider width={320}>
             <div className="container">
                 <div className="image">
-                    <img src="/Artel_logo_RU.svg" alt="logo" />
+                    <img src="/logo.svg" alt="logo" />
                 </div>
                 <ul className="nav-links">
                     {collections?.map((collection, index) => (

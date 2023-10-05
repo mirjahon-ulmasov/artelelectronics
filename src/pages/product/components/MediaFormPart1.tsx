@@ -11,7 +11,7 @@ import { v4 as uuid } from 'uuid'
 import { useFetchColorsQuery, useCreateProductVariantsMutation, useAdd360ViewMutation } from 'services'
 import { 
     CustomSelect, BorderBox, StyledText, 
-    FormItem, StyledTextL2, CustomUpload, FileUpload 
+    FormItem, StyledTextL2, ImageUpload, FileUpload 
 } from 'components'
 import { ID } from 'types/api'
 import { Product, Variant } from 'types/product';
@@ -29,7 +29,7 @@ export function MediaFormPart1({ onClick, product }: MedieFormProps) {
     
     const [view360, setView360] = useState<UploadFile[]>([])
     const [variants, setVariants] = useState<Variant.DTOLocal[]>([
-        { product: product.id, color: '', default_image: [], is_default: false, uuid: uuid() }
+        { color: '', default_image: [], is_default: false, uuid: uuid() }
     ])
 
     const [add360View, { isLoading: createLoading1 }] = useAdd360ViewMutation()
@@ -41,7 +41,7 @@ export function MediaFormPart1({ onClick, product }: MedieFormProps) {
     function addNewVariant() {
         setVariants(prev => [
             ...prev, 
-            { product: product.id, color: '', default_image: [], is_default: false, uuid: uuid() }
+            { color: '', default_image: [], is_default: false, uuid: uuid() }
         ])
     }
 
@@ -63,7 +63,6 @@ export function MediaFormPart1({ onClick, product }: MedieFormProps) {
         const hasError = 
         variants.some(variant => 
             !variant.color || 
-            !variant.product ||
             !isArray(variant.default_image) ||
             !variant.default_image.length
         ) 
@@ -81,10 +80,10 @@ export function MediaFormPart1({ onClick, product }: MedieFormProps) {
         }
 
         const dataVariants: Variant.DTOUpload[] = variants.map(variant => ({
-            product: variant.product,
+            product: product.id,
             color: variant.color,
             is_default: variant.is_default,
-            default_image: (variant.default_image as UploadFile[])[0]?.response?.id as ID
+            default_image: variant.default_image[0]?.response?.id as ID
         }))
 
         const promises = [
@@ -127,8 +126,13 @@ export function MediaFormPart1({ onClick, product }: MedieFormProps) {
                 <Col span={24}>
                     <BorderBox>
                         <StyledTextL2>Изображение каталога</StyledTextL2>
-                        {variants.map((variant) => (
+                        {variants.map((variant, index) => (
                             <Fragment key={variant.uuid}>
+                                {!!index && (
+                                    <Divider style={{ margin: '15px 0'}}>
+                                        <StyledText>{index + 1}</StyledText>
+                                    </Divider>
+                                )}
                                 <FormItem
                                     label="Выбрать цвет продукта"
                                     style={{ maxWidth: 300 }}
@@ -148,9 +152,9 @@ export function MediaFormPart1({ onClick, product }: MedieFormProps) {
                                         }))}
                                     ></CustomSelect>
                                 </FormItem>
-                                <CustomUpload
+                                <ImageUpload
                                     maxCount={1}
-                                    fileList={variant.default_image as UploadFile[]} 
+                                    fileList={variant.default_image} 
                                     onChange={(info) => changeVariant('default_image', info.fileList, variant.uuid)}
                                 />
                                 <StyledText>Загрузить основное фото каталога</StyledText>
@@ -165,8 +169,7 @@ export function MediaFormPart1({ onClick, product }: MedieFormProps) {
                                     >
                                         <StyledText>По умолчанию</StyledText>
                                     </Checkbox>
-                            </Form.Item>
-                                <Divider style={{ margin: '5px 0'}} />
+                                </Form.Item>
                             </Fragment>
                         ))}
                     </BorderBox>

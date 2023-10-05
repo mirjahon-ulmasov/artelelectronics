@@ -2,10 +2,10 @@ import { Row, Col, Form, Input, Typography, Button } from 'antd';
 import { useNavigate } from 'react-router-dom';
 import { styled } from 'styled-components';
 import { toast } from 'react-hot-toast';
-import { useLoginMutation } from 'services/auth';
+import { useLoginMutation } from 'services/auth/auth';
 import { useAppDispatch } from 'hooks/redux';
 import { setCredentials } from 'store/reducers/authSlice';
-import { Account } from 'types/api';
+import { Account } from 'types/auth';
 
 const { Title } = Typography;
 
@@ -35,7 +35,7 @@ export function Login() {
             <Row gutter={[24, 0]} align="middle">
                 <Col span={12}>
                     <Image>
-                        <img src="/logo-white.png" alt="logo" />
+                        <img src="/logo-white.svg" alt="logo" />
                     </Image>
                 </Col>
                 <Col span={12}>
@@ -60,7 +60,7 @@ export function Login() {
                                         rules={[
                                             {
                                                 required: true,
-                                                message: 'Пожалуйста, введите имя!',
+                                                message: 'Пожалуйста, введите номер телефона!',
                                             },
                                         ]}
                                     >
@@ -103,7 +103,7 @@ export function Login() {
                                 </Col>
                             </Row>
                         </StyledForm>
-                        <Copyright>Все права защищены. Gorenty © 2023</Copyright>
+                        <Copyright>Все права защищены. Artel Electronics © 2023</Copyright>
                     </LeftSide>
                 </Col>
             </Row>
@@ -125,12 +125,12 @@ const Image = styled.div`
     background-image: linear-gradient(
             180deg, 
             rgba(255, 86, 31, 0.00) 55.73%, 
-            var(--primary) 100%),
-        url('/login.png');
+            #1b1c1b 100%),
+        url('/login.jpg');
 
     img {
-        width: 120px;
-        height: auto;
+        width: auto;
+        height: 5rem;
         position: absolute;
         bottom: 1rem;
         left: 2rem;
@@ -140,6 +140,7 @@ const Image = styled.div`
 const LeftSide = styled.div`
     height: calc(100vh - 80px);
     display: flex;
+    background: #fff;
 `;
 
 const StyledForm = styled(Form)`
