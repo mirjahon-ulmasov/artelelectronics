@@ -10,31 +10,21 @@ import toast from 'react-hot-toast'
 import _ from 'lodash'
 import { useCreateInstructionMutation, useUploadExcelCharacteristicsMutation } from 'services'
 import { 
-    BorderBox, LanguageToggle, Language, 
-    StyledText, FormItem, StyledTextL2, 
-    ImageUpload, FileUpload 
+    BorderBox, LanguageToggle, StyledText, 
+    FormItem, StyledTextL2, ImageUpload, FileUpload 
 } from 'components'
+import { languages } from 'utils/index'
 import { ID } from 'types/api'
 import { LANGUAGE } from 'types/index';
 import { Characteristic, Instruction, Product } from 'types/product';
-import { useQuery } from 'hooks/useQuery';
 
-interface CharacteristicsFormProps {
+interface CharacteristicsProps {
     product: Product.DTO
+    category: string
 }
 
-const languages: Language[] = [
-    { label: 'Ru', value: LANGUAGE.RU },
-    { label: 'Uz', value: LANGUAGE.UZ },
-    { label: 'En', value: LANGUAGE.EN }
-]
-
-
-export function CharacteristicsForm({ product }: CharacteristicsFormProps) {
+export function Characteristics({ product, category }: CharacteristicsProps) {
     const navigate = useNavigate();
-    const query = useQuery();
-    const category = query.get("category") ?? undefined
-    
     const [language, setLanguage] = useState<LANGUAGE>(LANGUAGE.RU)
     const [fileCharacteristics, setFileCharacteristics] = useState<UploadFile[]>([])
     const [instruction, setInstruction] = useState<Instruction.DTOLocal>({ 
@@ -105,15 +95,13 @@ export function CharacteristicsForm({ product }: CharacteristicsFormProps) {
 
         Promise.all(promises)
             .then(() => {
-                toast.success("Варианты продукта и видео успешно добавлены.");
+                toast.success("Характеристики и инструкция успешно добавлены.");
                 navigate({
                     pathname: '/product/list',
                     search: `?category=${category}`
                 })
             })
-            .catch(() => {
-                toast.error("Что-то пошло не так");
-            });
+            .catch(() => toast.error("Что-то пошло не так"));
     };
 
     return (
@@ -158,7 +146,6 @@ export function CharacteristicsForm({ product }: CharacteristicsFormProps) {
                         >
                             <Input.TextArea
                                 showCount
-                                maxLength={100}
                                 style={{ height: 120 }}
                                 placeholder="Описание"
                                 value={getValue('description')}
@@ -191,14 +178,6 @@ export function CharacteristicsForm({ product }: CharacteristicsFormProps) {
                             style={{ background: '#25A55A' }}
                         >
                             Сохранить
-                        </Button>
-                        <Button
-                            shape="round"
-                            size="large"
-                            type="primary"
-                            onClick={() => navigate('/client/list')}
-                        >
-                            Сохранить и опубликовать
                         </Button>
                     </Space>
                 </Col>

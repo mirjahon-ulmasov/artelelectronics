@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { useState } from 'react'
+import { useCallback, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { 
     Button, Checkbox, Col, Form, Input, 
@@ -8,30 +8,33 @@ import {
 import toast from 'react-hot-toast'
 import _ from 'lodash'
 import { useCreateProductMutation, useFetchBrandsQuery, useFetchCategoriesQuery } from 'services';
-import { CustomSelect, BorderBox, LanguageToggle, Language, StyledText, FormItem } from 'components'
+import { CustomSelect, BorderBox, LanguageToggle, StyledText, FormItem } from 'components'
+import { languages } from 'utils/index'
 import { LANGUAGE } from 'types/index';
 import { Product } from 'types/product';
-import { useQuery } from 'hooks/useQuery'
 import { ID } from 'types/api'
 
-const languages: Language[] = [
-    { label: 'Ru', value: LANGUAGE.RU },
-    { label: 'Uz', value: LANGUAGE.UZ },
-    { label: 'En', value: LANGUAGE.EN }
-]
-
-interface MainFormProps {
+interface MainProps {
     onClick: () => void
     onSetID: (id: ID) => void
+    category: string
 }
 
-export function MainForm({ onClick, onSetID }: MainFormProps) {
+export function Main({ onClick, onSetID, category }: MainProps) {
     const navigate = useNavigate();
-    const query = useQuery();
-    const category = query.get("category") ?? undefined
-
-    const [form] = Form.useForm()
     const [language, setLanguage] = useState<LANGUAGE>(LANGUAGE.RU)
+    const [product, setProduct] = useState<Product.DTOLocal>({
+        brand: '',
+        subcategory: '',
+        is_hot: false,
+        is_new: false,
+        is_recommended: false,
+        languages: [
+            { title: '', language: LANGUAGE.UZ },
+            { title: '', language: LANGUAGE.RU },
+            { title: '', language: LANGUAGE.EN },
+        ]
+    })
 
     const [createProduct, { isLoading: createLoading }] = useCreateProductMutation()
     const { data: brands, isLoading: brandsLoading } = useFetchBrandsQuery({})
@@ -39,44 +42,74 @@ export function MainForm({ onClick, onSetID }: MainFormProps) {
         parent: category
     })
 
+    // ---------------- Product ----------------
+
+    const changeProduct = useCallback((key: keyof Product.DTOLocal, value: unknown) => {
+        setProduct(prev => ({
+            ...prev,
+            [key]: value
+        }))
+    }, [])
+
+
+    const changeTitle = useCallback((key: keyof Product.Language, value: string) => {
+        setProduct(prev => ({
+            ...prev,
+            languages: prev.languages.map(el => {
+                if(el.language === language) {
+                    return {
+                        ...el,
+                        [key]: value
+                    }
+                }
+                return el
+            })
+        }))
+    }, [language])
+
+
+    const getValue = useCallback((key: keyof Product.Language) => {
+        const foundIdx = product.languages.findIndex(el => el.language === language)
+        if(foundIdx !== -1) {
+            return product.languages[foundIdx][key]
+        }
+        return ''
+    }, [language, product.languages])
+
 
     // ---------------- Submit ----------------
-    const onFinish = (values: Product.DTOCreation) => {
+    const onFinish = useCallback((next: boolean) => {
 
         if(!category) {
             toast.error("Категория не выбрана")
             return;
         } 
 
-        const data = {
-            ...values,
+        const data: Product.DTOUpload = {
+            ...product,
             category,
-            title_uz: form.getFieldValue('title_uz'),
-            title_ru: form.getFieldValue('title_ru'),
-            title: form.getFieldValue('title_en')
+            title: product.languages[2].title
         }
         
         createProduct(data)
             .unwrap()
             .then((response) => {
                 toast.success("Продукт успешно создан")
-                onClick()
-                onSetID(response.id)
+                if(next) {
+                    onClick()
+                    onSetID(response.id)
+                    return;
+                }
+                navigate({
+                    pathname: '/product/list',
+                    search: `?category=${category}`
+                })
             })
             .catch(() => toast.error("Не удалось создать продукт"))
-    };
-
-    const onFinishFailed = (errorInfo: any) => {
-        console.log('Failed: ', errorInfo)        
-    }
+    }, [category, createProduct, navigate, onClick, onSetID, product]);
 
     return (
-        <Form
-            form={form}
-            autoComplete="off"
-            onFinish={onFinish}
-            onFinishFailed={onFinishFailed}
-        >
+        <Form autoComplete="off">
             <Row gutter={[0, 20]}>
                 <Col span={24}>
                     <BorderBox>
@@ -88,8 +121,6 @@ export function MainForm({ onClick, onSetID }: MainFormProps) {
                             }}
                         />
                         <FormItem
-                            key={`title_${language}`}
-                            name={`title_${language}`}
                             label="Название продукта"
                             labelCol={{ span: 24 }}
                             wrapperCol={{ span: 24 }}
@@ -100,14 +131,18 @@ export function MainForm({ onClick, onSetID }: MainFormProps) {
                                 },
                             ]}
                         >
-                            <Input size="large" placeholder="Название продукта" />
+                            <Input 
+                                size="large" 
+                                placeholder="Название продукта"
+                                value={getValue('title')}
+                                onChange={e => changeTitle('title', e.target.value)}
+                            />
                         </FormItem>
                     </BorderBox>
                 </Col>
                 <Col span={24}>
                     <BorderBox>
                         <FormItem
-                            name="brand"
                             label="Выбрать бренд"
                             labelCol={{ span: 24 }}
                             wrapperCol={{ span: 24 }}
@@ -127,19 +162,14 @@ export function MainForm({ onClick, onSetID }: MainFormProps) {
                                     value: brand.id,
                                     label: brand.title,
                                 }))}
-                            ></CustomSelect>
+                                value={product.brand}
+                                onChange={(value: ID) => changeProduct('brand', value)}
+                            />
                         </FormItem>
                         <FormItem
-                            name="subcategory"
                             label="Субкатегория"
                             labelCol={{ span: 24 }}
                             wrapperCol={{ span: 24 }}
-                            // rules={[
-                            //     {
-                            //         required: true,
-                            //         message: 'Пожалуйста выберите подкатегорию',
-                            //     },
-                            // ]}
                         >
                             <CustomSelect
                                 allowClear
@@ -150,7 +180,9 @@ export function MainForm({ onClick, onSetID }: MainFormProps) {
                                     value: subcategory.id,
                                     label: subcategory.title,
                                 }))}
-                            ></CustomSelect>
+                                value={product.subcategory}
+                                onChange={(value: ID) => changeProduct('subcategory', value)}
+                            />
                         </FormItem>
                     </BorderBox>
                 </Col>
@@ -159,32 +191,38 @@ export function MainForm({ onClick, onSetID }: MainFormProps) {
                         <StyledText>Выбрать товар</StyledText>
                         <Space size="large">
                             <Form.Item
-                                name="is_hot"
                                 valuePropName="checked"
                                 labelCol={{ span: 24 }}
                                 wrapperCol={{ span: 24 }}
                             >
-                                <Checkbox>
+                                <Checkbox
+                                    checked={product.is_hot}
+                                    onChange={e => changeProduct('is_hot', e.target.checked)}
+                                >
                                     <StyledText>Хитовый товар</StyledText>
                                 </Checkbox>
                             </Form.Item>
                             <Form.Item
-                                name="is_new"
                                 valuePropName="checked"
                                 labelCol={{ span: 24 }}
                                 wrapperCol={{ span: 24 }}
                             >
-                                <Checkbox>
+                                 <Checkbox
+                                    checked={product.is_new}
+                                    onChange={e => changeProduct('is_new', e.target.checked)}
+                                >
                                     <StyledText>Новый товар</StyledText>
                                 </Checkbox>
                             </Form.Item>
                             <Form.Item
-                                name="is_recommended"
                                 valuePropName="checked"
                                 labelCol={{ span: 24 }}
                                 wrapperCol={{ span: 24 }}
                             >
-                                <Checkbox>
+                                 <Checkbox
+                                    checked={product.is_recommended}
+                                    onChange={e => changeProduct('is_recommended', e.target.checked)}
+                                >
                                     <StyledText>
                                         Рекомендованный товар
                                     </StyledText>
@@ -193,7 +231,6 @@ export function MainForm({ onClick, onSetID }: MainFormProps) {
                         </Space>
                     </BorderBox>
                 </Col>
-
                 <Col span={24} className='mt-2'>
                     <Space size="large">
                         <Button
@@ -201,8 +238,9 @@ export function MainForm({ onClick, onSetID }: MainFormProps) {
                             type="primary"
                             htmlType="submit"
                             shape="round"
-                            loading={createLoading}
                             style={{ background: '#25A55A' }}
+                            loading={createLoading}
+                            onClick={() => onFinish(false)}
                         >
                             Сохранить
                         </Button>
@@ -210,7 +248,8 @@ export function MainForm({ onClick, onSetID }: MainFormProps) {
                             shape="round"
                             size="large"
                             type="primary"
-                            onClick={() => navigate('/client/list')}
+                            loading={createLoading}
+                            onClick={() => onFinish(true)}
                         >
                             Сохранить и продолжить
                         </Button>

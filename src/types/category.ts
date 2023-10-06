@@ -27,4 +27,10 @@ export declare namespace Category {
         id: ID
         title: string
     }
+
+    interface Utility {
+        id: ID
+        title: string
+        items: { id: ID, title: string }[]
+    }
 }

@@ -6,32 +6,40 @@ import { LANGUAGE } from '.'
 export declare namespace Product {
     type List = DTO[]
 
-    interface DTOCreation {
+    interface DTOLocal {
         id?: ID
+        brand: ID
+        subcategory: ID
+        is_hot: boolean
+        is_new: boolean
+        is_recommended: boolean
+        languages: Language[]
+    }
+
+    interface DTOUpload {
+        id?: ID
+        brand: ID
         title: string
         category: ID
         subcategory: ID
-        brand: ID
-        default_image: ID
-        is_recommended: boolean
         is_hot: boolean
         is_new: boolean
+        is_recommended: boolean
     }
 
     interface DTO {
         id: ID
         title: string
         brand?: Brand
-        category?: Category
+        category: Category
         subcategory?: Category
-        default_image?: File
         dynamic_view?: File
         variants?: Variant.List
-        metadata?: Metadata[]
+        metadata: Metadata[]
         advantages?: Advantage.List
-        is_recommended?: boolean
         is_new?: boolean
         is_hot?: boolean
+        is_recommended?: boolean
         is_active: boolean
         is_published: boolean
     }
@@ -56,6 +64,11 @@ export declare namespace Product {
         key: string
         value: string
         is_active: boolean
+    }
+
+    interface Language {
+        title: string
+        language: LANGUAGE
     }
 }
 

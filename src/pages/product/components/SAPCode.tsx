@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Fragment, useState } from 'react'
+import { Fragment, useCallback, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { 
     Button, Col, Divider, Form, 
@@ -8,20 +8,23 @@ import {
 import toast from 'react-hot-toast'
 import _ from 'lodash'
 import { v4 as uuid } from 'uuid'
-import { useCreateProductVariantImagesMutation, useFetchProductVariantsQuery } from 'services'
+import { 
+    useCreateProductVariantImagesMutation, useFetchCategoryUtilityQuery, 
+    useFetchProductVariantsQuery 
+} from 'services'
 import { CustomSelect, BorderBox, FormItem, StyledTextL2, ImageUpload, StyledText } from 'components'
 import { Product, VariantImage } from 'types/product';
 import { PlusOutlined } from '@ant-design/icons';
 import { ID } from 'types/api'
 
-interface MedieFormProps {
+interface SAPCodeProps {
+    category: string
     onClick: () => void
     product: Product.DTO
 }
 
-export function MediaFormPart2({ onClick, product }: MedieFormProps) {
+export function SAPCode({ onClick, product, category }: SAPCodeProps) {
     const navigate = useNavigate();
-
     const [variantImages, setVariantImages] = useState<VariantImage.DTOLocal[]>([
         { variant: '', images: [], uuid: uuid() }
     ])
@@ -29,6 +32,9 @@ export function MediaFormPart2({ onClick, product }: MedieFormProps) {
     const [createProductVariantImages, { isLoading: createLoading }] = useCreateProductVariantImagesMutation()
     const { data: variants, isLoading: variantsLoading } = useFetchProductVariantsQuery({
         product: product.id
+    })
+    const { data: utilities } = useFetchCategoryUtilityQuery({
+        category
     })
 
     // ---------------- Product Variant Images ----------------
@@ -53,7 +59,7 @@ export function MediaFormPart2({ onClick, product }: MedieFormProps) {
     }
 
     // ---------------- Submit ----------------
-    const onFinish = () => {
+    const onFinish = useCallback((next: boolean) => {
         
         const dataVariantImages: VariantImage.DTOUpload[] = variantImages
             .flatMap(el => el.images.map(image => ({
@@ -68,23 +74,21 @@ export function MediaFormPart2({ onClick, product }: MedieFormProps) {
         Promise.all(promises)
             .then(() => {
                 toast.success("Варианты продукта и видео успешно добавлены.");
-                onClick();
+                if(next) {
+                    onClick()
+                    return;
+                }
+                navigate({
+                    pathname: '/product/list',
+                    search: `?category=${category}`
+                })
             })
-            .catch(() => {
-                toast.error("Что-то пошло не так");
-            });
-    };
+            .catch(() => toast.error("Что-то пошло не так"));
+    }, [category, createProductVariantImages, navigate, onClick, variantImages]);
 
-    const onFinishFailed = (errorInfo: any) => {
-        console.log('Failed: ', errorInfo)        
-    }
 
     return (
-        <Form
-            autoComplete="off"
-            onFinish={onFinish}
-            onFinishFailed={onFinishFailed}
-        >
+        <Form autoComplete="off">
             <Row gutter={[0, 20]}>
                 <Col span={24}>
                     <BorderBox>
@@ -105,8 +109,8 @@ export function MediaFormPart2({ onClick, product }: MedieFormProps) {
                                     <CustomSelect
                                         allowClear
                                         size="large"
-                                        value={variantImage.variant}
                                         placeholder="Выберите"
+                                        value={variantImage.variant}
                                         onChange={(value: ID) => changeVariantImage(
                                             'variant', value, variantImage.uuid
                                         )}
@@ -115,7 +119,7 @@ export function MediaFormPart2({ onClick, product }: MedieFormProps) {
                                             value: variant.id,
                                             label: variant.color.code,
                                         }))}
-                                    ></CustomSelect>
+                                    />
                                 </FormItem>
                                 <ImageUpload
                                     maxCount={8}
@@ -146,43 +150,10 @@ export function MediaFormPart2({ onClick, product }: MedieFormProps) {
                         <StyledTextL2>SUP code</StyledTextL2>
                         <Space size='large'>
                             <FormItem
-                                name="category"
-                                label="Объем/Размер"
-                                style={{ maxWidth: 300 }}
-                                labelCol={{ span: 24 }}
-                                wrapperCol={{ span: 24 }}
-                                rules={[
-                                    {
-                                        required: true,
-                                        message:
-                                            'Iltimos mijozning ismini kiriting',
-                                    },
-                                ]}
-                            >
-                                <CustomSelect
-                                    allowClear
-                                    size="large"
-                                    placeholder="Выберите"
-                                    loading={variantsLoading}
-                                    options={variants?.map(variant => ({
-                                        value: variant.id,
-                                        label: variant.color.code,
-                                    }))}
-                                ></CustomSelect>
-                            </FormItem>
-                            <FormItem
-                                name="category"
                                 label="Цвет продукта"
                                 style={{ maxWidth: 300 }}
                                 labelCol={{ span: 24 }}
                                 wrapperCol={{ span: 24 }}
-                                rules={[
-                                    {
-                                        required: true,
-                                        message:
-                                            'Iltimos mijozning ismini kiriting',
-                                    },
-                                ]}
                             >
                                 <CustomSelect
                                     allowClear
@@ -193,21 +164,33 @@ export function MediaFormPart2({ onClick, product }: MedieFormProps) {
                                         value: variant.id,
                                         label: variant.color.code,
                                     }))}
-                                ></CustomSelect>
+                                />
                             </FormItem>
+                            {utilities?.map(utility => (
+                                <FormItem
+                                    key={utility.id}
+                                    label={utility.title}
+                                    style={{ maxWidth: 300 }}
+                                    labelCol={{ span: 24 }}
+                                    wrapperCol={{ span: 24 }}
+                                >
+                                    <CustomSelect
+                                        allowClear
+                                        size="large"
+                                        placeholder="Выберите"
+                                        loading={variantsLoading}
+                                        options={utility.items.map(item => ({
+                                            value: item.id,
+                                            label: item.title,
+                                        }))}
+                                    />
+                                </FormItem>
+                            ))}
                             <FormItem
-                                name="category"
                                 label="Серийный номер"
                                 style={{ maxWidth: 300 }}
                                 labelCol={{ span: 24 }}
                                 wrapperCol={{ span: 24 }}
-                                rules={[
-                                    {
-                                        required: true,
-                                        message:
-                                            'Iltimos mijozning ismini kiriting',
-                                    },
-                                ]}
                             >
                                 <Input size="large" placeholder="Серийный номер" />
                             </FormItem>
@@ -223,8 +206,9 @@ export function MediaFormPart2({ onClick, product }: MedieFormProps) {
                             type="primary"
                             htmlType="submit"
                             shape="round"
-                            loading={createLoading}
                             style={{ background: '#25A55A' }}
+                            loading={createLoading}
+                            onClick={() => onFinish(true)}
                         >
                             Сохранить
                         </Button>
@@ -232,7 +216,8 @@ export function MediaFormPart2({ onClick, product }: MedieFormProps) {
                             shape="round"
                             size="large"
                             type="primary"
-                            onClick={() => navigate('/client/list')}
+                            loading={createLoading}
+                            onClick={() => onFinish(true)}
                         >
                             Сохранить и продолжить
                         </Button>

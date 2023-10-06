@@ -24,17 +24,19 @@ export function FileUpload(props: ImageUploadProps) {
     }
 
     return (
-        <Upload {...exProps} {...props} progress={{ showInfo: false }}>
-            {(fileList?.length || 0) >= maxCount ? null : (
-                <Button
-                    icon={<PlusOutlined />}
-                    type="primary"
-                    shape="round"
-                    className="d-flex"
-                >
-                    {label}
-                </Button>
-            )}
-        </Upload>
+        <div style={{ maxWidth: 'max-content'}}>
+            <Upload {...exProps} {...props} progress={{ showInfo: false }}>
+                {(fileList?.length || 0) >= maxCount ? null : (
+                    <Button
+                        icon={<PlusOutlined />}
+                        type="primary"
+                        shape="round"
+                        className="d-flex"
+                    >
+                        {label}
+                    </Button>
+                )}
+            </Upload>
+        </div>
     )
 }

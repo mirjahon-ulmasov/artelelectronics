@@ -5,15 +5,18 @@ import {
     Row, Space, Typography 
 } from 'antd'
 import { 
-    AdvantagesForm, CharacteristicsForm, MainForm, 
-    MediaFormPart1, MediaFormPart2 
+    Advantages, Characteristics, Main, 
+    Media, SAPCode 
 } from './components'
 import { useFetchProductQuery } from 'services'
+import { useQuery } from 'hooks/useQuery'
 import { ID } from 'types/api'
 
 const { Title } = Typography
 
 export default function AddProduct() {
+    const query = useQuery();
+    const category = query.get("category") ?? ''
     const [progress, setProgress] = useState(1)
     const [productID, setProductID] = useState<ID>('')
 
@@ -48,17 +51,41 @@ export default function AddProduct() {
                 </Col>
                 <Col span={24}>
                     {progress === 1 && (
-                        <MainForm 
+                        <Main
+                            category={category}
                             onClick={goNextForm} 
                             onSetID={(id: ID) => setProductID(id)} 
                         />
                     )}
                     {product && (
                         <Fragment>
-                            {progress === 2 && <MediaFormPart1 onClick={goNextForm} product={product} />}
-                            {progress === 3 && <MediaFormPart2 onClick={goNextForm} product={product} />}
-                            {progress === 4 && <AdvantagesForm onClick={goNextForm} product={product}/>}
-                            {progress === 5 && <CharacteristicsForm product={product} />}
+                            {progress === 2 && (
+                                <Media 
+                                    onClick={goNextForm} 
+                                    product={product} 
+                                    category={category}
+                                />
+                            )}
+                            {progress === 3 && (
+                                <SAPCode 
+                                    onClick={goNextForm} 
+                                    product={product} 
+                                    category={category}
+                                />
+                            )}
+                            {progress === 4 && (
+                                <Advantages 
+                                    onClick={goNextForm} 
+                                    product={product} 
+                                    category={category}
+                                />
+                            )}
+                            {progress === 5 && (
+                                <Characteristics 
+                                    product={product} 
+                                    category={category}
+                                />
+                            )}
                         </Fragment>
                     )}
                 </Col>

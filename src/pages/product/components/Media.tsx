@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Fragment, useState } from 'react'
+import { Fragment, useCallback, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { 
     Button, Checkbox, Col, Divider, Form, 
@@ -18,23 +18,22 @@ import { Product, Variant } from 'types/product';
 import { PlusOutlined } from '@ant-design/icons';
 
 
-interface MedieFormProps {
+interface MediaProps {
     onClick: () => void
     product: Product.DTO
+    category: string
 }
 
-export function MediaFormPart1({ onClick, product }: MedieFormProps) {
+export function Media({ onClick, product, category }: MediaProps) {
     const navigate = useNavigate();
-    
-    
     const [view360, setView360] = useState<UploadFile[]>([])
     const [variants, setVariants] = useState<Variant.DTOLocal[]>([
         { color: '', default_image: [], is_default: false, uuid: uuid() }
     ])
 
+    const { data: colors, isLoading: colorsLoading } = useFetchColorsQuery()
     const [add360View, { isLoading: createLoading1 }] = useAdd360ViewMutation()
     const [createProductVariants, { isLoading: createLoading2 }] = useCreateProductVariantsMutation()
-    const { data: colors, isLoading: colorsLoading } = useFetchColorsQuery()
 
     // ---------------- Product Variants ----------------
 
@@ -58,7 +57,7 @@ export function MediaFormPart1({ onClick, product }: MedieFormProps) {
     }
 
     // ---------------- Submit ----------------
-    const onFinish = () => {
+    const onFinish = useCallback((next: boolean) => {
 
         const hasError = 
         variants.some(variant => 
@@ -94,23 +93,21 @@ export function MediaFormPart1({ onClick, product }: MedieFormProps) {
         Promise.all(promises)
             .then(() => {
                 toast.success("Варианты продукта и видео успешно добавлены.");
-                onClick();
+                if(next) {
+                    onClick()
+                    return;
+                }
+                navigate({
+                    pathname: '/product/list',
+                    search: `?category=${category}`
+                })
             })
-            .catch(() => {
-                toast.error("Что-то пошло не так");
-            });
-    };
+            .catch(() => toast.error("Что-то пошло не так"));
+    }, [add360View, category, createProductVariants, navigate, onClick, product.id, variants, view360]);
 
-    const onFinishFailed = (errorInfo: any) => {
-        console.log('Failed: ', errorInfo)        
-    }
 
     return (
-        <Form
-            autoComplete="off"
-            onFinish={onFinish}
-            onFinishFailed={onFinishFailed}
-        >
+        <Form autoComplete="off">
             <Row gutter={[0, 20]}>
                 <Col span={24}>
                     <BorderBox>
@@ -193,8 +190,9 @@ export function MediaFormPart1({ onClick, product }: MedieFormProps) {
                             type="primary"
                             htmlType="submit"
                             shape="round"
-                            loading={createLoading1 || createLoading2}
                             style={{ background: '#25A55A' }}
+                            loading={createLoading1 || createLoading2}
+                            onClick={() => onFinish(true)}
                         >
                             Сохранить
                         </Button>
@@ -202,7 +200,8 @@ export function MediaFormPart1({ onClick, product }: MedieFormProps) {
                             shape="round"
                             size="large"
                             type="primary"
-                            onClick={() => navigate('/client/list')}
+                            loading={createLoading1 || createLoading2}
+                            onClick={() => onFinish(true)}
                         >
                             Сохранить и продолжить
                         </Button>

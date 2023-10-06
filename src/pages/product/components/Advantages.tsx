@@ -8,29 +8,22 @@ import { v4 as uuid } from 'uuid'
 import _ from 'lodash'
 import { useCreateAdvantagesMutation } from 'services'
 import { 
-    BorderBox, LanguageToggle, Language, 
-    StyledText, FormItem, StyledTextL2, ImageUpload 
+    BorderBox, LanguageToggle, StyledText, 
+    FormItem, StyledTextL2, ImageUpload 
 } from 'components'
+import { languages } from 'utils/index'
 import { Advantage, Product } from 'types/product';
 import { LANGUAGE } from 'types/index';
 import { ID } from 'types/api'
 
-const languages: Language[] = [
-    { label: 'Ru', value: LANGUAGE.RU },
-    { label: 'Uz', value: LANGUAGE.UZ },
-    { label: 'En', value: LANGUAGE.EN }
-]
-
-interface AdvantagesFormProps {
+interface AdvantagesProps {
     onClick: () => void
     product: Product.DTO
+    category: string
 }
 
-export function AdvantagesForm({ onClick, product }: AdvantagesFormProps) {
+export function Advantages({ onClick, product, category }: AdvantagesProps) {
     const navigate = useNavigate();
-
-    const [createAdvantages, { isLoading: createLoading }] = useCreateAdvantagesMutation()
-    
     const [language, setLanguage] = useState<LANGUAGE>(LANGUAGE.RU)
     const [advantages, setAdvantages] = useState<Advantage.DTOLocal[]>([
         { 
@@ -44,6 +37,7 @@ export function AdvantagesForm({ onClick, product }: AdvantagesFormProps) {
             uuid: uuid() 
         }
     ])
+    const [createAdvantages, { isLoading: createLoading }] = useCreateAdvantagesMutation()    
 
     // ---------------- Product Advantages ----------------
 
@@ -104,7 +98,7 @@ export function AdvantagesForm({ onClick, product }: AdvantagesFormProps) {
     }, [language])
 
     // ---------------- Submit ----------------
-    const onFinish = () => {
+    const onFinish = useCallback((next: boolean) => {
 
         const data: Advantage.DTOUpload[] = advantages.map(advantage => ({
             product: product.id,
@@ -118,13 +112,20 @@ export function AdvantagesForm({ onClick, product }: AdvantagesFormProps) {
             .unwrap()
             .then(() => {
                 toast.success("Преимущества успешно добавленного продукта")
-                onClick()
+                if(next) {
+                    onClick()
+                    return;
+                }
+                navigate({
+                    pathname: '/product/list',
+                    search: `?category=${category}`
+                })
             })
             .catch(() => toast.error("Что-то пошло не так"))
-    };
+    }, [advantages, category, createAdvantages, navigate, onClick, product.id]);
 
     return (
-        <Form autoComplete="off" onFinish={onFinish}>
+        <Form autoComplete="off">
             <BorderBox>
                 <StyledTextL2>Преимущества продукта</StyledTextL2>
                 {advantages.map((advantage, index) => (
@@ -160,7 +161,6 @@ export function AdvantagesForm({ onClick, product }: AdvantagesFormProps) {
                         >
                             <Input.TextArea
                                 showCount
-                                maxLength={100}
                                 style={{ height: 120 }}
                                 placeholder="Описание"
                                 value={getValue(advantage, 'description')}
@@ -202,24 +202,24 @@ export function AdvantagesForm({ onClick, product }: AdvantagesFormProps) {
             <Space size="large" className='mt-2'>
                 <Button
                     size="large"
-                    type="primary"
-                    htmlType="submit"
                     shape="round"
+                    type="primary"
                     loading={createLoading}
+                    onClick={() => onFinish(false)}
                     style={{ background: '#25A55A' }}
                 >
                     Сохранить
                 </Button>
                 <Button
-                    shape="round"
                     size="large"
+                    shape="round"
                     type="primary"
-                    onClick={() => navigate('/client/list')}
+                    loading={createLoading}
+                    onClick={() => onFinish(true)}
                 >
                     Сохранить и продолжить
                 </Button>
             </Space>
-           
         </Form>
     )
 }

@@ -38,6 +38,12 @@
     width: 32px;
 }
 
+// ------------File Upload Delete button ------------
+:where(.css-dev-only-do-not-override-8xg97z).ant-upload-wrapper .ant-upload-list .ant-upload-list-item:hover,
+:where(.css-8xg97z).ant-upload-wrapper .ant-upload-list .ant-upload-list-item:hover {
+    background: none;
+}
+
 :where(.css-dev-only-do-not-override-8xg97z ).ant-upload-wrapper .ant-upload-list .ant-upload-list-item .ant-upload-list-item-actions .ant-upload-list-item-action.ant-btn-sm,
 :where(.css-8xg97z ).ant-upload-wrapper .ant-upload-list .ant-upload-list-item .ant-upload-list-item-actions .ant-upload-list-item-action.ant-btn-sm {
     height: 36px;

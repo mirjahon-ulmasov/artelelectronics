@@ -8,6 +8,7 @@ const categoryWithTags = api.enhanceEndpoints({
 
 interface SearchParams {
     parent?: ID
+    category?: ID
     collection?: ID
     is_parent?: boolean
 }
@@ -17,6 +18,14 @@ export const categoryAPI = categoryWithTags.injectEndpoints({
         fetchCategories: build.query<Category.List, SearchParams>({
             query: params => ({
                 url: '/category/admin_view/',
+                method: 'GET',
+                params,
+            }),
+            providesTags: () => ['Category'],
+        }),
+        fetchCategoryUtility: build.query<Category.Utility[], SearchParams>({
+            query: params => ({
+                url: '/category_utility/',
                 method: 'GET',
                 params,
             }),
@@ -57,6 +66,7 @@ export const categoryAPI = categoryWithTags.injectEndpoints({
 
 export const {
     useFetchCategoriesQuery,
+    useFetchCategoryUtilityQuery,
     useCreateCategoryMutation,
     useUpdateCategoryMutation,
     useDeleteCategoryMutation,

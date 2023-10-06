@@ -1,52 +1,14 @@
 import dayjs, { Dayjs } from 'dayjs'
-import { CAR_STATUS, CLIENT_STATUS, ORDER_STATUS, ALL_STATUS, PAYMENT_METHOD } from 'types/index'
+import { Language } from 'components/LanguageToggle'
+import { LANGUAGE } from 'types/index'
 
 export type format = 'client' | 'car' | 'order' | 'active'
 
-export function getStatus(value: ALL_STATUS, type: format) {
-    switch (type) {
-        case 'client':
-            switch (value) {
-                case CLIENT_STATUS.NEW:
-                    return 'Yangi'
-                case CLIENT_STATUS.VIP:
-                    return 'VIP'
-                case CLIENT_STATUS.BLOCK:
-                    return 'Blok'
-                default:
-                    return 'Unknown'
-            }
-
-        case 'car':
-            switch (value) {
-                case CAR_STATUS.BUSY:
-                    return 'Band'
-                case CAR_STATUS.FREE:
-                    return 'Bo’sh'
-                case CAR_STATUS.BLOCK:
-                    return 'Blok'
-                default:
-                    return 'Unknown'
-            }
-
-        case 'order':
-            switch (value) {
-                case ORDER_STATUS.BOOKED:
-                    return 'Bron'
-                case ORDER_STATUS.CREATED:
-                    return 'Aktiv'
-                case ORDER_STATUS.FINISHED:
-                    return 'Tugatildi'
-                case ORDER_STATUS.CANCELLED:
-                    return 'Bekor qilindi'
-                default:
-                    return 'Unknown'
-            }
-
-        default:
-            return 'Unknown'
-    }
-}
+export const languages: Language[] = [
+    { label: 'Ru', value: LANGUAGE.RU },
+    { label: 'Uz', value: LANGUAGE.UZ },
+    { label: 'En', value: LANGUAGE.EN },
+]
 
 export function formatPhone(data: string) {
     return data
@@ -55,26 +17,16 @@ export function formatPhone(data: string) {
 }
 
 export function formatPlate(data: string) {
-    const isCommon = /[a-zA-Z]/.test(data[2]);
+    const isCommon = /[a-zA-Z]/.test(data[2])
 
-    if (isCommon) return data.replace(/(\d+)([A-Z]+)/g, '$1 $2 ');
-    return data.replace(/(\d+)(\d{3})([A-Z]+)/, '$1 $2 $3');
+    if (isCommon) return data.replace(/(\d+)([A-Z]+)/g, '$1 $2 ')
+    return data.replace(/(\d+)(\d{3})([A-Z]+)/, '$1 $2 $3')
 }
-
 
 export const formatDate = 'YYYY-MM-DD'
 
-
 export const disabledDate = (current: Dayjs): boolean => {
     // Disable dates before today
-    if (!current) return false;
+    if (!current) return false
     return current.isBefore(dayjs().subtract(1, 'day'))
-};
-
-export function getPaymentMethods() {
-    return [
-        { value: PAYMENT_METHOD.CASH, label: 'Naqd' },
-        { value: PAYMENT_METHOD.PLASTIC_CARD, label: 'Plastik Karta' },
-        { value: PAYMENT_METHOD.BANK_ACCOUNT, label: 'Bank hisob raqami' },
-    ]
 }

@@ -26,7 +26,7 @@ export const productAPI = productWithTags.injectEndpoints({
             query: id => `/product/${id}/admin_detail_view/`,
             providesTags: () => ['Product'],
         }),
-        createProduct: build.mutation<Product.DTO, Product.DTOCreation>({
+        createProduct: build.mutation<Product.DTO, Product.DTOUpload>({
             query: data => ({
                 url: '/product/',
                 method: 'POST',
@@ -34,7 +34,7 @@ export const productAPI = productWithTags.injectEndpoints({
             }),
             invalidatesTags: ['Product'],
         }),
-        updateProduct: build.mutation<Product.DTO, Product.DTOCreation>({
+        updateProduct: build.mutation<Product.DTO, Product.DTOUpload>({
             query: data => ({
                 url: `/product/${data.id}/`,
                 method: 'PUT',
