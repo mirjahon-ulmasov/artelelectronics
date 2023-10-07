@@ -9,11 +9,12 @@ import toast from 'react-hot-toast'
 import _ from 'lodash'
 import { v4 as uuid } from 'uuid'
 import { 
+    useAddUtilityProductMutation,
     useCreateProductVariantImagesMutation, useFetchCategoryUtilityQuery, 
     useFetchProductVariantsQuery 
 } from 'services'
 import { CustomSelect, BorderBox, FormItem, StyledTextL2, ImageUpload, StyledText } from 'components'
-import { Product, VariantImage } from 'types/product';
+import { Product, Utility, VariantImage } from 'types/product';
 import { PlusOutlined } from '@ant-design/icons';
 import { ID } from 'types/api'
 
@@ -25,11 +26,16 @@ interface SAPCodeProps {
 
 export function SAPCode({ onClick, product, category }: SAPCodeProps) {
     const navigate = useNavigate();
+
     const [variantImages, setVariantImages] = useState<VariantImage.DTOLocal[]>([
         { variant: '', images: [], uuid: uuid() }
     ])
+    const [productUtility, setProductUtility] = useState<Utility.DTOLocal[]>([
+        { utility_item: '', color: '', code: '', uuid: uuid() }
+    ])
 
-    const [createProductVariantImages, { isLoading: createLoading }] = useCreateProductVariantImagesMutation()
+    const [createProductVariantImages, { isLoading: loading1 }] = useCreateProductVariantImagesMutation()
+    const [addUtilityProduct, { isLoading: loading2 }] = useAddUtilityProductMutation()
     const { data: variants, isLoading: variantsLoading } = useFetchProductVariantsQuery({
         product: product.id
     })
@@ -38,7 +44,6 @@ export function SAPCode({ onClick, product, category }: SAPCodeProps) {
     })
 
     // ---------------- Product Variant Images ----------------
-
     function addNewVariantImage() {
         setVariantImages(prev => [
             ...prev, 
@@ -46,7 +51,7 @@ export function SAPCode({ onClick, product, category }: SAPCodeProps) {
         ])
     }
 
-    function changeVariantImage(key: string, value: unknown, uuid: string) {
+    function changeVariantImage(key: keyof VariantImage.DTOLocal, value: unknown, uuid: string) {
         setVariantImages(prev => prev.map(variant => {
             if(variant.uuid === uuid) {
                 return {
@@ -55,6 +60,26 @@ export function SAPCode({ onClick, product, category }: SAPCodeProps) {
                 }
             }
             return variant
+        }))
+    }
+
+    // ---------------- Product Utility ----------------
+    function addNewUtility() {
+        setProductUtility(prev => [
+            ...prev, 
+            { utility_item: '', color: '', code: '', uuid: uuid() }
+        ])
+    }
+
+    function changeProductUtility(key: keyof Utility.DTOLocal, value: unknown, uuid: string) {
+        setProductUtility(prev => prev.map(utility => {
+            if(utility.uuid === uuid) {
+                return {
+                    ...utility,
+                    [key]: value
+                }
+            }
+            return utility
         }))
     }
 
@@ -67,8 +92,14 @@ export function SAPCode({ onClick, product, category }: SAPCodeProps) {
                 image: image.response?.id as ID
         })))
 
+        const dataUtility: Utility.DTOUpload[] = productUtility.map((el) => ({
+            ...el,
+            product: product.id
+        }))
+
         const promises = [
             createProductVariantImages(dataVariantImages).unwrap(),
+            addUtilityProduct(dataUtility).unwrap(),
         ];
 
         Promise.all(promises)
@@ -84,7 +115,7 @@ export function SAPCode({ onClick, product, category }: SAPCodeProps) {
                 })
             })
             .catch(() => toast.error("Что-то пошло не так"));
-    }, [category, createProductVariantImages, navigate, onClick, variantImages]);
+    }, [addUtilityProduct, category, createProductVariantImages, navigate, onClick, product.id, productUtility, variantImages]);
 
 
     return (
@@ -147,29 +178,11 @@ export function SAPCode({ onClick, product, category }: SAPCodeProps) {
 
                 <Col span={24}>
                     <BorderBox>
-                        <StyledTextL2>SUP code</StyledTextL2>
-                        <Space size='large'>
-                            <FormItem
-                                label="Цвет продукта"
-                                style={{ maxWidth: 300 }}
-                                labelCol={{ span: 24 }}
-                                wrapperCol={{ span: 24 }}
-                            >
-                                <CustomSelect
-                                    allowClear
-                                    size="large"
-                                    placeholder="Выберите"
-                                    loading={variantsLoading}
-                                    options={variants?.map(variant => ({
-                                        value: variant.id,
-                                        label: variant.color.code,
-                                    }))}
-                                />
-                            </FormItem>
-                            {utilities?.map(utility => (
+                        <StyledTextL2>SAP Code</StyledTextL2>
+                        {productUtility.map((prodUtility) => (
+                            <Space size='large' key={prodUtility.uuid}>
                                 <FormItem
-                                    key={utility.id}
-                                    label={utility.title}
+                                    label="Цвет продукта"
                                     style={{ maxWidth: 300 }}
                                     labelCol={{ span: 24 }}
                                     wrapperCol={{ span: 24 }}
@@ -179,24 +192,70 @@ export function SAPCode({ onClick, product, category }: SAPCodeProps) {
                                         size="large"
                                         placeholder="Выберите"
                                         loading={variantsLoading}
-                                        options={utility.items.map(item => ({
-                                            value: item.id,
-                                            label: item.title,
+                                        options={variants?.map(variant => ({
+                                            value: variant.id,
+                                            label: variant.color.code,
                                         }))}
+                                        value={prodUtility.color}
+                                        onChange={(value: ID) => changeProductUtility(
+                                            'color', value, prodUtility.uuid
+                                        )}
                                     />
                                 </FormItem>
-                            ))}
-                            <FormItem
-                                label="Серийный номер"
-                                style={{ maxWidth: 300 }}
-                                labelCol={{ span: 24 }}
-                                wrapperCol={{ span: 24 }}
-                            >
-                                <Input size="large" placeholder="Серийный номер" />
-                            </FormItem>
-                        </Space>
-                        
+                                {utilities?.map(utility => (
+                                    <FormItem
+                                        key={utility.id}
+                                        label={utility.title}
+                                        style={{ maxWidth: 300 }}
+                                        labelCol={{ span: 24 }}
+                                        wrapperCol={{ span: 24 }}
+                                    >
+                                        <CustomSelect
+                                            allowClear
+                                            size="large"
+                                            placeholder="Выберите"
+                                            loading={variantsLoading}
+                                            options={utility.items.map(item => ({
+                                                value: item.id,
+                                                label: item.title,
+                                            }))}
+                                            value={prodUtility.utility_item}
+                                            onChange={(value: ID) => changeProductUtility(
+                                                'utility_item', value, prodUtility.uuid
+                                            )}
+                                        />
+                                    </FormItem>
+                                ))}
+                                <FormItem
+                                    label="Серийный номер"
+                                    style={{ maxWidth: 300 }}
+                                    labelCol={{ span: 24 }}
+                                    wrapperCol={{ span: 24 }}
+                                >
+                                    <Input 
+                                        size="large" 
+                                        placeholder="Серийный номер"
+                                        value={prodUtility.code}
+                                        onChange={e => changeProductUtility(
+                                            'code', e.target.value, prodUtility.uuid
+                                        )}
+                                    />
+                                </FormItem>
+                            </Space>
+                        ))}
                     </BorderBox>
+                    <div className='d-flex mt-1'>
+                        <Button 
+                            type='text' 
+                            size='large'
+                            shape='round'
+                            onClick={addNewUtility}
+                            icon={<PlusOutlined />} 
+                            style={{ fontWeight: 400 }} 
+                        >
+                            Добавить еще
+                        </Button>
+                    </div>
                 </Col>
 
                 <Col span={24} className='mt-2'>
@@ -207,7 +266,7 @@ export function SAPCode({ onClick, product, category }: SAPCodeProps) {
                             htmlType="submit"
                             shape="round"
                             style={{ background: '#25A55A' }}
-                            loading={createLoading}
+                            loading={loading1 || loading2}
                             onClick={() => onFinish(true)}
                         >
                             Сохранить
@@ -216,7 +275,7 @@ export function SAPCode({ onClick, product, category }: SAPCodeProps) {
                             shape="round"
                             size="large"
                             type="primary"
-                            loading={createLoading}
+                            loading={loading1 || loading2}
                             onClick={() => onFinish(true)}
                         >
                             Сохранить и продолжить

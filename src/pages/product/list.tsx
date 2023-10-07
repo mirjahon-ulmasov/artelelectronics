@@ -68,6 +68,13 @@ export default function Products() {
             ellipsis: true,
         },
         {
+            title: 'Бренд',
+            dataIndex: 'brand',
+            key: 'brand',
+            ellipsis: true,
+            render: (_, record) => record.brand?.title,
+        },
+        {
             title: 'Категория',
             dataIndex: 'category',
             key: 'category',
@@ -85,6 +92,7 @@ export default function Products() {
             title: 'Активен',
             dataIndex: 'is_active',
             key: 'is_active',
+            width: 180,
             render: (_, record) => (
                 <Status value={record.is_active} type='active'>
                     {record.is_active ? 'активный' : 'неактивный'}
@@ -106,6 +114,7 @@ export default function Products() {
             title: 'Опубликовано',
             dataIndex: 'is_published',
             key: 'is_published',
+            width: 200,
             render: (_, record) => (
                 <Status value={record.is_published} type='active'>
                     {record.is_published ? 'опубликован' : 'не опубликовано'}
@@ -140,7 +149,7 @@ export default function Products() {
                 columns={columns}
                 dataSource={dataSource}
                 onChange={handleChange}
-                scroll={{ y: 600, x: 1000 }} 
+                scroll={{ y: 600, x: 1200 }} 
             />
         </>
     )

@@ -44,7 +44,7 @@ export function Media({ onClick, product, category }: MediaProps) {
         ])
     }
 
-    function changeVariant(key: string, value: unknown, uuid: string) {
+    function changeVariant(key: keyof Variant.DTOLocal, value: unknown, uuid: string) {
         setVariants(prev => prev.map(variant => {
             if(variant.uuid === uuid) {
                 return {

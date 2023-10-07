@@ -1,6 +1,6 @@
 import { ID } from 'types/api'
 import { api } from '../auth/baseQuery'
-import { Product } from 'types/product'
+import { Product, Utility } from 'types/product'
 
 const productWithTags = api.enhanceEndpoints({
     addTagTypes: ['Product'],
@@ -57,6 +57,21 @@ export const productAPI = productWithTags.injectEndpoints({
             }),
             invalidatesTags: ['Product'],
         }),
+        activateProduct: build.mutation<unknown, ID>({
+            query: id => ({
+                url: `/product/${id}/activate/`,
+                method: 'PATCH',
+            }),
+            invalidatesTags: ['Product'],
+        }),
+        addUtilityProduct: build.mutation<unknown, Utility.DTOUpload[]>({
+            query: data => ({
+                url: '/product_utility/multiple_create/',
+                method: 'POST',
+                body: data,
+            }),
+            invalidatesTags: ['Product'],
+        }),
     }),
 })
 
@@ -66,5 +81,7 @@ export const {
     useCreateProductMutation,
     useUpdateProductMutation,
     useAdd360ViewMutation,
-    useDeleteProductMutation
+    useDeleteProductMutation,
+    useActivateProductMutation,
+    useAddUtilityProductMutation
 } = productAPI

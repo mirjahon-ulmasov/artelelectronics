@@ -44,7 +44,7 @@ export default function AddProduct() {
                     <Space>
                         <Button {...getButtonType(1)}>Главная</Button>
                         <Button {...getButtonType(2)}>Медиа</Button>
-                        <Button {...getButtonType(3)}>SUP code</Button>
+                        <Button {...getButtonType(3)}>SAP Code</Button>
                         <Button {...getButtonType(4)}>Преимущества</Button>
                         <Button {...getButtonType(5)}>Характеристики</Button>
                     </Space>

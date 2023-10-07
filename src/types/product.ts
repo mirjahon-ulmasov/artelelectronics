@@ -242,3 +242,20 @@ export declare namespace Instruction {
         language: LANGUAGE
     }
 }
+
+// -------------- Utility --------------
+export declare namespace Utility {
+    interface DTOLocal {
+        color: ID
+        code: string
+        uuid: string
+        utility_item: ID
+    }
+
+    interface DTOUpload {
+        product: ID
+        color: ID
+        code: string
+        utility_item: ID
+    }
+}
