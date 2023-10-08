@@ -82,8 +82,7 @@ export function Characteristics({ product, category }: CharacteristicsProps) {
 
         const dataInstruction: Instruction.DTOUpload = {
             product: product.id,
-            title: instruction.languages[2].title,
-            description: instruction.languages[2].description,
+            languages: instruction.languages,
             file: instruction.file[0]?.response?.id as ID,
             image: instruction.image[0]?.response?.id as ID
         }

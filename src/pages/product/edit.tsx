@@ -24,7 +24,8 @@ import { PlusIcon } from 'components';
 const { Title } = Typography
 
 export default function EditProduct() {
-    return <>EDIT</>
+    const { productID } = useParams()
+    return <>EDIT - {productID}</>
     // const { airCondID } = useParams();
     // const navigate = useNavigate();
 

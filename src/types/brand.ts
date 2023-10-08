@@ -7,8 +7,8 @@ export declare namespace Brand {
     interface DTOCreation {
         id?: ID
         title: string
-        image: number
-        secondary_image: number
+        image: ID
+        secondary_image: ID
         custom_order: number
     }
 

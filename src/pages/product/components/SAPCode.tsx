@@ -193,7 +193,8 @@ export function SAPCode({ onClick, product, category }: SAPCodeProps) {
                                         placeholder="Выберите"
                                         loading={variantsLoading}
                                         options={variants?.map(variant => ({
-                                            value: variant.id,
+                                            value: variant.color.id,
+                                            // value: variant.id,
                                             label: variant.color.code,
                                         }))}
                                         value={prodUtility.color}

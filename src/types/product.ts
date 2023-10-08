@@ -221,10 +221,9 @@ export declare namespace Instruction {
     interface DTOUpload {
         id?: ID
         product: ID
-        title: string
-        description: string
         file: ID
         image: ID
+        languages: Language[]
     }
 
     interface DTO {

@@ -6,7 +6,7 @@ export declare namespace Color {
 
     interface DTOCreation {
         id?: ID
-        image: number
+        image: ID
         code: string
     }
 

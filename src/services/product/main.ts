@@ -7,6 +7,7 @@ const productWithTags = api.enhanceEndpoints({
 })
 
 interface SearchParams {
+    brand?: ID
     category?: ID
     subcategory?: ID
     is_published?: boolean
@@ -72,6 +73,14 @@ export const productAPI = productWithTags.injectEndpoints({
             }),
             invalidatesTags: ['Product'],
         }),
+        publishProduct: build.mutation<unknown, { id: ID, is_published: boolean }>({
+            query: data => ({
+                url: `/product/${data.id}/publish/`,
+                method: 'PATCH',
+                body: data
+            }),
+            invalidatesTags: ['Product'],
+        }),
     }),
 })
 
@@ -83,5 +92,6 @@ export const {
     useAdd360ViewMutation,
     useDeleteProductMutation,
     useActivateProductMutation,
-    useAddUtilityProductMutation
+    useAddUtilityProductMutation,
+    usePublishProductMutation
 } = productAPI
