@@ -244,7 +244,9 @@ export declare namespace Instruction {
 
 // -------------- Utility --------------
 export declare namespace Utility {
+    type List = DTO[]
     interface DTOLocal {
+        id?: ID
         color: ID
         code: string
         uuid: string
@@ -252,9 +254,19 @@ export declare namespace Utility {
     }
 
     interface DTOUpload {
+        id?: ID
         product: ID
         color: ID
         code: string
         utility_item: ID
+    }
+
+    interface DTO {
+        id: ID
+        product: ID
+        color: ID
+        code: string
+        utility_item: ID
+        is_active: boolean
     }
 }

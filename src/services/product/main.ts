@@ -1,6 +1,6 @@
 import { ID } from 'types/api'
+import { Product } from 'types/product'
 import { api } from '../auth/baseQuery'
-import { Product, Utility } from 'types/product'
 
 const productWithTags = api.enhanceEndpoints({
     addTagTypes: ['Product'],
@@ -21,11 +21,11 @@ export const productAPI = productWithTags.injectEndpoints({
                 method: 'GET',
                 params
             }),
-            providesTags: () => ['Product'],
+            providesTags: () => [{ type: 'Product', id: 'LIST' }],
         }),
         fetchProduct: build.query<Product.DTO, ID>({
             query: id => `/product/${id}/admin_detail_view/`,
-            providesTags: () => ['Product'],
+            providesTags: () => [{ type: 'Product', id: 'DETAIL' }],
         }),
         createProduct: build.mutation<Product.DTO, Product.DTOUpload>({
             query: data => ({
@@ -33,7 +33,7 @@ export const productAPI = productWithTags.injectEndpoints({
                 method: 'POST',
                 body: data,
             }),
-            invalidatesTags: ['Product'],
+            invalidatesTags: () => [{ type: 'Product', id: 'LIST' }],
         }),
         updateProduct: build.mutation<Product.DTO, Product.DTOUpload>({
             query: data => ({
@@ -41,7 +41,7 @@ export const productAPI = productWithTags.injectEndpoints({
                 method: 'PUT',
                 body: data,
             }),
-            invalidatesTags: ['Product'],
+            invalidatesTags: () => [{ type: 'Product', id: 'LIST' }],
         }),
         add360View: build.mutation<unknown, Product.View360>({
             query: data => ({
@@ -49,29 +49,21 @@ export const productAPI = productWithTags.injectEndpoints({
                 method: 'PATCH',
                 body: data,
             }),
-            invalidatesTags: ['Product'],
+            invalidatesTags: () => [{ type: 'Product', id: 'DETAIL' }],
         }),
         deleteProduct: build.mutation<unknown, ID>({
             query: id => ({
                 url: `/product/${id}/`,
                 method: 'DELETE',
             }),
-            invalidatesTags: ['Product'],
+            invalidatesTags: () => [{ type: 'Product', id: 'LIST' }],
         }),
         activateProduct: build.mutation<unknown, ID>({
             query: id => ({
                 url: `/product/${id}/activate/`,
                 method: 'PATCH',
             }),
-            invalidatesTags: ['Product'],
-        }),
-        addUtilityProduct: build.mutation<unknown, Utility.DTOUpload[]>({
-            query: data => ({
-                url: '/product_utility/multiple_create/',
-                method: 'POST',
-                body: data,
-            }),
-            invalidatesTags: ['Product'],
+            invalidatesTags: () => [{ type: 'Product', id: 'LIST' }],
         }),
         publishProduct: build.mutation<unknown, { id: ID, is_published: boolean }>({
             query: data => ({
@@ -79,7 +71,7 @@ export const productAPI = productWithTags.injectEndpoints({
                 method: 'PATCH',
                 body: data
             }),
-            invalidatesTags: ['Product'],
+            invalidatesTags: () => [{ type: 'Product', id: 'LIST' }],
         }),
     }),
 })
@@ -92,6 +84,5 @@ export const {
     useAdd360ViewMutation,
     useDeleteProductMutation,
     useActivateProductMutation,
-    useAddUtilityProductMutation,
     usePublishProductMutation
 } = productAPI

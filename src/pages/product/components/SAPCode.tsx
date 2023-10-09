@@ -9,11 +9,10 @@ import toast from 'react-hot-toast'
 import _ from 'lodash'
 import { v4 as uuid } from 'uuid'
 import { 
-    useAddUtilityProductMutation,
-    useCreateProductVariantImagesMutation, useFetchCategoryUtilityQuery, 
-    useFetchProductVariantsQuery 
+    useCreateUtilitiesMutation, useCreateProductVariantImagesMutation, 
+    useFetchCategoryUtilityQuery, useFetchProductVariantsQuery 
 } from 'services'
-import { CustomSelect, BorderBox, FormItem, StyledTextL2, ImageUpload, StyledText } from 'components'
+import { CustomSelect, BorderBox, FormItem, StyledTextL2, ImageUpload, StyledText, Color } from 'components'
 import { Product, Utility, VariantImage } from 'types/product';
 import { PlusOutlined } from '@ant-design/icons';
 import { ID } from 'types/api'
@@ -35,7 +34,7 @@ export function SAPCode({ onClick, product, category }: SAPCodeProps) {
     ])
 
     const [createProductVariantImages, { isLoading: loading1 }] = useCreateProductVariantImagesMutation()
-    const [addUtilityProduct, { isLoading: loading2 }] = useAddUtilityProductMutation()
+    const [addUtilityProduct, { isLoading: loading2 }] = useCreateUtilitiesMutation()
     const { data: variants, isLoading: variantsLoading } = useFetchProductVariantsQuery({
         product: product.id
     })
@@ -148,8 +147,14 @@ export function SAPCode({ onClick, product, category }: SAPCodeProps) {
                                         loading={variantsLoading}
                                         options={variants?.map(variant => ({
                                             value: variant.id,
-                                            label: variant.color.title,
+                                            label: (
+                                                <div className='d-flex gap-12 jc-start'>
+                                                    <Color link={variant.color.image.file} />
+                                                    {variant.color.title}
+                                                </div>
+                                            ),
                                         }))}
+
                                     />
                                 </FormItem>
                                 <ImageUpload
@@ -194,7 +199,12 @@ export function SAPCode({ onClick, product, category }: SAPCodeProps) {
                                         loading={variantsLoading}
                                         options={variants?.map(variant => ({
                                             value: variant.color.id,
-                                            label: variant.color.title,
+                                            label: (
+                                                <div className='d-flex gap-12 jc-start'>
+                                                    <Color link={variant.color.image.file} />
+                                                    {variant.color.title}
+                                                </div>
+                                            ),
                                         }))}
                                         value={prodUtility.color}
                                         onChange={(value: ID) => changeProductUtility(

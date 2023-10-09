@@ -11,7 +11,7 @@ import { v4 as uuid } from 'uuid'
 import { useFetchColorsQuery, useCreateProductVariantsMutation, useAdd360ViewMutation } from 'services'
 import { 
     CustomSelect, BorderBox, StyledText, 
-    FormItem, StyledTextL2, ImageUpload, FileUpload 
+    FormItem, StyledTextL2, ImageUpload, FileUpload, Color 
 } from 'components'
 import { ID } from 'types/api'
 import { Product, Variant } from 'types/product';
@@ -145,7 +145,12 @@ export function Media({ onClick, product, category }: MediaProps) {
                                         onChange={(value: ID) => changeVariant('color', value, variant.uuid)}
                                         options={colors?.map(color => ({
                                             value: color.id,
-                                            label: color.title,
+                                            label: (
+                                                <div className='d-flex gap-12 jc-start'>
+                                                    <Color link={color.image.file} />
+                                                    {color.title}
+                                                </div>
+                                            ),
                                         }))}
                                     ></CustomSelect>
                                 </FormItem>

@@ -1,8 +1,4 @@
-import {
-    BaseQueryApi,
-    FetchArgs,
-    fetchBaseQuery,
-} from '@reduxjs/toolkit/dist/query'
+import { BaseQueryApi, FetchArgs, fetchBaseQuery } from '@reduxjs/toolkit/dist/query'
 import { createApi } from '@reduxjs/toolkit/dist/query/react'
 import { logout, setToken } from 'store/reducers/authSlice'
 import { RootState } from 'store/store'
@@ -10,9 +6,7 @@ import { RootState } from 'store/store'
 export const API_BASE_URL: string = import.meta.env.VITE_BASE_URL
 
 interface RefreshResponse {
-    data : {
-        access: string;
-    }
+    data : { access: string }
 }
 
 export const baseQuery = fetchBaseQuery({

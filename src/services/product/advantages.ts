@@ -53,7 +53,7 @@ export const advantagesAPI = advantagesWithTags.injectEndpoints({
         }),
         activateAdvantage: build.mutation<unknown, ID>({
             query: id => ({
-                url: `/product_advantage/${id}/activate`,
+                url: `/product_advantage/${id}/activate/`,
                 method: 'PATCH',
             }),
             invalidatesTags: ['Advantage'],

@@ -45,7 +45,7 @@ export const instructionsAPI = instructionsWithTags.injectEndpoints({
         }),
         activateInstruction: build.mutation<unknown, ID>({
             query: id => ({
-                url: `/product_instruction/${id}/activate`,
+                url: `/product_instruction/${id}/activate/`,
                 method: 'PATCH',
             }),
             invalidatesTags: ['Instruction'],

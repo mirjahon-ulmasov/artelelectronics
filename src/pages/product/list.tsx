@@ -1,8 +1,9 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { Fragment, useCallback, useMemo, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
-import { Button, Col, Row, Space, Table, TableProps, Typography } from 'antd'
+import { Button, Col, Row, Table, TableProps, Typography } from 'antd'
 import type { ColumnsType, FilterValue, SorterResult } from 'antd/es/table/interface'
+import toast from 'react-hot-toast'
 import { Status } from 'components'
 import { useActivateProductMutation, useDeleteProductMutation, useFetchBrandsQuery, useFetchProductsQuery, usePublishProductMutation } from 'services/index'
 import { useQuery } from 'hooks/useQuery'
@@ -72,17 +73,19 @@ export default function Products() {
 
     const changeActivateStat = useCallback((id: ID, is_active: boolean) => {
         if(is_active) {
-            deleteProduct(id)
+            deleteProduct(id).unwrap()
+                .then(() => toast.success('Продукт успешно удален'))
+                .catch(() => toast.error('Что-то пошло не так'))
             return;
         }
-        activateProduct(id)
+        activateProduct(id).unwrap()
+            .then(() => toast.success('Продукт успешно активирован'))
+            .catch(() => toast.error('Что-то пошло не так'))
+            
     }, [activateProduct, deleteProduct])
 
     const changePublishStat = useCallback((id: ID, is_published: boolean) => {
-        publishProduct({
-            id,
-            is_published
-        })
+        publishProduct({ id, is_published })
     }, [publishProduct])
 
     const columns: ColumnsType<TableDTO> = [
@@ -154,15 +157,15 @@ export default function Products() {
         {
             title: 'Действия',
             key: 'action',
-            width: 440,
+            width: 470,
             render: (_, record) => (
                <Row>
-                    <Col flex="150px">
+                    <Col flex="160px">
                         <Button type='text' loading={publishLoading} onClick={() => changePublishStat(record.id, !record.is_published)}>
                             {record.is_published ? 'Не публиковать' : 'Публиковать'}
                         </Button>
                     </Col>
-                    <Col flex="150px">
+                    <Col flex="160px">
                         <Button type='text' loading={deleteLoading || activateLoading} onClick={() => changeActivateStat(record.id, record.is_active)}>
                             {record.is_active ? 'Удалить' : 'Активировать'}
                         </Button>

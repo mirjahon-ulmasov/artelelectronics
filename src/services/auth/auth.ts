@@ -1,4 +1,4 @@
-import { Account } from "types/api";
+import { Account } from "types/auth";
 import { api } from "./baseQuery";
 
 

@@ -61,7 +61,7 @@ export const characteristicsAPI = characteristicsWithTags.injectEndpoints({
         }),
         activateCharacteristic: build.mutation<unknown, ID>({
             query: id => ({
-                url: `/product_characteristic/${id}/activate`,
+                url: `/product_characteristic/${id}/activate/`,
                 method: 'PATCH',
             }),
             invalidatesTags: ['Characteristic'],
