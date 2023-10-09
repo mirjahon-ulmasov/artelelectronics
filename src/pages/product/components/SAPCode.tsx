@@ -148,7 +148,7 @@ export function SAPCode({ onClick, product, category }: SAPCodeProps) {
                                         loading={variantsLoading}
                                         options={variants?.map(variant => ({
                                             value: variant.id,
-                                            label: variant.color.code,
+                                            label: variant.color.title,
                                         }))}
                                     />
                                 </FormItem>
@@ -194,8 +194,7 @@ export function SAPCode({ onClick, product, category }: SAPCodeProps) {
                                         loading={variantsLoading}
                                         options={variants?.map(variant => ({
                                             value: variant.color.id,
-                                            // value: variant.id,
-                                            label: variant.color.code,
+                                            label: variant.color.title,
                                         }))}
                                         value={prodUtility.color}
                                         onChange={(value: ID) => changeProductUtility(

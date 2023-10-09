@@ -13,7 +13,8 @@ export declare namespace Color {
     interface DTO {
         id: ID
         image: File
-        code:  string
+        code: string
+        title: string
         is_active: boolean
     }
 }

@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { Fragment, useCallback, useMemo, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
-import { Button, Space, Table, TableProps, Typography } from 'antd'
+import { Button, Col, Row, Space, Table, TableProps, Typography } from 'antd'
 import type { ColumnsType, FilterValue, SorterResult } from 'antd/es/table/interface'
 import { Status } from 'components'
 import { useActivateProductMutation, useDeleteProductMutation, useFetchBrandsQuery, useFetchProductsQuery, usePublishProductMutation } from 'services/index'
@@ -35,11 +35,11 @@ export default function Products() {
         brand: isArray(filters?.brand) ? filters?.brand[0].toString() : '',
         // object_index: isArray(filters?.id) ? filters?.id[0].toString() : '',
         // status: isArray(filters?.status) ? filters?.status.join() : '',
-        is_published: 
-            isArray(filters?.is_published) && 
-            (filters?.is_published.length > 1
+        is_published:
+            (!isArray(filters?.is_published) || 
+            filters?.is_published.length > 1)
                 ? undefined 
-                : filters?.is_published[0] as boolean),
+                : filters?.is_published[0] as boolean,
     })
 
     const dataSource: TableDTO[] = useMemo(() => {
@@ -154,19 +154,25 @@ export default function Products() {
         {
             title: 'Действия',
             key: 'action',
-            width: 380,
+            width: 440,
             render: (_, record) => (
-               <Space>
-                    <Button type='text' loading={publishLoading} onClick={() => changePublishStat(record.id, record.is_published)}>
-                        {record.is_published ? 'Не публиковать' : 'Публиковать'}
-                    </Button>
-                    <Button type='text' loading={deleteLoading || activateLoading} onClick={() => changeActivateStat(record.id, record.is_active)}>
-                        {record.is_active ? 'Удалить' : 'Активировать'}
-                    </Button>
-                    <Button type='text' onClick={() => navigate({ pathname: `/product/${record.id}/edit`, search })}>
-                        Изменить
-                    </Button>
-               </Space>
+               <Row>
+                    <Col flex="150px">
+                        <Button type='text' loading={publishLoading} onClick={() => changePublishStat(record.id, !record.is_published)}>
+                            {record.is_published ? 'Не публиковать' : 'Публиковать'}
+                        </Button>
+                    </Col>
+                    <Col flex="150px">
+                        <Button type='text' loading={deleteLoading || activateLoading} onClick={() => changeActivateStat(record.id, record.is_active)}>
+                            {record.is_active ? 'Удалить' : 'Активировать'}
+                        </Button>
+                    </Col>
+                    <Col>
+                        <Button type='text' onClick={() => navigate({ pathname: `/product/${record.id}/edit`, search })}>
+                            Изменить
+                        </Button>
+                    </Col>  
+               </Row>
             ),
         },
     ]

@@ -145,7 +145,7 @@ export function Media({ onClick, product, category }: MediaProps) {
                                         onChange={(value: ID) => changeVariant('color', value, variant.uuid)}
                                         options={colors?.map(color => ({
                                             value: color.id,
-                                            label: color.code,
+                                            label: color.title,
                                         }))}
                                     ></CustomSelect>
                                 </FormItem>
