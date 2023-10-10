@@ -148,20 +148,18 @@ export declare namespace Advantage {
 
     interface DTOUpload {
         id?: ID
-        title: string
-        description: string
         product: ID
         logo: ID
         image: ID
+        languages: Language[]
     }
 
     interface DTO {
         id: ID
-        title: string
-        description: string
         logo: File
         image: File
         is_active: boolean
+        languages: Language[]
     }
 
     interface Language {
@@ -228,11 +226,10 @@ export declare namespace Instruction {
 
     interface DTO {
         id: ID
-        title: string
-        description: string
         file: File
         image: File
         is_active: boolean
+        languages: Language[]
     }
 
     interface Language {

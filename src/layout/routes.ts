@@ -9,10 +9,58 @@ const routes: Route[] = [
         roles: [ROLE.ADMIN, ROLE.OPERATOR],
     },
     {
+        path: '/brand',
+        title: 'Бренд',
+        icon: SReportIcon,
+        roles: [ROLE.ADMIN, ROLE.OPERATOR],
+    },
+    {
+        path: '/category',
+        title: 'Категория',
+        icon: SReportIcon,
+        roles: [ROLE.ADMIN, ROLE.OPERATOR],
+    },
+    {
+        path: '/subcategory',
+        title: 'Подкатегория',
+        icon: SReportIcon,
+        roles: [ROLE.ADMIN, ROLE.OPERATOR],
+    },
+    {
+        path: '/color',
+        title: 'Цвета',
+        icon: SReportIcon,
+        roles: [ROLE.ADMIN, ROLE.OPERATOR],
+    },
+    {
+        path: '/store',
+        title: 'Магазины',
+        icon: SReportIcon,
+        roles: [ROLE.ADMIN, ROLE.OPERATOR],
+    },
+    {
+        path: '/country',
+        title: 'Страна',
+        icon: SReportIcon,
+        roles: [ROLE.ADMIN, ROLE.OPERATOR],
+    },
+    {
+        path: '/region',
+        title: 'Регион',
+        icon: SReportIcon,
+        roles: [ROLE.ADMIN, ROLE.OPERATOR],
+    },
+    {
+        path: '/district',
+        title: 'Район',
+        icon: SReportIcon,
+        roles: [ROLE.ADMIN, ROLE.OPERATOR],
+    },
+    {
         path: '/admin/report',
         title: 'Отчеты',
         icon: SReportIcon,
-        roles: [ROLE.ADMIN, ROLE.OPERATOR],
+        roles: [ROLE.ADMIN],
     }
 ]
 

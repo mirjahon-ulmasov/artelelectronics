@@ -102,8 +102,7 @@ export function Advantages({ onClick, product, category }: AdvantagesProps) {
 
         const data: Advantage.DTOUpload[] = advantages.map(advantage => ({
             product: product.id,
-            title: advantage.languages[2].title,
-            description: advantage.languages[2].description,
+            languages: advantage.languages,
             logo: advantage.logo[0]?.response?.id as ID,
             image: advantage.image[0]?.response?.id as ID,
         }))
@@ -125,7 +124,7 @@ export function Advantages({ onClick, product, category }: AdvantagesProps) {
     }, [advantages, category, createAdvantages, navigate, onClick, product.id]);
 
     return (
-        <Form autoComplete="off">
+        <Form autoComplete="off" style={{ maxWidth: 1000 }}>
             <BorderBox>
                 <StyledTextL2>Преимущества продукта</StyledTextL2>
                 {advantages.map((advantage, index) => (

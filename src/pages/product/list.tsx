@@ -5,7 +5,10 @@ import { Button, Col, Row, Table, TableProps, Typography } from 'antd'
 import type { ColumnsType, FilterValue, SorterResult } from 'antd/es/table/interface'
 import toast from 'react-hot-toast'
 import { Status } from 'components'
-import { useActivateProductMutation, useDeleteProductMutation, useFetchBrandsQuery, useFetchProductsQuery, usePublishProductMutation } from 'services/index'
+import { 
+    useFetchBrandsQuery, useFetchProductsQuery, 
+    usePublishProductMutation 
+} from 'services/index'
 import { useQuery } from 'hooks/useQuery'
 import { Product } from 'types/product'
 import { isArray } from 'lodash'
@@ -26,14 +29,12 @@ export default function Products() {
     const [sorters, setSorters] = useState<SorterResult<TableDTO>[]>([]);    
     const [filters, setFilters] = useState<Record<string, FilterValue | null>>({})  
 
-    const [deleteProduct, { isLoading: deleteLoading }] = useDeleteProductMutation()
-    const [activateProduct, { isLoading: activateLoading }] = useActivateProductMutation()
-    const [publishProduct, { isLoading: publishLoading }] = usePublishProductMutation()
+    const [publishProduct, { isLoading: publishLoading }] = usePublishProductMutation()   
 
     const { data: brands } = useFetchBrandsQuery({})
     const { data: products } = useFetchProductsQuery({
         category,
-        brand: isArray(filters?.brand) ? filters?.brand[0].toString() : '',
+        brand: isArray(filters?.brand) ? filters?.brand.join() : '',
         // object_index: isArray(filters?.id) ? filters?.id[0].toString() : '',
         // status: isArray(filters?.status) ? filters?.status.join() : '',
         is_published:
@@ -41,6 +42,8 @@ export default function Products() {
             filters?.is_published.length > 1)
                 ? undefined 
                 : filters?.is_published[0] as boolean,
+        is_active: true
+                
     })
 
     const dataSource: TableDTO[] = useMemo(() => {
@@ -71,21 +74,24 @@ export default function Products() {
         })
     };
 
-    const changeActivateStat = useCallback((id: ID, is_active: boolean) => {
-        if(is_active) {
-            deleteProduct(id).unwrap()
-                .then(() => toast.success('Продукт успешно удален'))
-                .catch(() => toast.error('Что-то пошло не так'))
-            return;
-        }
-        activateProduct(id).unwrap()
-            .then(() => toast.success('Продукт успешно активирован'))
-            .catch(() => toast.error('Что-то пошло не так'))
+    // const changeActivateStat = useCallback((id: ID, is_active: boolean) => {
+    //     if(is_active) {
+    //         deleteProduct(id).unwrap()
+    //             .then(() => toast.success('Продукт успешно удален'))
+    //             .catch(() => toast.error('Что-то пошло не так'))
+    //         return;
+    //     }
+    //     activateProduct(id).unwrap()
+    //         .then(() => toast.success('Продукт успешно активирован'))
+    //         .catch(() => toast.error('Что-то пошло не так'))
             
-    }, [activateProduct, deleteProduct])
+    // }, [activateProduct, deleteProduct])
 
     const changePublishStat = useCallback((id: ID, is_published: boolean) => {
-        publishProduct({ id, is_published })
+        publishProduct({ id, is_published }).unwrap()
+            .then(() => toast.success('Продукт успешно изменен'))
+            .catch(() => toast.error('Что-то пошло не так'))
+
     }, [publishProduct])
 
     const columns: ColumnsType<TableDTO> = [
@@ -122,22 +128,22 @@ export default function Products() {
             ellipsis: true,
             render: (_, record) => record.subcategory?.title,
         },
-        {
-            title: 'Активен',
-            dataIndex: 'is_active',
-            key: 'is_active',
-            width: 180,
-            render: (_, record) => (
-                <Status value={record.is_active} type='active'>
-                    {record.is_active ? 'активный' : 'неактивный'}
-                </Status>
-            ),
-            filters: [
-                { text: 'активный', value: true },
-                { text: 'неактивный', value: false },
-            ],
-            filterSearch: true,
-        },
+        // {
+        //     title: 'Активен',
+        //     dataIndex: 'is_active',
+        //     key: 'is_active',
+        //     width: 180,
+        //     render: (_, record) => (
+        //         <Status value={record.is_active} type='active'>
+        //             {record.is_active ? 'активный' : 'неактивный'}
+        //         </Status>
+        //     ),
+        //     filters: [
+        //         { text: 'активный', value: true },
+        //         { text: 'неактивный', value: false },
+        //     ],
+        //     filterSearch: true,
+        // },
         {
             title: 'Опубликовано',
             dataIndex: 'is_published',
@@ -157,7 +163,7 @@ export default function Products() {
         {
             title: 'Действия',
             key: 'action',
-            width: 470,
+            width: 300, // 470
             render: (_, record) => (
                <Row>
                     <Col flex="160px">
@@ -165,11 +171,11 @@ export default function Products() {
                             {record.is_published ? 'Не публиковать' : 'Публиковать'}
                         </Button>
                     </Col>
-                    <Col flex="160px">
+                    {/* <Col flex="160px">
                         <Button type='text' loading={deleteLoading || activateLoading} onClick={() => changeActivateStat(record.id, record.is_active)}>
                             {record.is_active ? 'Удалить' : 'Активировать'}
                         </Button>
-                    </Col>
+                    </Col> */}
                     <Col>
                         <Button type='text' onClick={() => navigate({ pathname: `/product/${record.id}/edit`, search })}>
                             Изменить
@@ -192,10 +198,11 @@ export default function Products() {
                 </Button>
             </div>
             <Table
+                pagination={false}
                 columns={columns}
                 dataSource={dataSource}
                 onChange={handleChange}
-                scroll={{ y: 600, x: 1500 }} 
+                scroll={{ y: 700, x: 1350 }} // 1500
             />
         </Fragment>
     )

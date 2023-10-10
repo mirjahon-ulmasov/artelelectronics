@@ -11,6 +11,7 @@ interface SearchParams {
     category?: ID
     subcategory?: ID
     is_published?: boolean
+    is_active?: boolean
 }
 
 export const productAPI = productWithTags.injectEndpoints({

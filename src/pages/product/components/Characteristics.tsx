@@ -104,7 +104,7 @@ export function Characteristics({ product, category }: CharacteristicsProps) {
     };
 
     return (
-        <Form autoComplete="off" onFinish={onFinish}>
+        <Form autoComplete="off" onFinish={onFinish} style={{ maxWidth: 1000 }}>
             <Row gutter={[0, 20]}>
                 <Col span={24}>
                     <BorderBox>

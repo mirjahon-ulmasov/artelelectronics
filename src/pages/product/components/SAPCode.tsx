@@ -132,7 +132,7 @@ export function SAPCode({ onClick, product, category }: SAPCodeProps) {
                                 )}
                                 <FormItem
                                     label="Выбрать цвет продукта"
-                                    style={{ maxWidth: 300 }}
+                                    style={{ width: 300 }}
                                     wrapperCol={{ span: 24 }}
                                     labelCol={{ span: 24 }}
                                 >
@@ -188,7 +188,7 @@ export function SAPCode({ onClick, product, category }: SAPCodeProps) {
                             <Space size='large' key={prodUtility.uuid}>
                                 <FormItem
                                     label="Цвет продукта"
-                                    style={{ maxWidth: 300 }}
+                                    style={{ width: 250 }}
                                     labelCol={{ span: 24 }}
                                     wrapperCol={{ span: 24 }}
                                 >
@@ -216,7 +216,7 @@ export function SAPCode({ onClick, product, category }: SAPCodeProps) {
                                     <FormItem
                                         key={utility.id}
                                         label={utility.title}
-                                        style={{ maxWidth: 300 }}
+                                        style={{ width: 250 }}
                                         labelCol={{ span: 24 }}
                                         wrapperCol={{ span: 24 }}
                                     >
@@ -238,7 +238,7 @@ export function SAPCode({ onClick, product, category }: SAPCodeProps) {
                                 ))}
                                 <FormItem
                                     label="Серийный номер"
-                                    style={{ maxWidth: 300 }}
+                                    style={{ width: 250 }}
                                     labelCol={{ span: 24 }}
                                     wrapperCol={{ span: 24 }}
                                 >

@@ -107,7 +107,7 @@ export function Media({ onClick, product, category }: MediaProps) {
 
 
     return (
-        <Form autoComplete="off">
+        <Form autoComplete="off" style={{ maxWidth: 1000 }}>
             <Row gutter={[0, 20]}>
                 <Col span={24}>
                     <BorderBox>
