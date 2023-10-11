@@ -202,7 +202,7 @@ export default function Products() {
                 columns={columns}
                 dataSource={dataSource}
                 onChange={handleChange}
-                scroll={{ y: 700, x: 1350 }} // 1500
+                scroll={{ y: 600, x: 1350 }} // 1500
             />
         </Fragment>
     )

@@ -202,10 +202,9 @@ export function Advantages({ onClick, product, category }: AdvantagesProps) {
                 <Button
                     size="large"
                     shape="round"
-                    type="primary"
+                    type="default"
                     loading={createLoading}
                     onClick={() => onFinish(false)}
-                    style={{ background: '#25A55A' }}
                 >
                     Сохранить
                 </Button>

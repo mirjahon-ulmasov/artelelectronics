@@ -23,6 +23,7 @@ const theme: ThemeConfig = {
         fontSize: 14,
         fontWeightStrong: 500,
         fontFamily: 'StyreneALC',
+        colorPrimary: '#006C41',
     },
     components: {
         Table: {},
@@ -30,8 +31,8 @@ const theme: ThemeConfig = {
             titleMarginBottom: 0,
         },
         Button: {
-            colorBorder: '#116DFF',
-            colorText: '#116DFF',
+            colorBorder: '#006C41',
+            colorText: '#006C41',
             fontWeight: 400,
         },
         Input: {
@@ -41,7 +42,7 @@ const theme: ThemeConfig = {
             colorBorder: '#878787'
         },
         Upload: {
-            colorBorder: '#116DFF',
+            colorBorder: '#006C41',
         }
     },
 }

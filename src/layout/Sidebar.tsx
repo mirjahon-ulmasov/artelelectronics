@@ -43,7 +43,7 @@ function Sidebar({ userRole }: SiderProps) {
                 <ul className="nav-links">
                     {collections?.map((collection, index) => (
                         <li key={index}>
-                            <Divider>
+                            <Divider orientation='left'>
                                 <StyledTextL2>
                                     {collection.title}
                                 </StyledTextL2>
@@ -112,6 +112,7 @@ const StyledSider = styled(Sider)`
         .image {
             display: flex;
             justify-content: center;
+            margin-bottom: 1rem;
             img {
                 width: 10rem;
             }
@@ -141,7 +142,7 @@ const StyledSider = styled(Sider)`
                     transition: all 0.1s linear;
 
                     &:hover, &.active {
-                        background: #116DFF;                        
+                        background: #006C41;                        
                         color: #FFFFFF;
                     }
                 }

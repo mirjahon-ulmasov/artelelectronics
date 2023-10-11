@@ -272,10 +272,9 @@ export function SAPCode({ onClick, product, category }: SAPCodeProps) {
                     <Space size="large">
                         <Button
                             size="large"
-                            type="primary"
+                            type="default"
                             htmlType="submit"
                             shape="round"
-                            style={{ background: '#25A55A' }}
                             loading={loading1 || loading2}
                             onClick={() => onFinish(true)}
                         >

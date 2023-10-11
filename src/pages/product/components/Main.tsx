@@ -23,8 +23,9 @@ interface MainProps {
 export function Main({ onClick, onSetID, category }: MainProps) {
     const navigate = useNavigate();
     const [language, setLanguage] = useState<LANGUAGE>(LANGUAGE.RU)
-    const [product, setProduct] = useState<Product.DTOLocal>({
+    const [product, setProduct] = useState<Product.DTOUpload>({
         brand: '',
+        category,
         subcategory: '',
         is_hot: false,
         is_new: false,
@@ -44,7 +45,7 @@ export function Main({ onClick, onSetID, category }: MainProps) {
 
     // ---------------- Product ----------------
 
-    const changeProduct = useCallback((key: keyof Product.DTOLocal, value: unknown) => {
+    const changeProduct = useCallback((key: keyof Product.DTOUpload, value: unknown) => {
         setProduct(prev => ({
             ...prev,
             [key]: value
@@ -84,14 +85,8 @@ export function Main({ onClick, onSetID, category }: MainProps) {
             toast.error("Категория не выбрана")
             return;
         } 
-
-        const data: Product.DTOUpload = {
-            ...product,
-            category,
-            title: product.languages[2].title
-        }
         
-        createProduct(data)
+        createProduct(product)
             .unwrap()
             .then((response) => {
                 toast.success("Продукт успешно создан")
@@ -199,6 +194,18 @@ export function Main({ onClick, onSetID, category }: MainProps) {
                                     checked={product.is_hot}
                                     onChange={e => changeProduct('is_hot', e.target.checked)}
                                 >
+                                    <StyledText>Стандартный товар</StyledText>
+                                </Checkbox>
+                            </Form.Item>
+                            <Form.Item
+                                valuePropName="checked"
+                                labelCol={{ span: 24 }}
+                                wrapperCol={{ span: 24 }}
+                            >
+                                <Checkbox
+                                    checked={product.is_hot}
+                                    onChange={e => changeProduct('is_hot', e.target.checked)}
+                                >
                                     <StyledText>Хитовый товар</StyledText>
                                 </Checkbox>
                             </Form.Item>
@@ -235,10 +242,9 @@ export function Main({ onClick, onSetID, category }: MainProps) {
                     <Space size="large">
                         <Button
                             size="large"
-                            type="primary"
+                            type="default"
                             htmlType="submit"
                             shape="round"
-                            style={{ background: '#25A55A' }}
                             loading={createLoading}
                             onClick={() => onFinish(false)}
                         >

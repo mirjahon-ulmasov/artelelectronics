@@ -6,22 +6,12 @@ import { LANGUAGE } from '.'
 export declare namespace Product {
     type List = DTO[]
 
-    interface DTOLocal {
-        id?: ID
-        brand: ID
-        subcategory: ID
-        is_hot: boolean
-        is_new: boolean
-        is_recommended: boolean
-        languages: Language[]
-    }
-
     interface DTOUpload {
         id?: ID
         brand: ID
-        title: string
         category: ID
         subcategory: ID
+        languages: Language[]
         is_hot: boolean
         is_new: boolean
         is_recommended: boolean

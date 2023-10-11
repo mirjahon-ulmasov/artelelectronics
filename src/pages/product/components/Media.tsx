@@ -11,7 +11,7 @@ import { v4 as uuid } from 'uuid'
 import { useFetchColorsQuery, useCreateProductVariantsMutation, useAdd360ViewMutation } from 'services'
 import { 
     CustomSelect, BorderBox, StyledText, 
-    FormItem, StyledTextL2, ImageUpload, FileUpload, Color 
+    FormItem, StyledTextL2, ImageUpload, FileUpload, Color, TrashIcon 
 } from 'components'
 import { ID } from 'types/api'
 import { Product, Variant } from 'types/product';
@@ -55,6 +55,10 @@ export function Media({ onClick, product, category }: MediaProps) {
             return variant
         }))
     }
+
+    const deleteItem = useCallback((id: string) => {
+        setVariants(prev => prev.filter(variant => variant.uuid !== id))
+    }, [])
 
     // ---------------- Submit ----------------
     const onFinish = useCallback((next: boolean) => {
@@ -127,7 +131,17 @@ export function Media({ onClick, product, category }: MediaProps) {
                             <Fragment key={variant.uuid}>
                                 {!!index && (
                                     <Divider style={{ margin: '15px 0'}}>
-                                        <StyledText>{index + 1}</StyledText>
+                                        <Space size='middle'>
+                                            <StyledText>{index + 1}</StyledText>
+                                            <Button
+                                                size='middle'
+                                                shape='circle'
+                                                className='d-flex'
+                                                icon={<TrashIcon />}
+                                                style={{ scale: '1.2' }}
+                                                onClick={() => deleteItem(variant.uuid)}
+                                            />
+                                        </Space>
                                     </Divider>
                                 )}
                                 <FormItem
@@ -154,12 +168,14 @@ export function Media({ onClick, product, category }: MediaProps) {
                                         }))}
                                     ></CustomSelect>
                                 </FormItem>
-                                <ImageUpload
-                                    maxCount={1}
-                                    fileList={variant.default_image} 
-                                    onChange={(info) => changeVariant('default_image', info.fileList, variant.uuid)}
-                                />
-                                <StyledText>Загрузить основное фото каталога</StyledText>
+                                <div>
+                                    <ImageUpload
+                                        maxCount={1}
+                                        fileList={variant.default_image} 
+                                        onChange={(info) => changeVariant('default_image', info.fileList, variant.uuid)}
+                                    />
+                                    <StyledText>Загрузить основное фото каталога</StyledText>
+                                </div>
                                 <Form.Item
                                     valuePropName="checked"
                                     labelCol={{ span: 24 }}
@@ -192,10 +208,9 @@ export function Media({ onClick, product, category }: MediaProps) {
                     <Space size="large">
                         <Button
                             size="large"
-                            type="primary"
+                            type="default"
                             htmlType="submit"
                             shape="round"
-                            style={{ background: '#25A55A' }}
                             loading={createLoading1 || createLoading2}
                             onClick={() => onFinish(true)}
                         >

@@ -174,7 +174,6 @@ export function Characteristics({ product, category }: CharacteristicsProps) {
                             htmlType="submit"
                             shape="round"
                             loading={loading1 || loading2}
-                            style={{ background: '#25A55A' }}
                         >
                             Сохранить
                         </Button>
