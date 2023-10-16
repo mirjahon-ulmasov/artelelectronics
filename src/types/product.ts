@@ -11,7 +11,7 @@ export declare namespace Product {
         brand: ID
         category: ID
         subcategory: ID
-        languages: Language[]
+        languages: LanguageUpload[]
         is_hot: boolean
         is_new: boolean
         is_recommended: boolean
@@ -19,10 +19,10 @@ export declare namespace Product {
 
     interface DTO {
         id: ID
-        title: string
         brand?: Brand
         category: Category
         subcategory?: Category
+        languages: Language[]
         dynamic_view?: File
         variants?: Variant.List
         metadata: Metadata[]
@@ -30,8 +30,8 @@ export declare namespace Product {
         is_new?: boolean
         is_hot?: boolean
         is_recommended?: boolean
-        is_active: boolean
         is_published: boolean
+        is_active: boolean
     }
 
     interface View360 {
@@ -55,11 +55,16 @@ export declare namespace Product {
         value: string
         is_active: boolean
     }
-
-    interface Language {
+    
+    interface LanguageUpload {
         title: string
         language: LANGUAGE
     }
+    interface Language extends LanguageUpload {
+        id: ID
+        is_active: boolean
+    }
+
 }
 
 // -------------- Variant --------------

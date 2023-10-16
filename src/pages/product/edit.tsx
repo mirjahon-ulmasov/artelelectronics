@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { ChangeEvent, useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { Button, Col, Form, Input, Row, Space, Typography, UploadFile } from 'antd'
@@ -20,14 +19,21 @@ import { BucketFile, Client, TBranch } from 'types/api'
 import { UploadChangeParam } from 'antd/es/upload';
 import clsx from 'clsx';
 import { PlusIcon } from 'components';
+import { useFetchProductQuery } from 'services';
 
 const { Title } = Typography
 
 export default function EditProduct() {
     const { productID } = useParams()
-    return <>EDIT - {productID}</>
-    // const { airCondID } = useParams();
-    // const navigate = useNavigate();
+    const navigate = useNavigate();
+    
+    const { data: product } = useFetchProductQuery(productID ?? '', {
+        skip: !productID
+    })
+    return <>
+        EDIT - {productID}
+        <pre>{JSON.stringify(product, null, 4)}</pre>
+    </>
 
     // const [form] = Form.useForm()
     // const [clientStatus, setClientStatus] = useState<CLIENT_STATUS>()

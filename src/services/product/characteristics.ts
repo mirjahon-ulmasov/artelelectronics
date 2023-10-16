@@ -38,7 +38,7 @@ export const characteristicsAPI = characteristicsWithTags.injectEndpoints({
         }),
         uploadExcelCharacteristics: build.mutation<unknown, Characteristic.UploadExcel>({
             query: data => ({
-                url: '/product_characteristic_item/upload_excel/',
+                url: '/product_characteristic/upload_excel/',
                 method: 'POST',
                 body: data,
             }),

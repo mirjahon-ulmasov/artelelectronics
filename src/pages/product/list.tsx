@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { Fragment, useCallback, useMemo, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { Button, Col, Row, Table, TableProps, Typography } from 'antd'
@@ -6,8 +5,8 @@ import type { ColumnsType, FilterValue, SorterResult } from 'antd/es/table/inter
 import toast from 'react-hot-toast'
 import { Status } from 'components'
 import { 
-    useFetchBrandsQuery, useFetchProductsQuery, 
-    usePublishProductMutation 
+    useDeleteProductMutation, useFetchBrandsQuery, 
+    useFetchProductsQuery, usePublishProductMutation 
 } from 'services/index'
 import { useQuery } from 'hooks/useQuery'
 import { Product } from 'types/product'
@@ -30,6 +29,7 @@ export default function Products() {
     const [filters, setFilters] = useState<Record<string, FilterValue | null>>({})  
 
     const [publishProduct, { isLoading: publishLoading }] = usePublishProductMutation()   
+    const [deleteProduct, { isLoading: deleteLoading }] = useDeleteProductMutation()   
 
     const { data: brands } = useFetchBrandsQuery({})
     const { data: products } = useFetchProductsQuery({
@@ -74,20 +74,13 @@ export default function Products() {
         })
     };
 
-    // const changeActivateStat = useCallback((id: ID, is_active: boolean) => {
-    //     if(is_active) {
-    //         deleteProduct(id).unwrap()
-    //             .then(() => toast.success('Продукт успешно удален'))
-    //             .catch(() => toast.error('Что-то пошло не так'))
-    //         return;
-    //     }
-    //     activateProduct(id).unwrap()
-    //         .then(() => toast.success('Продукт успешно активирован'))
-    //         .catch(() => toast.error('Что-то пошло не так'))
-            
-    // }, [activateProduct, deleteProduct])
+    const deleteProductHandler = useCallback((id: ID) => {
+        deleteProduct(id).unwrap()
+            .then(() => toast.success('Продукт успешно удален'))
+            .catch(() => toast.error('Что-то пошло не так'))
+    }, [deleteProduct])
 
-    const changePublishStat = useCallback((id: ID, is_published: boolean) => {
+    const publishProductHandler = useCallback((id: ID, is_published: boolean) => {
         publishProduct({ id, is_published }).unwrap()
             .then(() => toast.success('Продукт успешно изменен'))
             .catch(() => toast.error('Что-то пошло не так'))
@@ -100,6 +93,7 @@ export default function Products() {
             dataIndex: 'title',
             key: 'title',
             ellipsis: true,
+            render: (_, record) => record.languages[1]?.title ?? "-",
         },
         {
             title: 'Бренд',
@@ -128,22 +122,6 @@ export default function Products() {
             ellipsis: true,
             render: (_, record) => record.subcategory?.title,
         },
-        // {
-        //     title: 'Активен',
-        //     dataIndex: 'is_active',
-        //     key: 'is_active',
-        //     width: 180,
-        //     render: (_, record) => (
-        //         <Status value={record.is_active} type='active'>
-        //             {record.is_active ? 'активный' : 'неактивный'}
-        //         </Status>
-        //     ),
-        //     filters: [
-        //         { text: 'активный', value: true },
-        //         { text: 'неактивный', value: false },
-        //     ],
-        //     filterSearch: true,
-        // },
         {
             title: 'Опубликовано',
             dataIndex: 'is_published',
@@ -163,20 +141,20 @@ export default function Products() {
         {
             title: 'Действия',
             key: 'action',
-            width: 300, // 470
+            width: 420,
             render: (_, record) => (
                <Row>
                     <Col flex="160px">
-                        <Button type='text' loading={publishLoading} onClick={() => changePublishStat(record.id, !record.is_published)}>
+                        <Button type='text' loading={publishLoading} onClick={() => publishProductHandler(record.id, !record.is_published)}>
                             {record.is_published ? 'Не публиковать' : 'Публиковать'}
                         </Button>
                     </Col>
-                    {/* <Col flex="160px">
-                        <Button type='text' loading={deleteLoading || activateLoading} onClick={() => changeActivateStat(record.id, record.is_active)}>
-                            {record.is_active ? 'Удалить' : 'Активировать'}
+                    <Col flex="100px">
+                        <Button type='text' loading={deleteLoading} onClick={() => deleteProductHandler(record.id)}>
+                            Удалить
                         </Button>
-                    </Col> */}
-                    <Col>
+                    </Col>
+                    <Col flex="100px">
                         <Button type='text' onClick={() => navigate({ pathname: `/product/${record.id}/edit`, search })}>
                             Изменить
                         </Button>
@@ -202,7 +180,7 @@ export default function Products() {
                 columns={columns}
                 dataSource={dataSource}
                 onChange={handleChange}
-                scroll={{ y: 600, x: 1350 }} // 1500
+                scroll={{ y: 600, x: 1500 }}
             />
         </Fragment>
     )

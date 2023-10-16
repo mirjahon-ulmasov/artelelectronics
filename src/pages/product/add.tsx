@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useState, Fragment, useCallback } from 'react'
 import { 
     Button, ButtonProps, Col,

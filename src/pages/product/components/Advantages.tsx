@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Fragment, useCallback, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Button, Divider, Form, Input, Space } from 'antd'

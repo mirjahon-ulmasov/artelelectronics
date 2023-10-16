@@ -1,4 +1,5 @@
 export * from './report'
+export { Color } from './color'
 export { Product } from "./product"
 export { MainPage } from './main/MainPage'
 export { Login } from './auth/Login'

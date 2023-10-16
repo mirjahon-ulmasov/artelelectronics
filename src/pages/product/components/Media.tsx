@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Fragment, useCallback, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { 
@@ -31,7 +30,7 @@ export function Media({ onClick, product, category }: MediaProps) {
         { color: '', default_image: [], is_default: false, uuid: uuid() }
     ])
 
-    const { data: colors, isLoading: colorsLoading } = useFetchColorsQuery()
+    const { data: colors, isLoading: colorsLoading } = useFetchColorsQuery({})
     const [add360View, { isLoading: createLoading1 }] = useAdd360ViewMutation()
     const [createProductVariants, { isLoading: createLoading2 }] = useCreateProductVariantsMutation()
 

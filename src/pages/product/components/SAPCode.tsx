@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Fragment, useCallback, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { 
@@ -12,7 +11,10 @@ import {
     useCreateUtilitiesMutation, useCreateProductVariantImagesMutation, 
     useFetchCategoryUtilityQuery, useFetchProductVariantsQuery 
 } from 'services'
-import { CustomSelect, BorderBox, FormItem, StyledTextL2, ImageUpload, StyledText, Color } from 'components'
+import { 
+    CustomSelect, BorderBox, FormItem, 
+    StyledTextL2, ImageUpload, StyledText, Color 
+} from 'components'
 import { Product, Utility, VariantImage } from 'types/product';
 import { PlusOutlined } from '@ant-design/icons';
 import { ID } from 'types/api'

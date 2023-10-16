@@ -6,9 +6,13 @@ const colorWithTags = api.enhanceEndpoints({
     addTagTypes: ['Color'],
 })
 
+interface SearchParams {
+    is_active?: boolean
+}
+
 export const colorAPI = colorWithTags.injectEndpoints({
     endpoints: build => ({
-        fetchColors: build.query<Color.List, void>({
+        fetchColors: build.query<Color.List, SearchParams>({
             query: () => ({
                 url: '/color/admin_view/',
                 method: 'GET',

@@ -1,6 +1,5 @@
-/* eslint-disable no-param-reassign */
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
-import { Account } from 'types/api';
+import { Account } from 'types/auth';
 
 const getInitState = () => {
     const user: Account.DTO | null = JSON.parse(localStorage.getItem('user') as string);

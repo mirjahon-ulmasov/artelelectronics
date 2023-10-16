@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useCallback, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { 
@@ -53,7 +52,7 @@ export function Main({ onClick, onSetID, category }: MainProps) {
     }, [])
 
 
-    const changeTitle = useCallback((key: keyof Product.Language, value: string) => {
+    const changeTitle = useCallback((key: keyof Product.LanguageUpload, value: string) => {
         setProduct(prev => ({
             ...prev,
             languages: prev.languages.map(el => {
@@ -69,7 +68,7 @@ export function Main({ onClick, onSetID, category }: MainProps) {
     }, [language])
 
 
-    const getValue = useCallback((key: keyof Product.Language) => {
+    const getValue = useCallback((key: keyof Product.LanguageUpload) => {
         const foundIdx = product.languages.findIndex(el => el.language === language)
         if(foundIdx !== -1) {
             return product.languages[foundIdx][key]
@@ -185,18 +184,6 @@ export function Main({ onClick, onSetID, category }: MainProps) {
                     <BorderBox>
                         <StyledText>Выбрать товар</StyledText>
                         <Space size="large">
-                            <Form.Item
-                                valuePropName="checked"
-                                labelCol={{ span: 24 }}
-                                wrapperCol={{ span: 24 }}
-                            >
-                                <Checkbox
-                                    checked={product.is_hot}
-                                    onChange={e => changeProduct('is_hot', e.target.checked)}
-                                >
-                                    <StyledText>Стандартный товар</StyledText>
-                                </Checkbox>
-                            </Form.Item>
                             <Form.Item
                                 valuePropName="checked"
                                 labelCol={{ span: 24 }}
