@@ -16,6 +16,7 @@ dayjs.extend(localeData)
 
 import App from './App'
 import 'animate.css'
+import 'react-quill/dist/quill.snow.css';
 import 'assets/scss/styles.scss'
 
 const theme: ThemeConfig = {
@@ -24,6 +25,8 @@ const theme: ThemeConfig = {
         fontWeightStrong: 500,
         fontFamily: 'StyreneALC',
         colorPrimary: '#006C41',
+        colorError: '#C53434',
+        colorBorder: '#878787'
     },
     components: {
         Table: {},
@@ -35,17 +38,12 @@ const theme: ThemeConfig = {
             colorText: '#006C41',
             fontWeight: 400,
         },
-        Input: {
-            colorBorder: '#878787'
-        },
-        Select: {
-            colorBorder: '#878787'
-        },
         Upload: {
             colorBorder: '#006C41',
         }
     },
 }
+
 
 const store = setupStore()
 

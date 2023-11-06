@@ -1,9 +1,12 @@
 export * from './auth/auth'
 export * from './auth/baseQuery'
+
 export * from './collection'
 export * from './category'
 export * from './brand'
 export * from './color'
+export * from './news'
+
 export * from './product/main'
 export * from './product/variants'
 export * from './product/variant_images'

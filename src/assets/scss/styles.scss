@@ -24,6 +24,24 @@ svg {
     height: 16px;
 }
 
+.quill {
+    flex: 1;
+}
+.ql-container {
+    border-bottom-left-radius: 0.5em;
+    border-bottom-right-radius: 0.5em;
+    background: #fefcfc;
+}
+.ql-snow.ql-toolbar {
+    display: block;
+    background: #eaecec;
+    border-top-left-radius: 0.5em;
+    border-top-right-radius: 0.5em;
+}
+.ql-editor {
+    min-height: 23rem;
+}
+
 @keyframes fadeInDown {
     0% {
         opacity: 0;

@@ -33,6 +33,12 @@ const routes: Route[] = [
         roles: [ROLE.ADMIN, ROLE.OPERATOR],
     },
     {
+        path: '/news',
+        title: 'Новости',
+        icon: SReportIcon,
+        roles: [ROLE.ADMIN, ROLE.OPERATOR],
+    },
+    {
         path: '/store',
         title: 'Магазины',
         icon: SReportIcon,
