@@ -1,7 +1,7 @@
 import { Navigate, Route, Routes } from 'react-router-dom';
 import {
     ProtectedRoute, NotFound, Login, Report, 
-    Product, MainPage, Color, News
+    Product, MainPage, Color, News, Store
 } from 'pages';
 import { ROLE } from 'types/index';
 
@@ -14,6 +14,7 @@ export default function App() {
                 <Route path="main" element={<MainPage />} />
                 <Route path="color/*" element={<Color />} />
                 <Route path="news/*" element={<News />} />
+                <Route path="store/*" element={<Store />} />
                 <Route path="product/*" element={<Product />} />
                 <Route path="admin" element={<ProtectedRoute roles={[ROLE.ADMIN]} />}>
                     <Route path="report/*" element={<Report />} />

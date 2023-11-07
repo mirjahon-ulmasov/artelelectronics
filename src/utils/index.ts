@@ -1,6 +1,7 @@
 import dayjs, { Dayjs } from 'dayjs'
 import { Language } from 'components/LanguageToggle'
 import { LANGUAGE } from 'types/index'
+import { DAYS } from 'types/store'
 
 export type format = 'client' | 'car' | 'order' | 'active'
 
@@ -29,4 +30,23 @@ export const disabledDate = (current: Dayjs): boolean => {
     // Disable dates before today
     if (!current) return false
     return current.isBefore(dayjs().subtract(1, 'day'))
+}
+
+export const getWeekDay = (day: DAYS) => {
+    switch(day) {
+        case DAYS.MONDAY:
+            return 'Понедельник'
+        case DAYS.TUESDAY:
+            return 'Вторник'
+        case DAYS.WEDNESDAY:
+            return 'Среда'
+        case DAYS.THURSDAY:
+            return 'Четверг'
+        case DAYS.FRIDAY:
+            return 'Пятница'
+        case DAYS.SATURDAY:
+            return 'Суббота'
+        case DAYS.SUNDAY:
+            return 'Воскресенье'
+    }
 }

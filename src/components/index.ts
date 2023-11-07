@@ -1,5 +1,4 @@
 export * from "./Breadcrumb"
-export * from "./DatePicker"
 export * from "./Select"
 export * from "./Status"
 export * from "./Icons"
@@ -7,6 +6,8 @@ export * from "./Tabs"
 export * from "./Text"
 export * from "./StatusSelect"
 
+
+export { CustomDatePicker } from "./DatePicker"
 export { Color } from "./Color"
 export { FormItem } from "./FormItem"
 export { FileUpload }from "./FileUpload"

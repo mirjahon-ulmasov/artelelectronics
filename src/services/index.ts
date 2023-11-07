@@ -5,6 +5,7 @@ export * from './collection'
 export * from './category'
 export * from './brand'
 export * from './color'
+export * from './store'
 export * from './news'
 
 export * from './product/main'
@@ -14,3 +15,6 @@ export * from './product/advantages'
 export * from './product/characteristics'
 export * from './product/instructions'
 export * from './product/utilities'
+
+export * from './geography/country'
+

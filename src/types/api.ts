@@ -25,9 +25,9 @@ export interface Pagination {
 }
 
 export type NullableAll<T> = {
-    [K in keyof T]: T[K] | null
+    [K in keyof T]: T[K] | null | undefined
 }
 
 export type NullableExcept<T, K extends keyof T> = {
-    [P in keyof T]: P extends K ? T[P] : T[P] | null
+    [P in keyof T]: P extends K ? T[P] : T[P] | null | undefined
 }

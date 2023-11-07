@@ -47,7 +47,10 @@ export default function AddNews() {
         }))
     }, [])
 
-    const changeNewsContent = useCallback((key: keyof News.Content, value: string) => {        
+    const changeNewsContent = useCallback((key: keyof News.Content, value: string) => {
+
+        if (key === 'content' && value === '<p><br></p>') return;
+
         setNews(prev => ({
             ...prev,
             languages: prev.languages.map(el => {
@@ -191,7 +194,9 @@ export default function AddNews() {
                                 checked={news.add_to_carousel}
                                 onChange={e => changeNews('add_to_carousel', e.target.checked)}
                             >
-                                <StyledText>Добавить в карусель</StyledText>
+                                <StyledText style={{ marginLeft: 5 }}>
+                                    Добавить в карусель
+                                </StyledText>
                             </Checkbox>
                         </Form.Item>
                     </Col>
