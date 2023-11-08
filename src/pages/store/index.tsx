@@ -9,7 +9,7 @@ export function Store() {
 			<Route index element={<Navigate to='list' />} />
 			<Route path='/list' element={<Stores />} />
 			<Route path="/add" element={<AddStore />} />
-			<Route path="/:colorID/edit" element={<EditStore />} />
+			<Route path="/:storeID/edit" element={<EditStore />} />
 		</Routes>
     );
 }

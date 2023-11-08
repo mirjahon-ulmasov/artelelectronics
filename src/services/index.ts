@@ -22,6 +22,8 @@ export * from './product/utilities'
 
 // ------------ Geography ------------
 export * from './geography/country'
+export * from './geography/region'
+export * from './geography/district'
 
 
 // ------------ Others ------------

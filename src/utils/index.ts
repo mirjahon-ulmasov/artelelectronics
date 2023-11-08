@@ -1,7 +1,7 @@
 import dayjs, { Dayjs } from 'dayjs'
 import { Language } from 'components/LanguageToggle'
 import { LANGUAGE } from 'types/others/api'
-import { DAYS } from 'types/others/store'
+import { DAYS, STORE } from 'types/others/store'
 
 export type format = 'client' | 'car' | 'order' | 'active'
 
@@ -48,5 +48,20 @@ export const getWeekDay = (day: DAYS) => {
             return 'Суббота'
         case DAYS.SUNDAY:
             return 'Воскресенье'
+        default:
+            return 'Неизвестно'
+    }
+}
+
+export const getStoreType = (type: STORE) => {
+    switch(type) {
+        case STORE.BRAND_SHOP:
+            return 'Фирменный магазин'
+        case STORE.MARKETPLACE:
+            return 'Рынок'
+        case STORE.PREMIUM_STORE:
+            return 'Премиум-магазин'
+        default:
+            return 'Неизвестно'
     }
 }

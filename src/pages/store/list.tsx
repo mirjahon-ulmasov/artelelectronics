@@ -8,6 +8,7 @@ import {
 } from 'services'
 import { Store } from 'types/others/store'
 import { ID } from 'types/others/api'
+import { getStoreType } from 'utils/index'
 
 const { Title } = Typography
 
@@ -45,9 +46,29 @@ export default function Stores() {
             ellipsis: true,
         },
         {
+            title: 'Тип магазина',
+            dataIndex: 'store_type',
+            key: 'store_type',
+            ellipsis: true,
+            render: (_, record) => getStoreType(record.store_type)
+        },
+        {
+            title: 'Номер телефона',
+            dataIndex: 'phone_number',
+            key: 'phone_number',
+            ellipsis: true,
+            render: (_, record) => record.phone_number || '-'
+        },
+        {
+            title: 'Адрес',
+            dataIndex: 'address',
+            key: 'address',
+            ellipsis: true,
+        },
+        {
             title: 'Действия',
             key: 'action',
-            width: 420,
+            width: 300,
             render: (_, record) => (
                <Row>
                     <Col flex="100px">
@@ -56,7 +77,7 @@ export default function Stores() {
                         </Button>
                     </Col>
                     <Col flex="100px">
-                        <Button type='text' onClick={() => navigate({ pathname: `/color/${record.id}/edit` })}>
+                        <Button type='text' onClick={() => navigate({ pathname: `/store/${record.id}/edit` })}>
                             Изменить
                         </Button>
                     </Col>  
@@ -79,6 +100,7 @@ export default function Stores() {
                 pagination={false}
                 columns={columns}
                 dataSource={dataSource}
+                scroll={{ y: 600, x: 1000 }}
             />
         </Fragment>
     )

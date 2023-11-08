@@ -9,7 +9,7 @@ export function News() {
 			<Route index element={<Navigate to='list' />} />
 			<Route path='/list' element={<NewsList />} />
 			<Route path="/add" element={<AddNews />} />
-			<Route path="/:colorID/edit" element={<EditNews />} />
+			<Route path="/:newsID/edit" element={<EditNews />} />
 		</Routes>
     );
 }

@@ -1,20 +1,30 @@
-import { File, ID } from '../others/api'
+import { UploadFile } from 'antd'
+import { File, ID, LANGUAGE } from '../others/api'
 
 // -------------- Color --------------
 export declare namespace Color {
     type List = DTO[]
 
-    interface DTOCreation {
-        id?: ID
-        image: ID
-        code: string
-    }
-
     interface DTO {
         id: ID
         image: File
         code: string
+        languages: Language[]
+        is_active?: boolean
+    }
+
+    interface DTOCreation extends Omit<DTO, 'id' | 'image'> {
+        id?: ID
+        image: UploadFile[]
+    }
+
+    interface DTOUpload extends Omit<DTOCreation, 'image'> {
+        image: ID
+    }
+
+    interface Language {
         title: string
-        is_active: boolean
+        language: LANGUAGE
+        is_active?: boolean
     }
 }

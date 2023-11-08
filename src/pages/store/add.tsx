@@ -10,8 +10,11 @@ import {
     FormItem, ImageUpload, StyledText,
     BorderBox, CustomSelect, StyledTextL1 
 } from 'components'
-import { useCreateStoreMutation, useFetchCountriesQuery } from 'services'
-import { getWeekDay } from 'utils/index'
+import { 
+    useCreateStoreMutation, useFetchCountriesQuery, 
+    useFetchRegionsQuery, useFetchDistrictsQuery 
+} from 'services'
+import { getStoreType, getWeekDay } from 'utils/index'
 import { Store, STORE, DAYS } from 'types/others/store'
 import { ID } from 'types/others/api'
 
@@ -19,11 +22,7 @@ const { Title } = Typography
 
 const format = 'HH:mm';
 
-const store_types = [
-    { value: STORE.BRAND_SHOP, label: 'Фирменный магазин' },
-    { value: STORE.MARKETPLACE, label: 'Рынок' },
-    { value: STORE.PREMIUM_STORE, label: 'Премиум-магазин' },
-]
+const store_types = [STORE.BRAND_SHOP, STORE.MARKETPLACE, STORE.PREMIUM_STORE]
 
 export default function AddStore() {
     const navigate = useNavigate()
@@ -51,8 +50,15 @@ export default function AddStore() {
     })
 
     const { data: countries, isLoading: loadingCountry } = useFetchCountriesQuery({})
+    const { data: regions, isLoading: loadingRegions } = useFetchRegionsQuery(
+        { country: store.country as ID }, 
+        { skip: !store.country }
+    )
+    const { data: districts, isLoading: loadingDistricts } = useFetchDistrictsQuery(
+        { region: store.region as ID }, 
+        { skip: !store.region }
+    )
     const [createStore, { isLoading: createLoading }] = useCreateStoreMutation()
-
 
     const changeStore = useCallback((key: keyof Store.DTOCreation, value: unknown) => {
         setStore(prev => ({
@@ -136,7 +142,10 @@ export default function AddStore() {
                                 allowClear
                                 size="large"
                                 placeholder="Выберите"
-                                options={store_types}
+                                options={store_types.map(store => ({
+                                    label: getStoreType(store),
+                                    value: store
+                                }))}
                                 value={store.store_type}
                                 onChange={(value: ID) => changeStore('store_type', value)}
                             />
@@ -174,10 +183,10 @@ export default function AddStore() {
                                 allowClear
                                 size="large"
                                 placeholder="Выберите"
-                                loading={loadingCountry}
-                                options={countries?.map(country => ({
-                                    label: country.languages[1].title,
-                                    value: country.id
+                                loading={loadingRegions}
+                                options={regions?.map(region => ({
+                                    label: region.languages[1].title,
+                                    value: region.id
                                 }))}
                                 value={store.region}
                                 onChange={(value: ID) => changeStore('region', value)}
@@ -195,10 +204,10 @@ export default function AddStore() {
                                 allowClear
                                 size="large"
                                 placeholder="Выберите"
-                                loading={loadingCountry}
-                                options={countries?.map(country => ({
-                                    label: country.languages[1].title,
-                                    value: country.id
+                                loading={loadingDistricts}
+                                options={districts?.map(district => ({
+                                    label: district.languages[1].title,
+                                    value: district.id
                                 }))}
                                 value={store.district}
                                 onChange={(value: ID) => changeStore('district', value)}

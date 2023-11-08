@@ -5,8 +5,8 @@ import type { ColumnsType } from 'antd/es/table/interface'
 import toast from 'react-hot-toast'
 import { isArray } from 'lodash'
 import { 
-    useDeleteColorMutation, useFetchNewsListQuery 
-} from 'services/index'
+    useDeleteNewsMutation, useFetchNewsListQuery 
+} from 'services'
 import { News } from 'types/others/news'
 import { ID } from 'types/others/api'
 
@@ -19,7 +19,7 @@ interface TableDTO extends News.DTO {
 export default function NewsList() {
     const navigate = useNavigate()
 
-    const [deleteColor, { isLoading: deleteLoading }] = useDeleteColorMutation()   
+    const [deleteNews, { isLoading: deleteLoading }] = useDeleteNewsMutation()   
     const { data: news } = useFetchNewsListQuery({
         is_active: true
     })
@@ -31,11 +31,11 @@ export default function NewsList() {
         })) || []
     }, [news])
 
-    const deleteColorHandler = useCallback((id: ID) => {
-        deleteColor(id).unwrap()
-            .then(() => toast.success('Цвет успешно удален'))
+    const deleteNewsHandler = useCallback((id: ID) => {
+        deleteNews(id).unwrap()
+            .then(() => toast.success('Новость успешно удалена'))
             .catch(() => toast.error('Что-то пошло не так'))
-    }, [deleteColor])
+    }, [deleteNews])
 
 
     const columns: ColumnsType<TableDTO> = [
@@ -53,12 +53,12 @@ export default function NewsList() {
             render: (_, record) => (
                <Row>
                     <Col flex="100px">
-                        <Button type='text' loading={deleteLoading} onClick={() => deleteColorHandler(record.id)}>
+                        <Button type='text' loading={deleteLoading} onClick={() => deleteNewsHandler(record.id)}>
                             Удалить
                         </Button>
                     </Col>
                     <Col flex="100px">
-                        <Button type='text' onClick={() => navigate({ pathname: `/color/${record.id}/edit` })}>
+                        <Button type='text' onClick={() => navigate({ pathname: `/news/${record.id}/edit` })}>
                             Изменить
                         </Button>
                     </Col>  
@@ -81,6 +81,7 @@ export default function NewsList() {
                 pagination={false}
                 columns={columns}
                 dataSource={dataSource}
+                scroll={{ y: 600, x: 700 }}
             />
         </Fragment>
     )

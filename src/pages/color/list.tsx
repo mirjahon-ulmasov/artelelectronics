@@ -44,6 +44,7 @@ export default function Colors() {
             dataIndex: 'title',
             key: 'title',
             ellipsis: true,
+            render: (_, record) => record.languages[1].title ?? '-',
         },
         {
             title: 'Код',

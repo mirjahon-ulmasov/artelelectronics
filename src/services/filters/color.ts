@@ -19,7 +19,7 @@ export const colorAPI = colorWithTags.injectEndpoints({
             }),
             providesTags: () => ['Color'],
         }),
-        createColor: build.mutation<unknown, Color.DTOCreation>({
+        createColor: build.mutation<unknown, Color.DTOUpload>({
             query: data => ({
                 url: '/color/',
                 method: 'POST',
@@ -27,7 +27,7 @@ export const colorAPI = colorWithTags.injectEndpoints({
             }),
             invalidatesTags: ['Color'],
         }),
-        updateColor: build.mutation<unknown, Color.DTOCreation>({
+        updateColor: build.mutation<unknown, Color.DTOUpload>({
             query: data => ({
                 url: `/color/${data.id}/`,
                 method: 'PUT',
