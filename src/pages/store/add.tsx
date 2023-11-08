@@ -2,7 +2,7 @@ import { Fragment, useCallback, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import toast from 'react-hot-toast'
 import { 
-    Button, Checkbox, Col, Form, Input, 
+    Button, Checkbox, Col, Divider, Form, Input, 
     Row, Space, TimePicker, Typography 
 } from 'antd'
 import dayjs, { Dayjs } from 'dayjs'
@@ -12,8 +12,8 @@ import {
 } from 'components'
 import { useCreateStoreMutation, useFetchCountriesQuery } from 'services'
 import { getWeekDay } from 'utils/index'
-import { Store, STORE, DAYS } from 'types/store'
-import { ID } from 'types/api'
+import { Store, STORE, DAYS } from 'types/others/store'
+import { ID } from 'types/others/api'
 
 const { Title } = Typography
 
@@ -265,46 +265,51 @@ export default function AddStore() {
                             />
                         </FormItem>
                     </Col>
-                    <BorderBox>
-                        {store.timetable.map(timetable => (
-                            <Fragment key={timetable.day}>
-                                <div className='d-flex gap-24'>
-                                    <StyledTextL1 style={{ maxWidth: 100, minWidth: 100 }}>
-                                        {getWeekDay(timetable.day)}
-                                    </StyledTextL1>
-                                    <TimePicker
-                                        size="large"
-                                        format={format}
-                                        placeholder="9:00"
-                                        style={{ maxWidth: 100, minWidth: 100 }}
-                                        value={timetable.opens_at}
-                                        onChange={data => changeStoreTimetable(timetable.day, 'opens_at', data)}
-                                    />
-                                    <TimePicker
-                                        size="large"
-                                        format={format}
-                                        placeholder="18:00"
-                                        style={{ maxWidth: 100, minWidth: 100 }}
-                                        value={timetable.closes_at}
-                                        onChange={data => changeStoreTimetable(timetable.day, 'closes_at', data)}
-                                    />
-                                    <Form.Item
-                                        valuePropName="checked"
-                                        style={{ maxWidth: 150, minWidth: 150 }}
-                                        labelCol={{ span: 24 }}
-                                        wrapperCol={{ span: 24 }}
-                                    >
-                                        <Checkbox
-                                            checked={timetable.is_open}
-                                            onChange={e => changeStoreTimetable(timetable.day, 'is_open', e.target.checked)}
+                    <div>
+                        <Divider>
+                            <StyledText>Рабочее время</StyledText>
+                        </Divider>
+                        <BorderBox>
+                            {store.timetable.map(timetable => (
+                                <Fragment key={timetable.day}>
+                                    <div className='d-flex gap-24'>
+                                        <StyledTextL1 style={{ maxWidth: 100, minWidth: 100 }}>
+                                            {getWeekDay(timetable.day)}
+                                        </StyledTextL1>
+                                        <TimePicker
+                                            size="large"
+                                            format={format}
+                                            placeholder="9:00"
+                                            style={{ maxWidth: 100, minWidth: 100 }}
+                                            value={timetable.opens_at}
+                                            onChange={data => changeStoreTimetable(timetable.day, 'opens_at', data)}
+                                        />
+                                        <TimePicker
+                                            size="large"
+                                            format={format}
+                                            placeholder="18:00"
+                                            style={{ maxWidth: 100, minWidth: 100 }}
+                                            value={timetable.closes_at}
+                                            onChange={data => changeStoreTimetable(timetable.day, 'closes_at', data)}
+                                        />
+                                        <Form.Item
+                                            valuePropName="checked"
+                                            style={{ maxWidth: 150, minWidth: 150 }}
+                                            labelCol={{ span: 24 }}
+                                            wrapperCol={{ span: 24 }}
                                         >
-                                            <StyledText style={{ marginLeft: 5 }}>Открыто</StyledText>
-                                        </Checkbox>
-                                    </Form.Item>
-                                </div>
-                            </Fragment>
-                        ))}
-                    </BorderBox>
+                                            <Checkbox
+                                                checked={timetable.is_open}
+                                                onChange={e => changeStoreTimetable(timetable.day, 'is_open', e.target.checked)}
+                                            >
+                                                <StyledText style={{ marginLeft: 5 }}>Открыто</StyledText>
+                                            </Checkbox>
+                                        </Form.Item>
+                                    </div>
+                                </Fragment>
+                            ))}
+                        </BorderBox>
+                    </div>
                     <Col span={24}>
                         <ImageUpload
                             maxCount={1}

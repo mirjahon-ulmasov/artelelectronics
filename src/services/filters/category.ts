@@ -1,6 +1,6 @@
-import { ID } from 'types/api'
-import { api } from './auth/baseQuery'
-import { Category } from 'types/category'
+import { Category } from 'types/filters/category'
+import { ID } from 'types/others/api'
+import { api } from '../auth/baseQuery'
 
 const categoryWithTags = api.enhanceEndpoints({
     addTagTypes: ['Category'],

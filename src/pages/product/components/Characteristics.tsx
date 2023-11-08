@@ -13,9 +13,8 @@ import {
     FormItem, StyledTextL2, ImageUpload, FileUpload 
 } from 'components'
 import { languages } from 'utils/index'
-import { ID } from 'types/api'
-import { LANGUAGE } from 'types/index';
-import { Characteristic, Instruction, Product } from 'types/product';
+import { Characteristic, Instruction, Product } from 'types/product/product';
+import { ID, LANGUAGE } from 'types/others/api'
 
 interface CharacteristicsProps {
     product: Product.DTO

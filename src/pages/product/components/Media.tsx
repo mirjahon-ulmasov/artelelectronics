@@ -12,8 +12,8 @@ import {
     CustomSelect, BorderBox, StyledText, 
     FormItem, StyledTextL2, ImageUpload, FileUpload, Color, TrashIcon 
 } from 'components'
-import { ID } from 'types/api'
-import { Product, Variant } from 'types/product';
+import { ID } from 'types/others/api'
+import { Product, Variant } from 'types/product/product';
 import { PlusOutlined } from '@ant-design/icons';
 
 

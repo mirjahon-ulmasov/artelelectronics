@@ -1,7 +1,7 @@
 import dayjs, { Dayjs } from 'dayjs'
 import { Language } from 'components/LanguageToggle'
-import { LANGUAGE } from 'types/index'
-import { DAYS } from 'types/store'
+import { LANGUAGE } from 'types/others/api'
+import { DAYS } from 'types/others/store'
 
 export type format = 'client' | 'car' | 'order' | 'active'
 

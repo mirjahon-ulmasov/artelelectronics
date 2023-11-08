@@ -1,6 +1,6 @@
 import { useCallback } from 'react'
 import { Button, ButtonProps, Space } from 'antd'
-import { LANGUAGE } from 'types/index'
+import { LANGUAGE } from 'types/others/api'
 
 export interface Language {
     label: string

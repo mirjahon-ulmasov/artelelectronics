@@ -1,6 +1,5 @@
 import { UploadFile } from 'antd'
-import { BucketFile, File, ID } from './api'
-import { LANGUAGE } from '.'
+import { BucketFile, File, ID, LANGUAGE } from '../others/api'
 
 // -------------- Product --------------
 export declare namespace Product {

@@ -1,7 +1,6 @@
 import { UploadFile } from 'antd'
 import { Dayjs } from 'dayjs'
-import { LANGUAGE } from '.'
-import { File, ID } from './api'
+import { File, ID, LANGUAGE } from './api'
 
 // -------------- News --------------
 export declare namespace News {

@@ -3,9 +3,9 @@ import { FormItem, ImageUpload, StyledText } from 'components'
 import { Fragment, useState } from 'react'
 import toast from 'react-hot-toast'
 import { useNavigate } from 'react-router-dom'
-import { useCreateColorMutation } from 'services/color'
-import { ID } from 'types/api'
-import { Color } from 'types/color'
+import { useCreateColorMutation } from 'services/filters/color'
+import { Color } from 'types/filters/color'
+import { ID } from 'types/others/api'
 
 const { Title } = Typography
 

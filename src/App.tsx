@@ -3,7 +3,7 @@ import {
     ProtectedRoute, NotFound, Login, Report, 
     Product, MainPage, Color, News, Store
 } from 'pages';
-import { ROLE } from 'types/index';
+import { ROLE } from 'types/others/api';
 
 export default function App() {
     return (

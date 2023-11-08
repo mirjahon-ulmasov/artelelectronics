@@ -1,6 +1,6 @@
-import { ID } from 'types/api'
+import { Instruction } from 'types/product/product'
+import { ID } from 'types/others/api'
 import { api } from '../auth/baseQuery'
-import { Instruction } from 'types/product'
 
 const instructionsWithTags = api.enhanceEndpoints({
     addTagTypes: ['Instruction'],

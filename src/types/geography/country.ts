@@ -1,6 +1,5 @@
 import { UploadFile } from 'antd'
-import { File, ID } from '../api'
-import { LANGUAGE } from '..'
+import { File, ID, LANGUAGE } from '../others/api'
 
 // -------------- Country --------------
 export declare namespace Country {

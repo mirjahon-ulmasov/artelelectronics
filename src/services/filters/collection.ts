@@ -1,6 +1,6 @@
-import { ID } from 'types/api'
-import { api } from './auth/baseQuery'
-import { Collection } from 'types/collection'
+import { Collection } from 'types/filters/collection'
+import { ID } from 'types/others/api'
+import { api } from '../auth/baseQuery'
 
 const collectionWithTags = api.enhanceEndpoints({
     addTagTypes: ['Collection'],

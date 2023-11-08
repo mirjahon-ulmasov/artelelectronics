@@ -1,6 +1,6 @@
-import { ID } from 'types/api'
-import { api } from './auth/baseQuery'
-import { News } from 'types/news'
+import { News } from 'types/others/news'
+import { ID } from 'types/others/api'
+import { api } from '../auth/baseQuery'
 
 const newsWithTags = api.enhanceEndpoints({
     addTagTypes: ['News'],

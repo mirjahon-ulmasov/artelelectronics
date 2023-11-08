@@ -1,5 +1,5 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
-import { Account } from 'types/auth';
+import { Account } from 'types/others/auth';
 
 const getInitState = () => {
     const user: Account.DTO | null = JSON.parse(localStorage.getItem('user') as string);

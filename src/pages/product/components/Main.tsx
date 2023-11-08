@@ -9,9 +9,8 @@ import _ from 'lodash'
 import { useCreateProductMutation, useFetchBrandsQuery, useFetchCategoriesQuery } from 'services';
 import { CustomSelect, BorderBox, LanguageToggle, StyledText, FormItem } from 'components'
 import { languages } from 'utils/index'
-import { LANGUAGE } from 'types/index';
-import { Product } from 'types/product';
-import { ID } from 'types/api'
+import { Product } from 'types/product/product';
+import { ID, LANGUAGE } from 'types/others/api'
 
 interface MainProps {
     onClick: () => void

@@ -1,6 +1,6 @@
-import { ID } from 'types/api'
+import { Advantage } from 'types/product/product'
+import { ID } from 'types/others/api'
 import { api } from '../auth/baseQuery'
-import { Advantage } from 'types/product'
 
 const advantagesWithTags = api.enhanceEndpoints({
     addTagTypes: ['Advantage'],

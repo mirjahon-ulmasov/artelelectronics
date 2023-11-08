@@ -6,8 +6,8 @@ import toast from 'react-hot-toast'
 import { 
     useDeleteStoreMutation, useFetchStoresQuery 
 } from 'services'
-import { Store } from 'types/store'
-import { ID } from 'types/api'
+import { Store } from 'types/others/store'
+import { ID } from 'types/others/api'
 
 const { Title } = Typography
 

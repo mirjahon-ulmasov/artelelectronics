@@ -1,6 +1,6 @@
-import { ID } from 'types/api'
+import { Variant } from 'types/product/product'
+import { ID } from 'types/others/api'
 import { api } from '../auth/baseQuery'
-import { Variant } from 'types/product'
 
 const productVariantsWithTags = api.enhanceEndpoints({
     addTagTypes: ['ProductVariant'],

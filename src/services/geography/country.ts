@@ -1,6 +1,6 @@
-import { ID } from 'types/api'
-import { api } from '../auth/baseQuery'
 import { Country } from 'types/geography/country'
+import { ID } from 'types/others/api'
+import { api } from '../auth/baseQuery'
 
 const countryWithTags = api.enhanceEndpoints({
     addTagTypes: ['Country'],

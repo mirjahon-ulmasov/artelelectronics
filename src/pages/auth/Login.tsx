@@ -5,7 +5,7 @@ import { toast } from 'react-hot-toast';
 import { useLoginMutation } from 'services/auth/auth';
 import { useAppDispatch } from 'hooks/redux';
 import { setCredentials } from 'store/reducers/authSlice';
-import { Account } from 'types/auth';
+import { Account } from 'types/others/auth';
 
 const { Title } = Typography;
 

@@ -11,9 +11,8 @@ import {
     FormItem, StyledTextL2, ImageUpload 
 } from 'components'
 import { languages } from 'utils/index'
-import { Advantage, Product } from 'types/product';
-import { LANGUAGE } from 'types/index';
-import { ID } from 'types/api'
+import { Advantage, Product } from 'types/product/product';
+import { ID, LANGUAGE } from 'types/others/api'
 
 interface AdvantagesProps {
     onClick: () => void

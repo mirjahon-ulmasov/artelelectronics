@@ -1,6 +1,6 @@
-import { ID } from 'types/api'
-import { api } from './auth/baseQuery'
-import { Store } from 'types/store'
+import { Store } from 'types/others/store'
+import { ID } from 'types/others/api'
+import { api } from '../auth/baseQuery'
 
 const storeWithTags = api.enhanceEndpoints({
     addTagTypes: ['Store'],

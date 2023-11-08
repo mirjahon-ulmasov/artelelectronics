@@ -1,4 +1,4 @@
-import { ROLE, Route } from 'types/index'
+import { ROLE, Route } from 'types/others/api'
 import { SReportIcon } from 'components'
 
 const routes: Route[] = [

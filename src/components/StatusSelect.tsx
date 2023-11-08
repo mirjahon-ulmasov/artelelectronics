@@ -1,7 +1,7 @@
 import { CheckCircle } from 'components'
 import clsx from 'clsx'
 import styled from 'styled-components'
-import { STATUSES } from 'types/index'
+import { ID } from 'types/others/api'
 
 interface Status<T> {
     title: string
@@ -14,7 +14,7 @@ interface SelectStatusProps<T> {
     onSelectStatus: (status: T) => void
 }
 
-export function StatusSelect<T extends STATUSES>({ statuses, activeStatus, onSelectStatus }: SelectStatusProps<T>) {
+export function StatusSelect<T extends ID>({ statuses, activeStatus, onSelectStatus }: SelectStatusProps<T>) {
     const handleStatusClick = (status: T) => {
         onSelectStatus(status)
     }

@@ -15,9 +15,9 @@ import {
     CustomSelect, BorderBox, FormItem, 
     StyledTextL2, ImageUpload, StyledText, Color 
 } from 'components'
-import { Product, Utility, VariantImage } from 'types/product';
+import { Product, Utility, VariantImage } from 'types/product/product';
 import { PlusOutlined } from '@ant-design/icons';
-import { ID } from 'types/api'
+import { ID } from 'types/others/api'
 
 interface SAPCodeProps {
     category: string

@@ -2,10 +2,9 @@ import { useEffect, useState } from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
 import styled from 'styled-components';
 import { Divider, Layout } from 'antd';
-import { ROLE, Route } from 'types/index';
 import { StyledTextL2 } from 'components';
 import { useFetchCollectionsQuery } from 'services';
-import { ID } from 'types/api';
+import { ID, ROLE, Route } from 'types/others/api';
 import routes from './routes';
 
 const { Sider } = Layout;

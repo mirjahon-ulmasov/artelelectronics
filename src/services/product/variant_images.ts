@@ -1,6 +1,6 @@
-import { ID } from 'types/api'
+import { VariantImage } from 'types/product/product'
+import { ID } from 'types/others/api'
 import { api } from '../auth/baseQuery'
-import { VariantImage } from 'types/product'
 
 const productVariantImageWithTags = api.enhanceEndpoints({
     addTagTypes: ['ProductVariantImage'],

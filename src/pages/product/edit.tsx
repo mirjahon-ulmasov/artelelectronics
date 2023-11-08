@@ -15,7 +15,7 @@ import { useFetchBranchesQuery } from 'services/branch'
 import { CustomSelect, CustomBreadcrumb, ImageUpload, CustomDatePicker, StatusSelect, StyledTextL1 } from 'components'
 import { formatDate, getStatus } from 'utils/index'
 import { CLIENT_STATUS } from 'types/index'
-import { BucketFile, Client, TBranch } from 'types/api'
+import { BucketFile, Client, TBranch } from 'types/others/api'
 import { UploadChangeParam } from 'antd/es/upload';
 import clsx from 'clsx';
 import { PlusIcon } from 'components';

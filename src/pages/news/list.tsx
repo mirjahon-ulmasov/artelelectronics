@@ -3,12 +3,12 @@ import { useNavigate } from 'react-router-dom'
 import { Button, Col, Row, Table, Typography } from 'antd'
 import type { ColumnsType } from 'antd/es/table/interface'
 import toast from 'react-hot-toast'
+import { isArray } from 'lodash'
 import { 
     useDeleteColorMutation, useFetchNewsListQuery 
 } from 'services/index'
-import { News } from 'types/news'
-import { ID } from 'types/api'
-import { isArray } from 'lodash'
+import { News } from 'types/others/news'
+import { ID } from 'types/others/api'
 
 const { Title } = Typography
 
@@ -44,12 +44,12 @@ export default function NewsList() {
             dataIndex: 'title',
             key: 'title',
             ellipsis: true,
-            render: (_, record) => (isArray(record.languages) && record.languages[0]?.title) ?? '-',
+            render: (_, record) => (isArray(record.languages) && record.languages[1]?.title) ?? '-',
         },
         {
             title: 'Действия',
             key: 'action',
-            width: 420,
+            width: 300,
             render: (_, record) => (
                <Row>
                     <Col flex="100px">

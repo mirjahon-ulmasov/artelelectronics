@@ -14,9 +14,8 @@ import {
 import { useCreateNewsMutation } from 'services'
 import { formatDate, languages } from 'utils/index'
 import { modules, formats } from 'utils/richtext'
-import { LANGUAGE } from 'types/index'
-import { News } from 'types/news'
-import { ID } from 'types/api'
+import { News } from 'types/others/news'
+import { ID, LANGUAGE } from 'types/others/api'
 
 const { Title } = Typography
 

@@ -1,6 +1,6 @@
-import { ID } from 'types/api'
+import { Utility } from 'types/product/product'
+import { ID } from 'types/others/api'
 import { api } from '../auth/baseQuery'
-import { Utility } from 'types/product'
 
 const utilitiesWithTags = api.enhanceEndpoints({
     addTagTypes: ['Utility'],

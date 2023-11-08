@@ -1,6 +1,6 @@
-import { ID } from 'types/api'
-import { api } from './auth/baseQuery'
-import { Brand } from 'types/brand'
+import { Brand } from 'types/filters/brand'
+import { ID } from 'types/others/api'
+import { api } from '../auth/baseQuery'
 
 const brandWithTags = api.enhanceEndpoints({
     addTagTypes: ['Brand'],

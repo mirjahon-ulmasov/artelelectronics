@@ -9,9 +9,9 @@ import {
     useFetchProductsQuery, usePublishProductMutation 
 } from 'services/index'
 import { useQuery } from 'hooks/useQuery'
-import { Product } from 'types/product'
+import { Product } from 'types/product/product'
 import { isArray } from 'lodash'
-import { ID } from 'types/api'
+import { ID } from 'types/others/api'
 
 const { Title } = Typography
 

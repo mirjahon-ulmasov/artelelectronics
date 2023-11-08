@@ -9,7 +9,7 @@ import {
 } from './components'
 import { useFetchProductQuery } from 'services'
 import { useQuery } from 'hooks/useQuery'
-import { ID } from 'types/api'
+import { ID } from 'types/others/api'
 
 const { Title } = Typography
 

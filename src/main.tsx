@@ -40,6 +40,9 @@ const theme: ThemeConfig = {
         },
         Upload: {
             colorBorder: '#006C41',
+        },
+        Select: {
+            optionSelectedBg: '#c9ded2'
         }
     },
 }

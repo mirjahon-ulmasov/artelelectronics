@@ -1,4 +1,4 @@
-import { File, ID } from './api'
+import { File, ID } from '../others/api'
 
 // -------------- Color --------------
 export declare namespace Color {

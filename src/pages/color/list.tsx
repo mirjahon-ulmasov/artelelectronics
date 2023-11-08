@@ -7,8 +7,8 @@ import { Color as ColorComponent } from 'components'
 import { 
     useDeleteColorMutation, useFetchColorsQuery 
 } from 'services/index'
-import { Color } from 'types/color'
-import { ID } from 'types/api'
+import { Color } from 'types/filters/color'
+import { ID } from 'types/others/api'
 
 const { Title } = Typography
 

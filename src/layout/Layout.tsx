@@ -1,7 +1,7 @@
 import { ReactNode } from 'react'
 import { Layout } from 'antd'
 import styled from 'styled-components'
-import { ROLE } from 'types/index'
+import { ROLE } from 'types/others/api'
 import Sidebar from './Sidebar'
 
 const { Content } = Layout

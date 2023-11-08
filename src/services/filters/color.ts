@@ -1,6 +1,6 @@
-import { ID } from 'types/api'
-import { api } from './auth/baseQuery'
-import { Color } from 'types/color'
+import { Color } from 'types/filters/color'
+import { ID } from 'types/others/api'
+import { api } from '../auth/baseQuery'
 
 const colorWithTags = api.enhanceEndpoints({
     addTagTypes: ['Color'],

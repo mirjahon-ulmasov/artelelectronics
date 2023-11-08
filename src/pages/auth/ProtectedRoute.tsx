@@ -1,7 +1,7 @@
 import { Outlet, Navigate, useLocation } from 'react-router-dom'
 import { useAppSelector } from 'hooks/redux'
 import MainLayout from 'layout/Layout'
-import { ROLE } from 'types/index'
+import { ROLE } from 'types/others/api'
 
 interface PropTypes {
     roles: ROLE[]

@@ -1,6 +1,6 @@
-import { ID } from 'types/api'
+import { Characteristic } from 'types/product/product'
+import { ID } from 'types/others/api'
 import { api } from '../auth/baseQuery'
-import { Characteristic } from 'types/product'
 
 const characteristicsWithTags = api.enhanceEndpoints({
     addTagTypes: ['Characteristic'],
