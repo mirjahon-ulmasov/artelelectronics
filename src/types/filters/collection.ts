@@ -1,31 +1,37 @@
-import { File, ID } from '../others/api'
+import { UploadFile } from 'antd'
+import { File, ID, LANGUAGE } from '../others/api'
 
 // -------------- Collection --------------
 export declare namespace Collection {
     type List = DTO[]
 
-    interface DTOCreation {
-        id?: ID
-        title: string
-        image: ID
-        categories: CategoryCreation[]
-    }
-
-    interface CategoryCreation {
-        category: ID
-    }
-    
     interface DTO {
         id: ID
-        title: string
         image: File
-        is_active: boolean
+        languages: Language[]
         categories: Category[]
+        is_active?: boolean
     }
-    
+
+    interface DTOCreation extends Omit<DTO, 'id' | 'image' | 'categories'> {
+        id?: ID
+        image: UploadFile[]
+        categories: { category: ID }[]
+    }
+
+    interface DTOUpload extends Omit<DTOCreation, 'image'> {
+        image: ID
+    }
+
     interface Category {
         id: ID
         title: string
         is_active: boolean
+    }
+
+    interface Language {
+        title: string
+        language: LANGUAGE
+        is_active?: boolean
     }
 }

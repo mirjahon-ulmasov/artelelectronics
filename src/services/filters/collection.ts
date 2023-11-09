@@ -15,15 +15,15 @@ export const collectionAPI = collectionWithTags.injectEndpoints({
             }),
             providesTags: () => ['Collection'],
         }),
-        createCollection: build.mutation<unknown, Collection.DTOCreation>({
+        createCollection: build.mutation<unknown, Collection.DTOUpload>({
             query: data => ({
-                url: '/collection/',
+                url: '/collection/create_with_category/',
                 method: 'POST',
                 body: data,
             }),
             invalidatesTags: ['Collection'],
         }),
-        updateCollection: build.mutation<unknown, Collection.DTOCreation>({
+        updateCollection: build.mutation<unknown, Collection.DTOUpload>({
             query: data => ({
                 url: `/collection/${data.id}/`,
                 method: 'PUT',

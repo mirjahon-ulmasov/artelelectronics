@@ -2,7 +2,6 @@ export * from './report'
 
 export { News } from './news'
 export { Store } from './store'
-export { Color } from './color'
 export { Product } from "./product"
 export { MainPage } from './main/MainPage'
 
@@ -13,3 +12,5 @@ export { ProtectedRoute } from './auth/ProtectedRoute'
 export { Country } from "./geography/country"
 export { Region } from "./geography/region"
 export { District } from "./geography/district"
+
+export { Color } from './filters/color'
