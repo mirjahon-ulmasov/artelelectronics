@@ -13,9 +13,10 @@ interface SearchParams {
 export const countryAPI = countryWithTags.injectEndpoints({
     endpoints: build => ({
         fetchCountries: build.query<Country.List, SearchParams>({
-            query: () => ({
+            query: params => ({
                 url: '/country/admin_view/',
                 method: 'GET',
+                params
             }),
             providesTags: () => ['Country'],
         }),

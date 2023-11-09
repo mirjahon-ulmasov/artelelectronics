@@ -4,9 +4,7 @@ import { Button, Col, Row, Table, Typography } from 'antd'
 import type { ColumnsType } from 'antd/es/table/interface'
 import toast from 'react-hot-toast'
 import { isArray } from 'lodash'
-import { 
-    useDeleteNewsMutation, useFetchNewsListQuery 
-} from 'services'
+import { useDeleteNewsMutation, useFetchNewsListQuery } from 'services'
 import { News } from 'types/others/news'
 import { ID } from 'types/others/api'
 

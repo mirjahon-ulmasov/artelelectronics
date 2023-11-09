@@ -26,13 +26,13 @@ const store_types = [STORE.BRAND_SHOP, STORE.MARKETPLACE, STORE.PREMIUM_STORE]
 
 export default function AddStore() {
     const navigate = useNavigate()
-    const [store, setStore] = useState<Store.NullableDTOCreation>({ 
+    const [store, setStore] = useState<Store.DTOCreation>({ 
         title: '',
         latitude: '',
         longitude: '',
-        country: null,
-        region: null,
-        district: null,
+        country: '',
+        region: '',
+        district: '',
         address: '',
         phone_number: '',
         store_type: STORE.BRAND_SHOP,
@@ -126,7 +126,7 @@ export default function AddStore() {
                             <Input 
                                 size="large" 
                                 placeholder="Название магазина"
-                                value={store.title ?? ''}
+                                value={store.title}
                                 onChange={e => changeStore('title', e.target.value)}
                             />
                         </FormItem>
@@ -146,7 +146,7 @@ export default function AddStore() {
                                     label: getStoreType(store),
                                     value: store
                                 }))}
-                                value={store.store_type}
+                                value={store.store_type || undefined}
                                 onChange={(value: ID) => changeStore('store_type', value)}
                             />
                         </FormItem>
@@ -167,7 +167,7 @@ export default function AddStore() {
                                     label: country.languages[1].title,
                                     value: country.id
                                 }))}
-                                value={store.country}
+                                value={store.country || undefined}
                                 onChange={(value: ID) => changeStore('country', value)}
                             />
                         </FormItem>
@@ -188,7 +188,7 @@ export default function AddStore() {
                                     label: region.languages[1].title,
                                     value: region.id
                                 }))}
-                                value={store.region}
+                                value={store.region || undefined}
                                 onChange={(value: ID) => changeStore('region', value)}
                             />
                         </FormItem>
@@ -209,7 +209,7 @@ export default function AddStore() {
                                     label: district.languages[1].title,
                                     value: district.id
                                 }))}
-                                value={store.district}
+                                value={store.district || undefined}
                                 onChange={(value: ID) => changeStore('district', value)}
                             />
                         </FormItem>
@@ -224,7 +224,7 @@ export default function AddStore() {
                             <Input 
                                 size="large" 
                                 placeholder="Махтумкули (бывш. Тараккиёт), 2"
-                                value={store.address ?? ''}
+                                value={store.address}
                                 onChange={e => changeStore('address', e.target.value)}
                             />
                         </FormItem>
@@ -239,7 +239,7 @@ export default function AddStore() {
                             <Input 
                                 size="large" 
                                 placeholder="41.311081"
-                                value={store.longitude ?? ''}
+                                value={store.longitude}
                                 onChange={e => changeStore('longitude', e.target.value)}
                             />
                         </FormItem>
@@ -254,7 +254,7 @@ export default function AddStore() {
                             <Input 
                                 size="large" 
                                 placeholder="69.240562"
-                                value={store.latitude ?? ''}
+                                value={store.latitude}
                                 onChange={e => changeStore('latitude', e.target.value)}
                             />
                         </FormItem>
@@ -269,7 +269,7 @@ export default function AddStore() {
                             <Input 
                                 size="large" 
                                 placeholder="+998 71 255 61 58"
-                                value={store.phone_number ?? ''}
+                                value={store.phone_number}
                                 onChange={e => changeStore('phone_number', e.target.value)}
                             />
                         </FormItem>

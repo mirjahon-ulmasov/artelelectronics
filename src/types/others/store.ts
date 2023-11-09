@@ -1,11 +1,10 @@
 import { UploadFile } from 'antd'
 import { Dayjs } from 'dayjs'
-import { BucketFile, File, ID, NullableExcept } from './api'
+import { BucketFile, File, ID } from './api'
 
 // -------------- Store --------------
 export declare namespace Store {
     type List = DTO[]
-    type NullableDTOCreation = NullableExcept<DTOCreation, 'timetable' | 'images' | 'default_image'>
 
     interface DTO {
         id: ID
@@ -31,7 +30,7 @@ export declare namespace Store {
         timetable: TimeTable<Dayjs | null>[]
     }
 
-    interface DTOUpload extends Omit<NullableDTOCreation, 'images' | 'default_image' | 'timetable'> {
+    interface DTOUpload extends Omit<DTOCreation, 'images' | 'default_image' | 'timetable'> {
         images: { image: ID }[]
         default_image: ID
         timetable: TimeTable<string>[]

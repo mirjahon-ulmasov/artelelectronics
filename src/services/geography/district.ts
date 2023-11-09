@@ -8,7 +8,7 @@ const districtWithTags = api.enhanceEndpoints({
 
 interface SearchParams {
     is_active?: boolean
-    region: ID
+    region?: ID
 }
 
 export const districtAPI = districtWithTags.injectEndpoints({

@@ -3,36 +3,37 @@ import { useNavigate } from 'react-router-dom'
 import { Button, Col, Form, Input, Row, Space, Typography } from 'antd'
 import toast from 'react-hot-toast'
 import { BorderBox, FormItem, ImageUpload, LanguageToggle, StyledText } from 'components'
-import { useCreateColorMutation } from 'services'
+import { useCreateCountryMutation } from 'services'
 import { ID, LANGUAGE } from 'types/others/api'
-import { Color } from 'types/filters/color'
+import { Country } from 'types/geography/country'
 import { languages } from 'utils/index'
 
 const { Title } = Typography
 
-export default function AddColor() {
+export default function AddCountry() {
     const navigate = useNavigate()
     const [language, setLanguage] = useState<LANGUAGE>(LANGUAGE.RU)
-    const [color, setColor] = useState<Color.DTOCreation>({
-        code: '',
-        image: [],
+    const [country, setCountry] = useState<Country.DTOCreation>({
+        flag: [],
+        IP: '',
+        country_code: '',
         languages: [
             { title: '', language: LANGUAGE.UZ },
             { title: '', language: LANGUAGE.RU },
             { title: '', language: LANGUAGE.EN },
         ]
     })
-    const [createColor, { isLoading: createLoading }] = useCreateColorMutation()
+    const [createCountry, { isLoading: createLoading }] = useCreateCountryMutation()
 
-    const changeColor = useCallback((key: keyof Color.DTOCreation, value: unknown) => {
-        setColor(prev => ({
+    const changeCountry = useCallback((key: keyof Country.DTOCreation, value: unknown) => {
+        setCountry(prev => ({
             ...prev,
             [key]: value
         }))
     }, [])
 
-    const changeColorTitle = useCallback((key: keyof Color.Language, value: string) => {
-        setColor(prev => ({
+    const changeCountryTitle = useCallback((key: keyof Country.Language, value: string) => {
+        setCountry(prev => ({
             ...prev,
             languages: prev.languages.map(el => {
                 if(el.language === language) {
@@ -46,34 +47,34 @@ export default function AddColor() {
         }))
     }, [language])
 
-    const getValue = useCallback((key: keyof Color.Language) => {
-        const foundIdx = color.languages.findIndex(el => el.language === language)
+    const getValue = useCallback((key: keyof Country.Language) => {
+        const foundIdx = country.languages.findIndex(el => el.language === language)
         if(foundIdx !== -1) {
-            return color.languages[foundIdx][key] as string
+            return country.languages[foundIdx][key] as string
         }
         return ''
-    }, [language, color.languages])
+    }, [language, country.languages])
 
 
     // ---------------- Submit ----------------
     const onFinish = useCallback(() => {
-        const data: Color.DTOUpload = {
-            ...color,
-            image: color.image[0]?.response?.id as ID
+        const data: Country.DTOUpload = {
+            ...country,
+            flag: country.flag[0]?.response?.id as ID
         }
 
-        createColor(data)
+        createCountry(data)
             .unwrap()
             .then(() => {
-                toast.success("Цвет успешно добавлен")
-                navigate("/color/list")
+                toast.success("Страна успешно добавлена")
+                navigate("/country/list")
             })
-            .catch(() => toast.error("Не удалось добавить цвет"))
-    }, [color, createColor, navigate])
+            .catch(() => toast.error("Не удалось добавить страну"))
+    }, [country, createCountry, navigate])
 
     return (
         <Fragment>
-            <Title level={3}>Добавить новый цвет</Title>
+            <Title level={3}>Добавить новую страну</Title>
             <Form
                 autoComplete="off"
                 onFinish={onFinish}
@@ -98,34 +99,50 @@ export default function AddColor() {
                                     size="large" 
                                     placeholder="Название"
                                     value={getValue('title')}
-                                    onChange={e => changeColorTitle('title', e.target.value)} 
+                                    onChange={e => changeCountryTitle('title', e.target.value)} 
                                 />
                             </FormItem>
                         </BorderBox>
                     </Col>
                     <Col span={24}>
                         <FormItem
-                            name="code"
-                            label="Цветовой код"
+                            name="country_code"
+                            label="Код страны"
                             labelCol={{ span: 24 }}
                             wrapperCol={{ span: 24 }}
                             rules={[{ required: true, message: 'Пожалуйста заполните это поле' }]}
                         >
                             <Input 
                                 size="large" 
-                                placeholder="#FFFFFF"
-                                value={color.code}
-                                onChange={e => changeColor('code', e.target.value)}
+                                placeholder="uz"
+                                value={country.country_code}
+                                onChange={e => changeCountry('country_code', e.target.value)}
+                            />
+                        </FormItem>
+                    </Col>
+                    <Col span={24}>
+                        <FormItem
+                            name="IP"
+                            label="IP-адрес"
+                            labelCol={{ span: 24 }}
+                            wrapperCol={{ span: 24 }}
+                            rules={[{ required: true, message: 'Пожалуйста заполните это поле' }]}
+                        >
+                            <Input 
+                                size="large" 
+                                placeholder="127.0.0.1"
+                                value={country.IP}
+                                onChange={e => changeCountry('IP', e.target.value)}
                             />
                         </FormItem>
                     </Col>
                     <Col span={24} className="mt-1">
                         <ImageUpload
                             maxCount={1}
-                            fileList={color.image} 
-                            onChange={(info) => changeColor('image', info.fileList)}
+                            fileList={country.flag} 
+                            onChange={(info) => changeCountry('flag', info.fileList)}
                         />
-                        <StyledText>Загрузить изображение цвета</StyledText>
+                        <StyledText>Загрузить флаг страны</StyledText>
                     </Col>
                     <Col span={24} className="mt-2">
                         <Space size="large">
@@ -142,7 +159,7 @@ export default function AddColor() {
                                 size="large"
                                 shape="round"
                                 type="default"
-                                onClick={() => navigate(`/color/list`)}
+                                onClick={() => navigate(`/country/list`)}
                             >
                                 Отменить
                             </Button>

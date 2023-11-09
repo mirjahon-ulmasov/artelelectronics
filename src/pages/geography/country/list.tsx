@@ -3,39 +3,36 @@ import { useNavigate } from 'react-router-dom'
 import { Button, Col, Row, Table, Typography } from 'antd'
 import type { ColumnsType } from 'antd/es/table/interface'
 import toast from 'react-hot-toast'
-import { Color as ColorComponent } from 'components'
-import { 
-    useDeleteColorMutation, useFetchColorsQuery 
-} from 'services/index'
-import { Color } from 'types/filters/color'
+import { useDeleteCountryMutation, useFetchCountriesQuery } from 'services/index'
+import { Country } from 'types/geography/country'
 import { ID } from 'types/others/api'
 
 const { Title } = Typography
 
-interface TableDTO extends Color.DTO {
+interface TableDTO extends Country.DTO {
     key: string
 }
 
-export default function Colors() {
+export default function CountryList() {
     const navigate = useNavigate()
 
-    const [deleteColor, { isLoading: deleteLoading }] = useDeleteColorMutation()   
-    const { data: colors } = useFetchColorsQuery({
+    const [deleteCountry, { isLoading: deleteLoading }] = useDeleteCountryMutation()   
+    const { data: countries } = useFetchCountriesQuery({
         is_active: true
     })
 
     const dataSource: TableDTO[] = useMemo(() => {
-        return colors?.map((el, idx) => ({
+        return countries?.map((el, idx) => ({
             ...el,
             key: idx.toString()
         })) || []
-    }, [colors])
+    }, [countries])
 
-    const deleteColorHandler = useCallback((id: ID) => {
-        deleteColor(id).unwrap()
-            .then(() => toast.success('Цвет успешно удален'))
+    const deleteCountryHandler = useCallback((id: ID) => {
+        deleteCountry(id).unwrap()
+            .then(() => toast.success('Страна успешно удалена'))
             .catch(() => toast.error('Что-то пошло не так'))
-    }, [deleteColor])
+    }, [deleteCountry])
 
 
     const columns: ColumnsType<TableDTO> = [
@@ -47,17 +44,16 @@ export default function Colors() {
             render: (_, record) => record.languages[1].title ?? '-',
         },
         {
-            title: 'Код',
-            dataIndex: 'code',
-            key: 'code',
+            title: 'IP',
+            dataIndex: 'IP',
+            key: 'IP',
             ellipsis: true,
         },
         {
-            title: 'Изображение',
-            dataIndex: 'image',
-            key: 'image',
+            title: 'Код страны',
+            dataIndex: 'country_code',
+            key: 'country_code',
             ellipsis: true,
-            render: (_, record) => <ColorComponent link={record.image?.file} />,
         },
         {
             title: 'Действия',
@@ -66,12 +62,12 @@ export default function Colors() {
             render: (_, record) => (
                <Row>
                     <Col flex="100px">
-                        <Button type='text' loading={deleteLoading} onClick={() => deleteColorHandler(record.id)}>
+                        <Button type='text' loading={deleteLoading} onClick={() => deleteCountryHandler(record.id)}>
                             Удалить
                         </Button>
                     </Col>
                     <Col flex="100px">
-                        <Button type='text' onClick={() => navigate({ pathname: `/color/${record.id}/edit` })}>
+                        <Button type='text' onClick={() => navigate({ pathname: `/country/${record.id}/edit` })}>
                             Изменить
                         </Button>
                     </Col>  
@@ -83,11 +79,11 @@ export default function Colors() {
     return (
         <Fragment>
             <div className='d-flex jc-sb mb-2'>
-                <Title level={3} className='fw-400'>Цвета</Title>
+                <Title level={3} className='fw-400'>Страны</Title>
                 <Button type='primary' size='large' onClick={() => navigate({
-                    pathname: '/color/add'
+                    pathname: '/country/add'
                 })}>
-                    Добавить новый цвет
+                    Добавить новую страну
                 </Button>
             </div>
             <Table
