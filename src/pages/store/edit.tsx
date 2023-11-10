@@ -1,3 +1,3 @@
-export default function EditColor() {
+export default function EditStore() {
     return <div>EditColor</div>
 }
