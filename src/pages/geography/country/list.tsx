@@ -62,7 +62,7 @@ export default function CountryList() {
             render: (_, record) => (
                <Row>
                     <Col flex="100px">
-                        <Button type='text' loading={deleteLoading} onClick={() => deleteCountryHandler(record.id)}>
+                        <Button type='text' danger loading={deleteLoading} onClick={() => deleteCountryHandler(record.id)}>
                             Удалить
                         </Button>
                     </Col>

@@ -51,7 +51,7 @@ export default function NewsList() {
             render: (_, record) => (
                <Row>
                     <Col flex="100px">
-                        <Button type='text' loading={deleteLoading} onClick={() => deleteNewsHandler(record.id)}>
+                        <Button type='text' danger loading={deleteLoading} onClick={() => deleteNewsHandler(record.id)}>
                             Удалить
                         </Button>
                     </Col>

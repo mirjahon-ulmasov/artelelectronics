@@ -66,7 +66,7 @@ export default function Colors() {
             render: (_, record) => (
                <Row>
                     <Col flex="100px">
-                        <Button type='text' loading={deleteLoading} onClick={() => deleteColorHandler(record.id)}>
+                        <Button type='text' danger loading={deleteLoading} onClick={() => deleteColorHandler(record.id)}>
                             Удалить
                         </Button>
                     </Col>

@@ -49,7 +49,7 @@ export default function Regions() {
             render: (_, record) => (
                <Row>
                     <Col flex="100px">
-                        <Button type='text' loading={deleteLoading} onClick={() => deleteRegionHandler(record.id)}>
+                        <Button type='text' danger loading={deleteLoading} onClick={() => deleteRegionHandler(record.id)}>
                             Удалить
                         </Button>
                     </Col>

@@ -72,7 +72,7 @@ export default function Stores() {
             render: (_, record) => (
                <Row>
                     <Col flex="100px">
-                        <Button type='text' loading={deleteLoading} onClick={() => deleteStoreHandler(record.id)}>
+                        <Button type='text' danger loading={deleteLoading} onClick={() => deleteStoreHandler(record.id)}>
                             Удалить
                         </Button>
                     </Col>

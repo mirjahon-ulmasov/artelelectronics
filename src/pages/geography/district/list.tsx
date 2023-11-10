@@ -49,7 +49,7 @@ export default function Districts() {
             render: (_, record) => (
                <Row>
                     <Col flex="100px">
-                        <Button type='text' loading={deleteLoading} onClick={() => deleteDistrictHandler(record.id)}>
+                        <Button type='text' danger loading={deleteLoading} onClick={() => deleteDistrictHandler(record.id)}>
                             Удалить
                         </Button>
                     </Col>

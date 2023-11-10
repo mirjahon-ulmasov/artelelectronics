@@ -150,7 +150,7 @@ export default function Products() {
                         </Button>
                     </Col>
                     <Col flex="100px">
-                        <Button type='text' loading={deleteLoading} onClick={() => deleteProductHandler(record.id)}>
+                        <Button type='text' danger loading={deleteLoading} onClick={() => deleteProductHandler(record.id)}>
                             Удалить
                         </Button>
                     </Col>
