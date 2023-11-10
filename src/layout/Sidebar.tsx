@@ -18,8 +18,9 @@ function Sidebar({ userRole }: SiderProps) {
     const [links, setLinks] = useState<Route[]>([]);
     const [hoveredIdx, setHoveredIdx] = useState<ID>('');
 
-    const { data: collections, isLoading } = useFetchCollectionsQuery()
-
+    const { data: collections } = useFetchCollectionsQuery({
+        is_active: true
+    })
 
     const handleMouseEnter = (index: ID) => {
         setHoveredIdx(index);
@@ -44,7 +45,7 @@ function Sidebar({ userRole }: SiderProps) {
                         <li key={index}>
                             <Divider orientation='left'>
                                 <StyledTextL2>
-                                    {collection.title}
+                                    {collection.languages[1]?.title ?? '-'}
                                 </StyledTextL2>
                             </Divider>
                             <ul className='bg'>

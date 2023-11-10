@@ -14,3 +14,4 @@ export { Region } from "./geography/region"
 export { District } from "./geography/district"
 
 export { Color } from './filters/color'
+export { Collection } from './filters/collection'

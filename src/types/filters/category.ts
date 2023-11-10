@@ -1,26 +1,32 @@
-import { File, ID } from '../others/api'
+import { UploadFile } from 'antd'
+import { File, ID, LANGUAGE } from '../others/api'
 
 // -------------- Category --------------
 export declare namespace Category {
     type List = DTO[]
 
-    interface DTOCreation {
-        id?: ID
-        title: string
-        parent: ID | null 
-        image: ID
-        secondary_file: ID
-        custom_order: number
-    }
-
     interface DTO {
         id: ID
-        title: string
+        parent: ParentCategory | null
         image: File
         secondary_file: File
-        parent: ParentCategory | null
         custom_order: number
+        languages: Language[]
         is_active: boolean
+    }
+
+    interface DTOCreation {
+        id?: ID
+        parent: ID | null 
+        image: UploadFile[]
+        secondary_file: UploadFile[]
+        custom_order: number
+        languages: Language[]
+    }
+
+    interface DTOUpload extends Omit<DTOCreation, 'image' | 'secondary_file'> {
+        image: ID
+        secondary_file: ID
     }
 
     interface ParentCategory {
@@ -32,5 +38,11 @@ export declare namespace Category {
         id: ID
         title: string
         items: { id: ID, title: string }[]
+    }
+
+    interface Language {
+        title: string
+        language: LANGUAGE
+        is_active?: boolean
     }
 }

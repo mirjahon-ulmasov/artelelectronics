@@ -16,11 +16,12 @@ export declare namespace Collection {
     interface DTOCreation extends Omit<DTO, 'id' | 'image' | 'categories'> {
         id?: ID
         image: UploadFile[]
-        categories: { category: ID }[]
+        categories: number[]
     }
 
-    interface DTOUpload extends Omit<DTOCreation, 'image'> {
+    interface DTOUpload extends Omit<DTOCreation, 'image' | 'categories'> {
         image: ID
+        categories: { category: ID }[]
     }
 
     interface Category {

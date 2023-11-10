@@ -3,36 +3,36 @@ import { useNavigate } from 'react-router-dom'
 import { Button, Col, Row, Table, Typography } from 'antd'
 import type { ColumnsType } from 'antd/es/table/interface'
 import toast from 'react-hot-toast'
-import { useDeleteCountryMutation, useFetchCountriesQuery } from 'services/index'
-import { Country } from 'types/geography/country'
+import { useDeleteCollectionMutation, useFetchCollectionsQuery } from 'services'
+import { Collection } from 'types/filters/collection'
 import { ID } from 'types/others/api'
 
 const { Title } = Typography
 
-interface TableDTO extends Country.DTO {
+interface TableDTO extends Collection.DTO {
     key: string
 }
 
-export default function CountryList() {
+export default function Collections() {
     const navigate = useNavigate()
 
-    const [deleteCountry, { isLoading: deleteLoading }] = useDeleteCountryMutation()   
-    const { data: countries } = useFetchCountriesQuery({
+    const [deleteCollection, { isLoading: deleteLoading }] = useDeleteCollectionMutation()   
+    const { data: collections } = useFetchCollectionsQuery({
         is_active: true
     })
 
     const dataSource: TableDTO[] = useMemo(() => {
-        return countries?.map((el, idx) => ({
+        return collections?.map((el, idx) => ({
             ...el,
             key: idx.toString()
         })) || []
-    }, [countries])
+    }, [collections])
 
-    const deleteCountryHandler = useCallback((id: ID) => {
-        deleteCountry(id).unwrap()
-            .then(() => toast.success('Страна успешно удалена'))
+    const deleteCollectionHandler = useCallback((id: ID) => {
+        deleteCollection(id).unwrap()
+            .then(() => toast.success('Коллекция успешно удалена'))
             .catch(() => toast.error('Что-то пошло не так'))
-    }, [deleteCountry])
+    }, [deleteCollection])
 
 
     const columns: ColumnsType<TableDTO> = [
@@ -41,19 +41,7 @@ export default function CountryList() {
             dataIndex: 'title',
             key: 'title',
             ellipsis: true,
-            render: (_, record) => record.languages[1].title ?? '-',
-        },
-        {
-            title: 'IP',
-            dataIndex: 'IP',
-            key: 'IP',
-            ellipsis: true,
-        },
-        {
-            title: 'Код страны',
-            dataIndex: 'country_code',
-            key: 'country_code',
-            ellipsis: true,
+            render: (_, record) => record.languages[1]?.title ?? '-',
         },
         {
             title: 'Действия',
@@ -62,12 +50,12 @@ export default function CountryList() {
             render: (_, record) => (
                <Row>
                     <Col flex="100px">
-                        <Button type='text' loading={deleteLoading} onClick={() => deleteCountryHandler(record.id)}>
+                        <Button type='text' loading={deleteLoading} onClick={() => deleteCollectionHandler(record.id)}>
                             Удалить
                         </Button>
                     </Col>
                     <Col flex="100px">
-                        <Button type='text' onClick={() => navigate({ pathname: `/country/${record.id}/edit` })}>
+                        <Button type='text' onClick={() => navigate({ pathname: `/collection/${record.id}/edit` })}>
                             Изменить
                         </Button>
                     </Col>  
@@ -79,11 +67,11 @@ export default function CountryList() {
     return (
         <Fragment>
             <div className='d-flex jc-sb mb-2'>
-                <Title level={3} className='fw-400'>Страны</Title>
+                <Title level={3} className='fw-400'>Коллекции</Title>
                 <Button type='primary' size='large' onClick={() => navigate({
-                    pathname: '/country/add'
+                    pathname: '/collection/add'
                 })}>
-                    Добавить новую страну
+                    Добавить новую коллекцию
                 </Button>
             </div>
             <Table

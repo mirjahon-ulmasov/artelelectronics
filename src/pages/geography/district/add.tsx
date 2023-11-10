@@ -104,7 +104,7 @@ export default function AddDistrict() {
                                 placeholder="Выберите"
                                 loading={loadingRegion}
                                 options={regions?.map(region => ({
-                                    label: region.languages[1].title,
+                                    label: region.languages[1]?.title,
                                     value: region.id
                                 }))}
                                 value={district.region || undefined}

@@ -102,7 +102,7 @@ export default function AddRegion() {
                                 placeholder="Выберите"
                                 loading={loadingCountry}
                                 options={countries?.map(country => ({
-                                    label: country.languages[1].title,
+                                    label: country.languages[1]?.title,
                                     value: country.id
                                 }))}
                                 value={region.country || undefined}

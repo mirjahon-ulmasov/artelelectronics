@@ -6,12 +6,17 @@ const collectionWithTags = api.enhanceEndpoints({
     addTagTypes: ['Collection'],
 })
 
+interface SearchParams {
+    is_active?: boolean
+}
+
 export const collectionAPI = collectionWithTags.injectEndpoints({
     endpoints: build => ({
-        fetchCollections: build.query<Collection.List, void>({
-            query: () => ({
+        fetchCollections: build.query<Collection.List, SearchParams>({
+            query: params => ({
                 url: '/collection/admin_view/',
                 method: 'GET',
+                params
             }),
             providesTags: () => ['Collection'],
         }),

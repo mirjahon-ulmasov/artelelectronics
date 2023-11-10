@@ -11,6 +11,7 @@ interface SearchParams {
     category?: ID
     collection?: ID
     is_parent?: boolean
+    is_active?: boolean
 }
 
 export const categoryAPI = categoryWithTags.injectEndpoints({
@@ -31,7 +32,7 @@ export const categoryAPI = categoryWithTags.injectEndpoints({
             }),
             providesTags: () => ['Category'],
         }),
-        createCategory: build.mutation<unknown, Category.DTOCreation>({
+        createCategory: build.mutation<unknown, Category.DTOUpload>({
             query: data => ({
                 url: '/category/',
                 method: 'POST',
@@ -39,7 +40,7 @@ export const categoryAPI = categoryWithTags.injectEndpoints({
             }),
             invalidatesTags: ['Category'],
         }),
-        updateCategory: build.mutation<unknown, Category.DTOCreation>({
+        updateCategory: build.mutation<unknown, Category.DTOUpload>({
             query: data => ({
                 url: `/category/${data.id}/`,
                 method: 'PUT',

@@ -2,7 +2,7 @@ import { Navigate, Route, Routes } from 'react-router-dom';
 import {
     ProtectedRoute, NotFound, Login, Report, 
     Product, MainPage, Color, News, Store,
-    Country, Region, District
+    Country, Region, District, Collection
 } from 'pages';
 import { ROLE } from 'types/others/api';
 
@@ -17,6 +17,8 @@ export default function App() {
                 <Route path="news/*" element={<News />} />
                 <Route path="store/*" element={<Store />} />
                 <Route path="product/*" element={<Product />} />
+
+                <Route path="collection/*" element={<Collection />} />
 
                 <Route path="country/*" element={<Country />} />
                 <Route path="region/*" element={<Region />} />

@@ -41,7 +41,7 @@ export default function Districts() {
             dataIndex: 'title',
             key: 'title',
             ellipsis: true,
-            render: (_, record) => record.languages[1].title ?? '-',
+            render: (_, record) => record.languages[1]?.title ?? '-',
         },
         {
             title: 'Действия',

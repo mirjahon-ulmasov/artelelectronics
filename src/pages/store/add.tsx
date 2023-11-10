@@ -164,7 +164,7 @@ export default function AddStore() {
                                 placeholder="Выберите"
                                 loading={loadingCountry}
                                 options={countries?.map(country => ({
-                                    label: country.languages[1].title,
+                                    label: country.languages[1]?.title,
                                     value: country.id
                                 }))}
                                 value={store.country || undefined}
@@ -185,7 +185,7 @@ export default function AddStore() {
                                 placeholder="Выберите"
                                 loading={loadingRegions}
                                 options={regions?.map(region => ({
-                                    label: region.languages[1].title,
+                                    label: region.languages[1]?.title,
                                     value: region.id
                                 }))}
                                 value={store.region || undefined}
@@ -206,7 +206,7 @@ export default function AddStore() {
                                 placeholder="Выберите"
                                 loading={loadingDistricts}
                                 options={districts?.map(district => ({
-                                    label: district.languages[1].title,
+                                    label: district.languages[1]?.title,
                                     value: district.id
                                 }))}
                                 value={store.district || undefined}

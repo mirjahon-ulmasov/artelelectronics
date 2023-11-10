@@ -2,8 +2,8 @@ import { Fragment, useCallback, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Button, Col, Form, Input, Row, Space, Typography } from 'antd'
 import toast from 'react-hot-toast'
-import { BorderBox, FormItem, ImageUpload, LanguageToggle, StyledText } from 'components'
-import { useCreateCollectionMutation } from 'services'
+import { BorderBox, CustomSelect, FormItem, ImageUpload, LanguageToggle, StyledText } from 'components'
+import { useCreateCollectionMutation, useFetchCategoriesQuery } from 'services'
 import { ID, LANGUAGE } from 'types/others/api'
 import { Collection } from 'types/filters/collection'
 import { languages } from 'utils/index'
@@ -22,6 +22,7 @@ export default function AddCollection() {
             { title: '', language: LANGUAGE.EN },
         ]
     })
+    const { data: categories, isLoading: loadingCategory } = useFetchCategoriesQuery({})
     const [createCollection, { isLoading: createLoading }] = useCreateCollectionMutation()
 
     const changeCollection = useCallback((key: keyof Collection.DTOCreation, value: unknown) => {
@@ -59,21 +60,22 @@ export default function AddCollection() {
     const onFinish = useCallback(() => {
         const data: Collection.DTOUpload = {
             ...collection,
-            flag: collection.flag[0]?.response?.id as ID
+            image: collection.image[0]?.response?.id as ID,
+            categories: collection.categories.map(el => ({ category: el }))
         }
 
         createCollection(data)
             .unwrap()
             .then(() => {
-                toast.success("Страна успешно добавлена")
+                toast.success("Коллекция успешно добавлена")
                 navigate("/collection/list")
             })
-            .catch(() => toast.error("Не удалось добавить страну"))
+            .catch(() => toast.error("Не удалось добавить коллекцию"))
     }, [collection, createCollection, navigate])
 
     return (
         <Fragment>
-            <Title level={3}>Добавить новую страну</Title>
+            <Title level={3}>Добавить новую коллекцию</Title>
             <Form
                 autoComplete="off"
                 onFinish={onFinish}
@@ -105,43 +107,33 @@ export default function AddCollection() {
                     </Col>
                     <Col span={24}>
                         <FormItem
-                            name="collection_code"
-                            label="Код страны"
+                            label="Категория"
                             labelCol={{ span: 24 }}
                             wrapperCol={{ span: 24 }}
-                            rules={[{ required: true, message: 'Пожалуйста заполните это поле' }]}
+                            rules={[{ required: true, message: 'Пожалуйста заполните поле' }]}
                         >
-                            <Input 
-                                size="large" 
-                                placeholder="uz"
-                                value={collection.collection_code}
-                                onChange={e => changeCollection('collection_code', e.target.value)}
-                            />
-                        </FormItem>
-                    </Col>
-                    <Col span={24}>
-                        <FormItem
-                            name="IP"
-                            label="IP-адрес"
-                            labelCol={{ span: 24 }}
-                            wrapperCol={{ span: 24 }}
-                            rules={[{ required: true, message: 'Пожалуйста заполните это поле' }]}
-                        >
-                            <Input 
-                                size="large" 
-                                placeholder="127.0.0.1"
-                                value={collection.IP}
-                                onChange={e => changeCollection('IP', e.target.value)}
+                            <CustomSelect
+                                mode='multiple'
+                                allowClear
+                                size="large"
+                                placeholder="Выберите"
+                                loading={loadingCategory}
+                                options={categories?.map(category => ({
+                                    label: category.languages[1]?.title ?? '',
+                                    value: category.id
+                                }))}
+                                value={collection.categories || undefined}
+                                onChange={(value) => changeCollection('categories', value)}
                             />
                         </FormItem>
                     </Col>
                     <Col span={24} className="mt-1">
                         <ImageUpload
                             maxCount={1}
-                            fileList={collection.flag} 
-                            onChange={(info) => changeCollection('flag', info.fileList)}
+                            fileList={collection.image} 
+                            onChange={(info) => changeCollection('image', info.fileList)}
                         />
-                        <StyledText>Загрузить флаг страны</StyledText>
+                        <StyledText>Загрузить изображение</StyledText>
                     </Col>
                     <Col span={24} className="mt-2">
                         <Space size="large">

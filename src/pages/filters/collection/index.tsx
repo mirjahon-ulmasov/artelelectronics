@@ -1,15 +1,15 @@
 import { Route, Routes, Navigate } from 'react-router-dom';
-import CountryList from './list';
-import AddCountry from './add';
-import EditCountry from './edit';
+import Collections from './list';
+import AddCollection from './add';
+import EditCollection from './edit';
 
-export function Country() {
+export function Collection() {
     return (
 		<Routes>
 			<Route index element={<Navigate to='list' />} />
-			<Route path='/list' element={<CountryList />} />
-			<Route path="/add" element={<AddCountry />} />
-			<Route path="/:countryID/edit" element={<EditCountry />} />
+			<Route path='/list' element={<Collections />} />
+			<Route path="/add" element={<AddCollection />} />
+			<Route path="/:collectionID/edit" element={<EditCollection />} />
 		</Routes>
     );
 }
