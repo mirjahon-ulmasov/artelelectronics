@@ -2,7 +2,8 @@ import { Navigate, Route, Routes } from 'react-router-dom';
 import {
     ProtectedRoute, NotFound, Login, Report, 
     Product, MainPage, Color, News, Store,
-    Country, Region, District, Collection
+    Country, Region, District, Collection,
+    Category
 } from 'pages';
 import { ROLE } from 'types/others/api';
 
@@ -13,13 +14,16 @@ export default function App() {
             <Route path="/" element={<ProtectedRoute isRoot={true} roles={[ROLE.ADMIN, ROLE.OPERATOR]} />}>
                 <Route index element={<Navigate replace to='/main' />} />
                 <Route path="main" element={<MainPage />} />
-                <Route path="color/*" element={<Color />} />
                 <Route path="news/*" element={<News />} />
                 <Route path="store/*" element={<Store />} />
                 <Route path="product/*" element={<Product />} />
 
+                {/* ---------- Filters ---------- */}
+                <Route path="color/*" element={<Color />} />
                 <Route path="collection/*" element={<Collection />} />
+                <Route path="category/*" element={<Category />} />
 
+                {/* ---------- Geography ---------- */}
                 <Route path="country/*" element={<Country />} />
                 <Route path="region/*" element={<Region />} />
                 <Route path="district/*" element={<District />} />
