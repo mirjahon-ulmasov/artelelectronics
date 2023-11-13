@@ -5,22 +5,10 @@ import { BucketFile, File, ID, LANGUAGE } from '../others/api'
 export declare namespace Product {
     type List = DTO[]
 
-    interface DTOUpload {
-        id?: ID
-        brand: ID
-        category: ID
-        subcategory: ID
-        languages: LanguageUpload[]
-        is_hot: boolean
-        is_new: boolean
-        is_recommended: boolean
-    }
-
     interface DTO {
         id: ID
         brand?: Brand
         category: Category
-        subcategory?: Category
         languages: Language[]
         dynamic_view?: File
         variants?: Variant.List
@@ -32,6 +20,15 @@ export declare namespace Product {
         is_published: boolean
         is_active: boolean
     }
+
+    interface DTOUpload {
+        id?: ID
+        brand: ID
+        category: ID
+        category_type: ID
+        languages: LanguageUpload[]
+    }
+
 
     interface View360 {
         id: ID
@@ -57,6 +54,7 @@ export declare namespace Product {
     
     interface LanguageUpload {
         title: string
+        secondary_title: string
         language: LANGUAGE
     }
     interface Language extends LanguageUpload {

@@ -68,7 +68,7 @@ function Sidebar({ userRole }: SiderProps) {
                                                         : '#1b1005a6' 
                                                 }                                               
                                             )} */}
-                                            <span>{category.title}</span>
+                                            <span>{category.languages[1].title}</span>
                                         </NavLink>
                                     </li>
                                 ))}

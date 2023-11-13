@@ -1,16 +1,13 @@
 import { useCallback, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { 
-    Button, Checkbox, Col, Form, Input, 
-    Row, Space 
-} from 'antd'
+import { Button, Col, Form, Input, Row, Space } from 'antd'
 import toast from 'react-hot-toast'
 import _ from 'lodash'
-import { useCreateProductMutation, useFetchBrandsQuery, useFetchCategoriesQuery } from 'services';
-import { CustomSelect, BorderBox, LanguageToggle, StyledText, FormItem } from 'components'
-import { languages } from 'utils/index'
+import { useCreateProductMutation, useFetchBrandsQuery, useFetchCategoryTypesQuery } from 'services';
+import { CustomSelect, BorderBox, LanguageToggle, FormItem } from 'components'
 import { Product } from 'types/product/product';
 import { ID, LANGUAGE } from 'types/others/api'
+import { languages } from 'utils/index'
 
 interface MainProps {
     onClick: () => void
@@ -23,22 +20,19 @@ export function Main({ onClick, onSetID, category }: MainProps) {
     const [language, setLanguage] = useState<LANGUAGE>(LANGUAGE.RU)
     const [product, setProduct] = useState<Product.DTOUpload>({
         brand: '',
-        category,
-        subcategory: '',
-        is_hot: false,
-        is_new: false,
-        is_recommended: false,
+        category: '',
+        category_type: '',
         languages: [
-            { title: '', language: LANGUAGE.UZ },
-            { title: '', language: LANGUAGE.RU },
-            { title: '', language: LANGUAGE.EN },
+            { title: '', secondary_title: "", language: LANGUAGE.EN },
+            { title: '', secondary_title: "", language: LANGUAGE.RU },
+            { title: '', secondary_title: "", language: LANGUAGE.UZ },
         ]
     })
 
     const [createProduct, { isLoading: createLoading }] = useCreateProductMutation()
     const { data: brands, isLoading: brandsLoading } = useFetchBrandsQuery({})
-    const { data: subcategories, isLoading: subcategoriesLoading } = useFetchCategoriesQuery({
-        parent: category
+    const { data: category_types, isLoading: categoryTypesLoading } = useFetchCategoryTypesQuery({
+        category: category
     })
 
     // ---------------- Product ----------------
@@ -117,18 +111,26 @@ export function Main({ onClick, onSetID, category }: MainProps) {
                             label="Название продукта"
                             labelCol={{ span: 24 }}
                             wrapperCol={{ span: 24 }}
-                            rules={[
-                                {
-                                    required: true,
-                                    message: 'Пожалуйста заполните поле',
-                                },
-                            ]}
+                            rules={[{ required: true, message: 'Пожалуйста заполните поле' }]}
                         >
                             <Input 
                                 size="large" 
                                 placeholder="Название продукта"
                                 value={getValue('title')}
                                 onChange={e => changeTitle('title', e.target.value)}
+                            />
+                        </FormItem>
+                        <FormItem
+                            label="Вторичное название продукта"
+                            labelCol={{ span: 24 }}
+                            wrapperCol={{ span: 24 }}
+                            rules={[{ required: true, message: 'Пожалуйста заполните поле' }]}
+                        >
+                            <Input 
+                                size="large" 
+                                placeholder="Вторичное название продукта"
+                                value={getValue('secondary_title')}
+                                onChange={e => changeTitle('secondary_title', e.target.value)}
                             />
                         </FormItem>
                     </BorderBox>
@@ -139,12 +141,7 @@ export function Main({ onClick, onSetID, category }: MainProps) {
                             label="Выбрать бренд"
                             labelCol={{ span: 24 }}
                             wrapperCol={{ span: 24 }}
-                            rules={[
-                                {
-                                    required: true,
-                                    message: 'Пожалуйста выберите бренд',
-                                },
-                            ]}
+                            rules={[{ required: true, message: 'Пожалуйста заполните поле' }]}
                         >
                             <CustomSelect
                                 allowClear
@@ -155,31 +152,27 @@ export function Main({ onClick, onSetID, category }: MainProps) {
                                     value: brand.id,
                                     label: brand.title,
                                 }))}
-                                value={product.brand}
+                                value={product.brand || undefined}
                                 onChange={(value: ID) => changeProduct('brand', value)}
                             />
                         </FormItem>
-                        <FormItem
-                            label="Субкатегория"
-                            labelCol={{ span: 24 }}
-                            wrapperCol={{ span: 24 }}
-                        >
+                        <FormItem label="Тип названия категории" labelCol={{ span: 24 }} wrapperCol={{ span: 24 }}>
                             <CustomSelect
                                 allowClear
                                 size="large"
                                 placeholder="Выберите"
-                                loading={subcategoriesLoading}
-                                options={subcategories?.map(subcategory => ({
-                                    value: subcategory.id,
-                                    label: subcategory.title,
+                                loading={categoryTypesLoading}
+                                options={category_types?.map(type => ({
+                                    value: type.id,
+                                    label: type.languages[1]?.title,
                                 }))}
-                                value={product.subcategory}
-                                onChange={(value: ID) => changeProduct('subcategory', value)}
+                                value={product.category_type || undefined}
+                                onChange={(value: ID) => changeProduct('category_type', value)}
                             />
                         </FormItem>
                     </BorderBox>
                 </Col>
-                <Col span={24}>
+                {/* <Col span={24}>
                     <BorderBox>
                         <StyledText>Выбрать товар</StyledText>
                         <Space size="large">
@@ -223,7 +216,7 @@ export function Main({ onClick, onSetID, category }: MainProps) {
                             </Form.Item>
                         </Space>
                     </BorderBox>
-                </Col>
+                </Col> */}
                 <Col span={24} className='mt-2'>
                     <Space size="large">
                         <Button

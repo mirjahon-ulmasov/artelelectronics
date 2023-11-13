@@ -99,7 +99,6 @@ export default function Products() {
             title: 'Бренд',
             dataIndex: 'brand',
             key: 'brand',
-            width: 150,
             ellipsis: true,
             render: (_, record) => record.brand?.title,
             filters: brands?.map(brand => ({
@@ -116,17 +115,9 @@ export default function Products() {
             render: (_, record) => record.category?.title,
         },
         {
-            title: 'Подкатегория',
-            dataIndex: 'subcategory',
-            key: 'subcategory',
-            ellipsis: true,
-            render: (_, record) => record.subcategory?.title,
-        },
-        {
             title: 'Опубликовано',
             dataIndex: 'is_published',
             key: 'is_published',
-            width: 200,
             render: (_, record) => (
                 <Status value={record.is_published} type='active'>
                     {record.is_published ? 'опубликован' : 'не опубликовано'}

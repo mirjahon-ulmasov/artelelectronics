@@ -17,7 +17,7 @@ export declare namespace Category {
 
     interface DTOCreation {
         id?: ID
-        parent: ID | null 
+        parent: ID | null
         image: UploadFile[]
         secondary_file: UploadFile[]
         custom_order: number
@@ -37,7 +37,24 @@ export declare namespace Category {
     interface Utility {
         id: ID
         title: string
-        items: { id: ID, title: string }[]
+        items: { id: ID; title: string }[]
+    }
+
+    interface Language {
+        title: string
+        language: LANGUAGE
+        is_active?: boolean
+    }
+}
+
+export declare namespace CategoryType {
+    type List = DTO[]
+
+    interface DTO {
+        id?: ID
+        category: ID
+        languages: Language[]
+        is_active?: boolean
     }
 
     interface Language {

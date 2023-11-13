@@ -26,7 +26,7 @@ export declare namespace Collection {
 
     interface Category {
         id: ID
-        title: string
+        languages: Language[]
         is_active: boolean
     }
 
