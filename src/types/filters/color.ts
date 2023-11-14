@@ -1,5 +1,5 @@
 import { UploadFile } from 'antd'
-import { File, ID, LANGUAGE } from '../others/api'
+import { File, ID, Language } from '../others/api'
 
 // -------------- Color --------------
 export declare namespace Color {
@@ -20,11 +20,5 @@ export declare namespace Color {
 
     interface DTOUpload extends Omit<DTOCreation, 'image'> {
         image: ID
-    }
-
-    interface Language {
-        title: string
-        language: LANGUAGE
-        is_active?: boolean
     }
 }

@@ -1,5 +1,5 @@
 import { UploadFile } from 'antd'
-import { File, ID, LANGUAGE } from '../others/api'
+import { File, ID, Language } from '../others/api'
 
 // -------------- Collection --------------
 export declare namespace Collection {
@@ -28,11 +28,5 @@ export declare namespace Collection {
         id: ID
         languages: Language[]
         is_active: boolean
-    }
-
-    interface Language {
-        title: string
-        language: LANGUAGE
-        is_active?: boolean
     }
 }

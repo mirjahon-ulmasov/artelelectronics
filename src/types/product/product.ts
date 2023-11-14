@@ -1,5 +1,5 @@
 import { UploadFile } from 'antd'
-import { BucketFile, File, ID, LANGUAGE } from '../others/api'
+import { BucketFile, File, ID, LANGUAGE, Language } from '../others/api'
 
 // -------------- Product --------------
 export declare namespace Product {
@@ -7,18 +7,14 @@ export declare namespace Product {
 
     interface DTO {
         id: ID
-        brand?: Brand
+        brand: Brand
         category: Category
-        languages: Language[]
         dynamic_view?: File
-        variants?: Variant.List
-        metadata: Metadata[]
-        advantages?: Advantage.List
-        is_new?: boolean
-        is_hot?: boolean
-        is_recommended?: boolean
+        languages: ExLanguage[]
+        variants: Variant.List
+        advantages: Advantage.List
         is_published: boolean
-        is_active: boolean
+        is_active?: boolean
     }
 
     interface DTOUpload {
@@ -26,23 +22,20 @@ export declare namespace Product {
         brand: ID
         category: ID
         category_type: ID
-        languages: LanguageUpload[]
-    }
-
-
-    interface View360 {
-        id: ID
-        dynamic_file: ID
+        languages: ExLanguage[]
     }
 
     interface Category {
         id: ID
         title: string
-        is_active: boolean
+        is_active?: boolean
     }
 
     interface Brand extends Category {
+        id: ID
         image: File
+        title: string
+        is_active?: boolean
     }
 
     interface Metadata {
@@ -52,14 +45,13 @@ export declare namespace Product {
         is_active: boolean
     }
     
-    interface LanguageUpload {
-        title: string
+    interface ExLanguage extends Language {
         secondary_title: string
-        language: LANGUAGE
     }
-    interface Language extends LanguageUpload {
+
+    interface View360 {
         id: ID
-        is_active: boolean
+        dynamic_file: ID
     }
 
 }
@@ -89,7 +81,7 @@ export declare namespace Variant {
         color: Color
         default_image: File
         is_default: boolean
-        is_active: boolean
+        is_active?: boolean
         product_images?: BucketFile[]
     }
 

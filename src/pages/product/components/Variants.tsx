@@ -17,13 +17,13 @@ import { Product, Variant } from 'types/product/product';
 import { PlusOutlined } from '@ant-design/icons';
 
 
-interface MediaProps {
+interface VariantProps {
     onClick: () => void
     product: Product.DTO
     category: string
 }
 
-export function Media({ onClick, product, category }: MediaProps) {
+export function Variants({ onClick, product, category }: VariantProps) {
     const navigate = useNavigate();
     const [view360, setView360] = useState<UploadFile[]>([])
     const [variants, setVariants] = useState<Variant.DTOLocal[]>([
@@ -62,14 +62,9 @@ export function Media({ onClick, product, category }: MediaProps) {
     // ---------------- Submit ----------------
     const onFinish = useCallback((next: boolean) => {
 
-        const hasError = 
-        variants.some(variant => 
-            !variant.color || 
-            !isArray(variant.default_image) ||
-            !variant.default_image.length
-        ) 
-        || !isArray(view360) 
-        || !view360.length
+        const hasError = variants.some(variant => 
+            !variant.color || !isArray(variant.default_image) || !variant.default_image.length
+        )
 
         if(hasError) {
             toast.error("Пожалуйста заполните поля")
@@ -89,9 +84,12 @@ export function Media({ onClick, product, category }: MediaProps) {
         }))
 
         const promises = [
-            add360View(data360).unwrap(),
             createProductVariants(dataVariants).unwrap(),
         ];
+
+        if(data360.dynamic_file) {
+            promises.push(add360View(data360).unwrap())
+        }
 
         Promise.all(promises)
             .then(() => {
@@ -152,7 +150,7 @@ export function Media({ onClick, product, category }: MediaProps) {
                                     <CustomSelect
                                         allowClear
                                         size="large"
-                                        value={variant.color}
+                                        value={variant.color || undefined}
                                         placeholder="Выберите"
                                         loading={colorsLoading}
                                         onChange={(value: ID) => changeVariant('color', value, variant.uuid)}
@@ -161,7 +159,7 @@ export function Media({ onClick, product, category }: MediaProps) {
                                             label: (
                                                 <div className='d-flex gap-12 jc-start'>
                                                     <Color link={color.image.file} />
-                                                    {color.title}
+                                                    {color.languages[1]?.title}
                                                 </div>
                                             ),
                                         }))}

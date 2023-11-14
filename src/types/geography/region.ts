@@ -1,4 +1,4 @@
-import { ID, LANGUAGE } from '../others/api'
+import { ID, Language } from '../others/api'
 
 // -------------- Region --------------
 export declare namespace Region {
@@ -13,12 +13,5 @@ export declare namespace Region {
     interface DTOCreation extends Omit<DTO, 'id'> {
         id?: ID
         country: ID
-    }
-
-    interface Language {
-        id?: ID
-        title: string
-        language: LANGUAGE
-        is_active?: boolean
     }
 }

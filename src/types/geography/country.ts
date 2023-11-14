@@ -1,5 +1,5 @@
 import { UploadFile } from 'antd'
-import { File, ID, LANGUAGE } from '../others/api'
+import { File, ID, Language } from '../others/api'
 
 // -------------- Country --------------
 export declare namespace Country {
@@ -21,12 +21,5 @@ export declare namespace Country {
 
     interface DTOUpload extends Omit<DTOCreation, 'flag'> {
         flag: ID
-    }
-
-    interface Language {
-        id?: ID
-        title: string
-        language: LANGUAGE
-        is_active?: boolean
     }
 }

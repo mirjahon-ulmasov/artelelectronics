@@ -1,5 +1,5 @@
 import { UploadFile } from 'antd'
-import { File, ID, LANGUAGE } from '../others/api'
+import { File, ID, Language } from '../others/api'
 
 // -------------- Category --------------
 export declare namespace Category {
@@ -39,12 +39,6 @@ export declare namespace Category {
         title: string
         items: { id: ID; title: string }[]
     }
-
-    interface Language {
-        title: string
-        language: LANGUAGE
-        is_active?: boolean
-    }
 }
 
 export declare namespace CategoryType {
@@ -56,10 +50,22 @@ export declare namespace CategoryType {
         languages: Language[]
         is_active?: boolean
     }
+}
 
-    interface Language {
-        title: string
-        language: LANGUAGE
-        is_active?: boolean
+export declare namespace CategoryUtility {
+    type List = DTO[]
+
+    interface DTO {
+        id?: ID
+        category: ID
+        is_primary: boolean
+        languages: Language[]
+        items: UtilityItem[]
+    }
+    
+    interface UtilityItem {
+        id?: ID
+        languages: Language[]
     }
 }
+

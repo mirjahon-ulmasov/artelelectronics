@@ -12,7 +12,7 @@ import { languages } from 'utils/index'
 interface MainProps {
     onClick: () => void
     onSetID: (id: ID) => void
-    category: string
+    category: ID
 }
 
 export function Main({ onClick, onSetID, category }: MainProps) {
@@ -20,7 +20,7 @@ export function Main({ onClick, onSetID, category }: MainProps) {
     const [language, setLanguage] = useState<LANGUAGE>(LANGUAGE.RU)
     const [product, setProduct] = useState<Product.DTOUpload>({
         brand: '',
-        category: '',
+        category,
         category_type: '',
         languages: [
             { title: '', secondary_title: "", language: LANGUAGE.EN },
@@ -45,7 +45,7 @@ export function Main({ onClick, onSetID, category }: MainProps) {
     }, [])
 
 
-    const changeTitle = useCallback((key: keyof Product.LanguageUpload, value: string) => {
+    const changeTitle = useCallback((key: keyof Product.ExLanguage, value: string) => {
         setProduct(prev => ({
             ...prev,
             languages: prev.languages.map(el => {
@@ -61,7 +61,7 @@ export function Main({ onClick, onSetID, category }: MainProps) {
     }, [language])
 
 
-    const getValue = useCallback((key: keyof Product.LanguageUpload) => {
+    const getValue = useCallback((key: keyof Omit<Product.ExLanguage, 'is_active'>) => {
         const foundIdx = product.languages.findIndex(el => el.language === language)
         if(foundIdx !== -1) {
             return product.languages[foundIdx][key]

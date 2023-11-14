@@ -52,3 +52,9 @@ export enum ROLE {
     OPERATOR,
     BRANCH_MAIN,
 }
+
+export interface Language {
+    title: string
+    language: LANGUAGE
+    is_active?: boolean
+}

@@ -1,22 +1,23 @@
-import { Fragment, useCallback, useState } from 'react'
+import { useCallback, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { 
-    Button, Col, Divider, Form, 
+    Button, Checkbox, Col, Divider, Form, 
     Input, Row, Space 
 } from 'antd'
 import toast from 'react-hot-toast'
 import _ from 'lodash'
 import { v4 as uuid } from 'uuid'
+import { PlusOutlined } from '@ant-design/icons';
 import { 
-    useCreateUtilitiesMutation, useCreateProductVariantImagesMutation, 
-    useFetchCategoryUtilityQuery, useFetchProductVariantsQuery 
+    useCreateProductUtilityMutation, useFetchCategoryUtilitiesQuery, 
+    useFetchProductVariantsQuery 
 } from 'services'
 import { 
     CustomSelect, BorderBox, FormItem, 
-    StyledTextL2, ImageUpload, StyledText, Color 
+    StyledTextL2, Color, TrashIcon, StyledText, FileUpload 
 } from 'components'
-import { Product, Utility, VariantImage } from 'types/product/product';
-import { PlusOutlined } from '@ant-design/icons';
+import { ProductUtility } from 'types/product/utility'
+import { Product } from 'types/product/product';
 import { ID } from 'types/others/api'
 
 interface SAPCodeProps {
@@ -28,78 +29,122 @@ interface SAPCodeProps {
 export function SAPCode({ onClick, product, category }: SAPCodeProps) {
     const navigate = useNavigate();
 
-    const [variantImages, setVariantImages] = useState<VariantImage.DTOLocal[]>([
-        { variant: '', images: [], uuid: uuid() }
-    ])
-    const [productUtility, setProductUtility] = useState<Utility.DTOLocal[]>([
-        { utility_item: '', color: '', code: '', uuid: uuid() }
-    ])
+    const [productUtility, setProductUtility] = useState<ProductUtility.DTOLocal>({ 
+        product: product.id,
+        brand: product.brand.id,
+        is_default: false,
+        file: [],
+        items: [{
+            uuid: uuid(),
+            product: product.id,
+            brand: product.brand.id,
+            category: product.category.id,
+            variant: '',
+            primary_utility: '',
+            secondary_utilities: [],
+            code: '',
+            is_recommended: false,
+            is_new: false,
+            is_hot: false,
+        }],
+    })
 
-    const [createProductVariantImages, { isLoading: loading1 }] = useCreateProductVariantImagesMutation()
-    const [addUtilityProduct, { isLoading: loading2 }] = useCreateUtilitiesMutation()
     const { data: variants, isLoading: variantsLoading } = useFetchProductVariantsQuery({
         product: product.id
     })
-    const { data: utilities } = useFetchCategoryUtilityQuery({
-        category
+    const { data: primaryUtility } = useFetchCategoryUtilitiesQuery({
+        category,
+        is_primary: true
     })
-
-    // ---------------- Product Variant Images ----------------
-    function addNewVariantImage() {
-        setVariantImages(prev => [
-            ...prev, 
-            { variant: '', images: [], uuid: uuid() }
-        ])
-    }
-
-    function changeVariantImage(key: keyof VariantImage.DTOLocal, value: unknown, uuid: string) {
-        setVariantImages(prev => prev.map(variant => {
-            if(variant.uuid === uuid) {
-                return {
-                    ...variant,
-                    [key]: value
-                }
-            }
-            return variant
-        }))
-    }
+    const { data: secondaryUtilities } = useFetchCategoryUtilitiesQuery({
+        category,
+        is_primary: false
+    })
+    const [addUtilityProduct, { isLoading: loading }] = useCreateProductUtilityMutation()
 
     // ---------------- Product Utility ----------------
-    function addNewUtility() {
-        setProductUtility(prev => [
-            ...prev, 
-            { utility_item: '', color: '', code: '', uuid: uuid() }
-        ])
-    }
 
-    function changeProductUtility(key: keyof Utility.DTOLocal, value: unknown, uuid: string) {
-        setProductUtility(prev => prev.map(utility => {
-            if(utility.uuid === uuid) {
-                return {
-                    ...utility,
-                    [key]: value
-                }
-            }
-            return utility
+    function changeProductUtility(key: keyof Pick<ProductUtility.DTOLocal, 'file' | 'is_default'>, value: unknown) {
+        setProductUtility(prev => ({
+            ...prev,
+            [key]: value
         }))
     }
+
+    // ---------------- Product Utility Item ----------------
+    
+    function addNewUtilityItem() {
+        setProductUtility(prev => ({
+            ...prev,
+            items: [
+                ...prev.items, 
+                {
+                    uuid: uuid(),
+                    brand: product.brand.id,
+                    category: product.category.id,
+                    product: product.id,
+                    variant: '',
+                    primary_utility: '',
+                    secondary_utilities: [],
+                    code: '',
+                    is_recommended: false,
+                    is_new: false,
+                    is_hot: false,
+                }
+            ]
+        }))
+    }
+
+    function changeProductUtilityItem(id: ID, key: keyof ProductUtility.UtilityItem, value: unknown) {
+        setProductUtility(prev => ({
+            ...prev,
+            items: prev.items.map(item => {
+                if(item.uuid === id) {
+                    return {
+                        ...item,
+                        [key]: value
+                    }
+                }
+                return item
+            })
+        }))
+    }
+
+    function changeProductSecodaryUtility(id: ID, value: ID, idx: number) {
+        setProductUtility(prev => ({
+            ...prev,
+            items: prev.items.map(item => {
+                if(item.uuid === id) {
+                    const secondaryUtilities = item.secondary_utilities
+                    secondaryUtilities[idx] = value
+
+                    return {
+                        ...item,
+                        secondary_utilities: secondaryUtilities
+                    }
+                }
+                return item
+            })
+        }))
+    }
+
+    const deleteItem = useCallback((id: string) => {
+        setProductUtility(prev => ({
+            ...prev,
+            items: prev.items.filter(item => item.uuid !== id)
+        }))
+    }, [])
+
 
     // ---------------- Submit ----------------
-    const onFinish = useCallback((next: boolean) => {
-        
-        const dataVariantImages: VariantImage.DTOUpload[] = variantImages
-            .flatMap(el => el.images.map(image => ({
-                variant: el.variant,
-                image: image.response?.id as ID
-        })))
+    const onFinish = useCallback((next: boolean) => {    
 
-        const dataUtility: Utility.DTOUpload[] = productUtility.map((el) => ({
-            ...el,
-            product: product.id
-        }))
+        const dataUtility: ProductUtility.DTOUpload = {
+            ...productUtility,
+            file: productUtility.file[0]?.response?.id as ID
+        }
 
         const promises = [
-            createProductVariantImages(dataVariantImages).unwrap(),
             addUtilityProduct(dataUtility).unwrap(),
         ];
 
@@ -116,7 +161,7 @@ export function SAPCode({ onClick, product, category }: SAPCodeProps) {
                 })
             })
             .catch(() => toast.error("Что-то пошло не так"));
-    }, [addUtilityProduct, category, createProductVariantImages, navigate, onClick, product.id, productUtility, variantImages]);
+    }, [addUtilityProduct, category, navigate, onClick, productUtility]);
 
 
     return (
@@ -124,70 +169,48 @@ export function SAPCode({ onClick, product, category }: SAPCodeProps) {
             <Row gutter={[0, 20]}>
                 <Col span={24}>
                     <BorderBox>
-                        <StyledTextL2>Изображения продукта</StyledTextL2>
-                        {variantImages.map((variantImage, index) => (
-                            <Fragment key={variantImage.uuid}>
-                                {!!index && (
-                                    <Divider style={{ margin: '15px 0'}}>
-                                        <StyledText>{index + 1}</StyledText>
-                                    </Divider>
-                                )}
-                                <FormItem
-                                    label="Выбрать цвет продукта"
-                                    style={{ width: 300 }}
-                                    wrapperCol={{ span: 24 }}
-                                    labelCol={{ span: 24 }}
-                                >
-                                    <CustomSelect
-                                        allowClear
-                                        size="large"
-                                        placeholder="Выберите"
-                                        value={variantImage.variant}
-                                        onChange={(value: ID) => changeVariantImage(
-                                            'variant', value, variantImage.uuid
-                                        )}
-                                        loading={variantsLoading}
-                                        options={variants?.map(variant => ({
-                                            value: variant.id,
-                                            label: (
-                                                <div className='d-flex gap-12 jc-start'>
-                                                    <Color link={variant.color.image.file} />
-                                                    {variant.color.title}
-                                                </div>
-                                            ),
-                                        }))}
-
-                                    />
-                                </FormItem>
-                                <ImageUpload
-                                    maxCount={8}
-                                    fileList={variantImage.images} 
-                                    onChange={(info) => changeVariantImage(
-                                        'images', info.fileList, variantImage.uuid
-                                    )}
-                                />
-                            </Fragment>
-                        ))}
-                    </BorderBox>
-                    <div className='d-flex mt-1'>
-                        <Button 
-                            type='text' 
-                            size='large'
-                            shape='round'
-                            onClick={addNewVariantImage}
-                            icon={<PlusOutlined />} 
-                            style={{ fontWeight: 400 }} 
+                        <StyledTextL2>Характеристики</StyledTextL2>
+                        <FileUpload
+                            label='Загрузить Excel'
+                            fileList={productUtility.file} 
+                            onChange={(info) => changeProductUtility('file', info.fileList)}
+                        />
+                        <Form.Item
+                            valuePropName="checked"
+                            labelCol={{ span: 24 }}
+                            wrapperCol={{ span: 24 }}
                         >
-                            Добавить еще
-                        </Button>
-                    </div>
+                            <Checkbox
+                                checked={productUtility.is_default}
+                                onChange={e => changeProductUtility(
+                                    'is_default', e.target.checked
+                                )}
+                            >
+                                <StyledText>По умолчанию</StyledText>
+                            </Checkbox>
+                        </Form.Item>
+                    </BorderBox>
                 </Col>
-
                 <Col span={24}>
                     <BorderBox>
                         <StyledTextL2>SAP Code</StyledTextL2>
-                        {productUtility.map((prodUtility) => (
-                            <Space size='large' key={prodUtility.uuid}>
+                        {productUtility.items.map((prodUtility, index) => (
+                            <div key={prodUtility.uuid} className='d-flex gap-16 jc-start fw-wrap'>
+                                {!!index && (
+                                    <Divider style={{ margin: '15px 0'}}>
+                                        <Space size='middle'>
+                                            <StyledText>{index + 1}</StyledText>
+                                            <Button
+                                                size='middle'
+                                                shape='circle'
+                                                className='d-flex'
+                                                icon={<TrashIcon />}
+                                                style={{ scale: '1.2' }}
+                                                onClick={() => deleteItem(prodUtility.uuid)}
+                                            />
+                                        </Space>
+                                    </Divider>
+                                )}
                                 <FormItem
                                     label="Цвет продукта"
                                     style={{ width: 250 }}
@@ -208,16 +231,16 @@ export function SAPCode({ onClick, product, category }: SAPCodeProps) {
                                                 </div>
                                             ),
                                         }))}
-                                        value={prodUtility.color}
-                                        onChange={(value: ID) => changeProductUtility(
-                                            'color', value, prodUtility.uuid
+                                        value={prodUtility.variant || undefined}
+                                        onChange={(value: ID) => changeProductUtilityItem(
+                                            prodUtility.uuid, 'variant', value, 
                                         )}
                                     />
                                 </FormItem>
-                                {utilities?.map(utility => (
+                                {primaryUtility?.map(utility => (
                                     <FormItem
                                         key={utility.id}
-                                        label={utility.title}
+                                        label={utility.languages[1]?.title}
                                         style={{ width: 250 }}
                                         labelCol={{ span: 24 }}
                                         wrapperCol={{ span: 24 }}
@@ -227,13 +250,37 @@ export function SAPCode({ onClick, product, category }: SAPCodeProps) {
                                             size="large"
                                             placeholder="Выберите"
                                             loading={variantsLoading}
-                                            options={utility.items.map(item => ({
+                                            options={utility.items?.map(item => ({
                                                 value: item.id,
-                                                label: item.title,
+                                                label: item.languages[1]?.title,
                                             }))}
-                                            value={prodUtility.utility_item}
-                                            onChange={(value: ID) => changeProductUtility(
-                                                'utility_item', value, prodUtility.uuid
+                                            value={prodUtility.primary_utility || undefined}
+                                            onChange={(value: ID) => changeProductUtilityItem(
+                                                prodUtility.uuid, 'primary_utility', value 
+                                            )}
+                                        />
+                                    </FormItem>
+                                ))}
+                                {secondaryUtilities?.map((utility, idx) => (
+                                    <FormItem
+                                        key={utility.id}
+                                        label={utility.languages[1]?.title}
+                                        style={{ width: 250 }}
+                                        labelCol={{ span: 24 }}
+                                        wrapperCol={{ span: 24 }}
+                                    >
+                                        <CustomSelect
+                                            allowClear
+                                            size="large"
+                                            placeholder="Выберите"
+                                            loading={variantsLoading}
+                                            options={utility.items?.map(item => ({
+                                                value: item.id,
+                                                label: item.languages[1]?.title,
+                                            }))}
+                                            value={prodUtility.secondary_utilities[idx]}
+                                            onChange={(value: ID) => changeProductSecodaryUtility(
+                                                prodUtility.uuid, value, idx
                                             )}
                                         />
                                     </FormItem>
@@ -248,12 +295,61 @@ export function SAPCode({ onClick, product, category }: SAPCodeProps) {
                                         size="large" 
                                         placeholder="Серийный номер"
                                         value={prodUtility.code}
-                                        onChange={e => changeProductUtility(
-                                            'code', e.target.value, prodUtility.uuid
+                                        onChange={e => changeProductUtilityItem(
+                                            prodUtility.uuid, 'code', e.target.value, 
                                         )}
                                     />
                                 </FormItem>
-                            </Space>
+                                <Space size="large">
+                                    <Form.Item
+                                        valuePropName="checked"
+                                        labelCol={{ span: 24 }}
+                                        wrapperCol={{ span: 24 }}
+                                        // className='mt-2'
+                                    >
+                                        <Checkbox
+                                            checked={prodUtility.is_hot}
+                                            onChange={e => changeProductUtilityItem(
+                                                prodUtility.uuid, 'is_hot', e.target.checked
+                                            )}
+                                        >
+                                            <StyledText>Хитовый товар</StyledText>
+                                        </Checkbox>
+                                    </Form.Item>
+                                    <Form.Item
+                                        valuePropName="checked"
+                                        labelCol={{ span: 24 }}
+                                        wrapperCol={{ span: 24 }}
+                                        // className='mt-2'
+                                    >
+                                        <Checkbox
+                                            checked={prodUtility.is_new}
+                                            onChange={e => changeProductUtilityItem(
+                                                prodUtility.uuid, 'is_new', e.target.checked
+                                            )}
+                                        >
+                                            <StyledText>Новый товар</StyledText>
+                                        </Checkbox>
+                                    </Form.Item>
+                                    <Form.Item
+                                        valuePropName="checked"
+                                        labelCol={{ span: 24 }}
+                                        wrapperCol={{ span: 24 }}
+                                        // className='mt-2'
+                                    >
+                                        <Checkbox
+                                            checked={prodUtility.is_recommended}
+                                            onChange={e => changeProductUtilityItem(
+                                                prodUtility.uuid, 'is_recommended', e.target.checked
+                                            )}                                        
+                                        >
+                                            <StyledText>
+                                                Рекомендованный товар
+                                            </StyledText>
+                                        </Checkbox>
+                                    </Form.Item>
+                                </Space>
+                            </div>
                         ))}
                     </BorderBox>
                     <div className='d-flex mt-1'>
@@ -261,9 +357,8 @@ export function SAPCode({ onClick, product, category }: SAPCodeProps) {
                             type='text' 
                             size='large'
                             shape='round'
-                            onClick={addNewUtility}
+                            onClick={addNewUtilityItem}
                             icon={<PlusOutlined />} 
-                            style={{ fontWeight: 400 }} 
                         >
                             Добавить еще
                         </Button>
@@ -277,16 +372,25 @@ export function SAPCode({ onClick, product, category }: SAPCodeProps) {
                             type="default"
                             htmlType="submit"
                             shape="round"
-                            loading={loading1 || loading2}
+                            loading={loading}
                             onClick={() => onFinish(true)}
                         >
                             Сохранить
+                        </Button>
+                        <Button 
+                            shape="round"
+                            size="large"
+                            type="primary"
+                            onClick={addNewUtilityItem}
+                            icon={<PlusOutlined />} 
+                        >
+                            Сохранить и добавить еще
                         </Button>
                         <Button
                             shape="round"
                             size="large"
                             type="primary"
-                            loading={loading1 || loading2}
+                            loading={loading}
                             onClick={() => onFinish(true)}
                         >
                             Сохранить и продолжить

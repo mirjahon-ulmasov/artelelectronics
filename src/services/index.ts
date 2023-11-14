@@ -4,11 +4,12 @@ export * from './auth/baseQuery'
 
 
 // ------------ Filters ------------
+export * from './filters/brand'
+export * from './filters/color'
 export * from './filters/collection'
 export * from './filters/category'
 export * from './filters/category_type'
-export * from './filters/brand'
-export * from './filters/color'
+export * from './filters/category_utility'
 
 
 // ------------ Product ------------

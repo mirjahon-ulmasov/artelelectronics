@@ -1,5 +1,6 @@
 export { Main } from "./Main"
-export { Media } from "./Media"
+export { Variants } from "./Variants"
+export { VariantImages } from "./VariantImages"
 export { SAPCode } from "./SAPCode"
 export { Advantages } from "./Advantages"
 export { Characteristics } from "./Characteristics"

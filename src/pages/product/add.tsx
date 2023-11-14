@@ -4,8 +4,8 @@ import {
     Row, Space, Typography 
 } from 'antd'
 import { 
-    Advantages, Characteristics, Main, 
-    Media, SAPCode 
+    Advantages, Characteristics, 
+    Main, Variants, VariantImages, SAPCode 
 } from './components'
 import { useFetchProductQuery } from 'services'
 import { useQuery } from 'hooks/useQuery'
@@ -19,8 +19,8 @@ export default function AddProduct() {
     const [progress, setProgress] = useState(1)
     const [productID, setProductID] = useState<ID>('')
 
-    const { data: product } = useFetchProductQuery(productID, {
-        skip: !productID
+    const { data: product } = useFetchProductQuery(44, {
+        // skip: !productID
     })
 
     const getButtonType = useCallback((idx: number): ButtonProps => {
@@ -33,7 +33,7 @@ export default function AddProduct() {
 
     function goNextForm() {
         setProgress(prev => prev + 1)
-    }  
+    }
 
     return (
         <Fragment>
@@ -42,10 +42,11 @@ export default function AddProduct() {
                 <Col span={24}>
                     <Space>
                         <Button {...getButtonType(1)}>Главная</Button>
-                        <Button {...getButtonType(2)}>Медиа</Button>
-                        <Button {...getButtonType(3)}>SAP Code</Button>
-                        <Button {...getButtonType(4)}>Преимущества</Button>
-                        <Button {...getButtonType(5)}>Характеристики</Button>
+                        <Button {...getButtonType(2)} onClick={() => setProgress(2)}>Варианты</Button>
+                        <Button {...getButtonType(3)} onClick={() => setProgress(3)}>Изображений</Button>
+                        <Button {...getButtonType(4)} onClick={() => setProgress(4)}>SAP Code</Button>
+                        <Button {...getButtonType(5)} onClick={() => setProgress(5)}>Преимущества</Button>
+                        <Button {...getButtonType(6)} onClick={() => setProgress(6)}>Характеристики</Button>
                     </Space>
                 </Col>
                 <Col span={24}>
@@ -59,27 +60,34 @@ export default function AddProduct() {
                     {product && (
                         <Fragment>
                             {progress === 2 && (
-                                <Media 
+                                <Variants 
                                     onClick={goNextForm} 
                                     product={product} 
                                     category={category}
                                 />
                             )}
                             {progress === 3 && (
-                                <SAPCode 
+                                <VariantImages 
                                     onClick={goNextForm} 
                                     product={product} 
                                     category={category}
                                 />
                             )}
                             {progress === 4 && (
-                                <Advantages 
+                                <SAPCode 
                                     onClick={goNextForm} 
                                     product={product} 
                                     category={category}
                                 />
                             )}
                             {progress === 5 && (
+                                <Advantages 
+                                    onClick={goNextForm} 
+                                    product={product} 
+                                    category={category}
+                                />
+                            )}
+                            {progress === 6 && (
                                 <Characteristics 
                                     product={product} 
                                     category={category}
