@@ -4,7 +4,7 @@ import { Button, Col, Form, Input, Row, Space, Typography } from 'antd'
 import toast from 'react-hot-toast'
 import { BorderBox, FormItem, ImageUpload, LanguageToggle, StyledText } from 'components'
 import { useCreateColorMutation } from 'services'
-import { ID, LANGUAGE } from 'types/others/api'
+import { ID, LANGUAGE, Language } from 'types/others/api'
 import { Color } from 'types/filters/color'
 import { languages } from 'utils/index'
 
@@ -13,7 +13,7 @@ const { Title } = Typography
 export default function AddColor() {
     const navigate = useNavigate()
     const [language, setLanguage] = useState<LANGUAGE>(LANGUAGE.RU)
-    const [color, setColor] = useState<Color.DTOCreation>({
+    const [color, setColor] = useState<Color.DTOLocal>({
         code: '',
         image: [],
         languages: [
@@ -24,14 +24,14 @@ export default function AddColor() {
     })
     const [createColor, { isLoading: createLoading }] = useCreateColorMutation()
 
-    const changeColor = useCallback((key: keyof Color.DTOCreation, value: unknown) => {
+    const changeColor = useCallback((key: keyof Color.DTOLocal, value: unknown) => {
         setColor(prev => ({
             ...prev,
             [key]: value
         }))
     }, [])
 
-    const changeColorTitle = useCallback((key: keyof Color.Language, value: string) => {
+    const changeColorTitle = useCallback((key: keyof Language, value: string) => {
         setColor(prev => ({
             ...prev,
             languages: prev.languages.map(el => {
@@ -46,7 +46,7 @@ export default function AddColor() {
         }))
     }, [language])
 
-    const getValue = useCallback((key: keyof Color.Language) => {
+    const getValue = useCallback((key: keyof Language) => {
         const foundIdx = color.languages.findIndex(el => el.language === language)
         if(foundIdx !== -1) {
             return color.languages[foundIdx][key] as string

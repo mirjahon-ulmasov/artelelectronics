@@ -20,7 +20,7 @@ export declare namespace Store {
         is_active?: boolean
     }
 
-    interface DTOCreation extends Omit<DTO, 'id' | 'images' | 'default_image' | 'timetable'> {
+    interface DTOLocal extends Omit<DTO, 'id' | 'images' | 'default_image' | 'timetable'> {
         id?: ID
         country: ID
         region: ID
@@ -30,7 +30,7 @@ export declare namespace Store {
         timetable: TimeTable<Dayjs | null>[]
     }
 
-    interface DTOUpload extends Omit<DTOCreation, 'images' | 'default_image' | 'timetable'> {
+    interface DTOUpload extends Omit<DTOLocal, 'images' | 'default_image' | 'timetable'> {
         images: { image: ID }[]
         default_image: ID
         timetable: TimeTable<string>[]

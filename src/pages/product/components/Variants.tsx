@@ -7,15 +7,15 @@ import {
 import toast from 'react-hot-toast'
 import _, { isArray } from 'lodash'
 import { v4 as uuid } from 'uuid'
+import { PlusOutlined } from '@ant-design/icons';
 import { useFetchColorsQuery, useCreateProductVariantsMutation, useAdd360ViewMutation } from 'services'
 import { 
-    CustomSelect, BorderBox, StyledText, 
-    FormItem, StyledTextL2, ImageUpload, FileUpload, Color, TrashIcon 
+    CustomSelect, BorderBox, StyledText, FormItem, 
+    StyledTextL2, ImageUpload, FileUpload, Color, TrashIcon 
 } from 'components'
 import { ID } from 'types/others/api'
-import { Product, Variant } from 'types/product/product';
-import { PlusOutlined } from '@ant-design/icons';
-
+import { Product } from 'types/product/product';
+import { Variant } from "types/product/variant"
 
 interface VariantProps {
     onClick: () => void

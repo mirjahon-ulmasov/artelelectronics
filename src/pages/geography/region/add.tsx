@@ -4,7 +4,7 @@ import { Button, Col, Form, Input, Row, Space, Typography } from 'antd'
 import toast from 'react-hot-toast'
 import { BorderBox, CustomSelect, FormItem, LanguageToggle } from 'components'
 import { useCreateRegionMutation, useFetchCountriesQuery } from 'services'
-import { ID, LANGUAGE } from 'types/others/api'
+import { ID, LANGUAGE, Language } from 'types/others/api'
 import { Region } from 'types/geography/region'
 import { languages } from 'utils/index'
 
@@ -13,7 +13,7 @@ const { Title } = Typography
 export default function AddRegion() {
     const navigate = useNavigate()
     const [language, setLanguage] = useState<LANGUAGE>(LANGUAGE.RU)
-    const [region, setRegion] = useState<Region.DTOCreation>({
+    const [region, setRegion] = useState<Region.DTOLocal>({
         country: '',
         languages: [
             { title: '', language: LANGUAGE.UZ },
@@ -24,14 +24,14 @@ export default function AddRegion() {
     const { data: countries, isLoading: loadingCountry } = useFetchCountriesQuery({})
     const [createRegion, { isLoading: createLoading }] = useCreateRegionMutation()
 
-    const changeRegion = useCallback((key: keyof Region.DTOCreation, value: unknown) => {
+    const changeRegion = useCallback((key: keyof Region.DTOLocal, value: unknown) => {
         setRegion(prev => ({
             ...prev,
             [key]: value
         }))
     }, [])
 
-    const changeRegionTitle = useCallback((key: keyof Region.Language, value: string) => {
+    const changeRegionTitle = useCallback((key: keyof Language, value: string) => {
         setRegion(prev => ({
             ...prev,
             languages: prev.languages.map(el => {
@@ -46,7 +46,7 @@ export default function AddRegion() {
         }))
     }, [language])
 
-    const getValue = useCallback((key: keyof Region.Language) => {
+    const getValue = useCallback((key: keyof Language) => {
         const foundIdx = region.languages.findIndex(el => el.language === language)
         if(foundIdx !== -1) {
             return region.languages[foundIdx][key] as string

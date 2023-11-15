@@ -22,7 +22,7 @@ const { Title } = Typography
 export default function AddNews() {
     const navigate = useNavigate()
     const [language, setLanguage] = useState<LANGUAGE>(LANGUAGE.RU)
-    const [news, setNews] = useState<News.DTOCreation>({ 
+    const [news, setNews] = useState<News.DTOLocal>({ 
         languages: [
             { title: '', introduction_text: '', content: '', language: LANGUAGE.UZ },
             { title: '', introduction_text: '', content: '', language: LANGUAGE.RU },
@@ -39,7 +39,7 @@ export default function AddNews() {
         setNews(prev => ({ ...prev, publish_date: date }))
     }
 
-    const changeNews = useCallback((key: keyof News.DTOCreation, value: unknown) => {
+    const changeNews = useCallback((key: keyof News.DTOLocal, value: unknown) => {
         setNews(prev => ({
             ...prev,
             [key]: value

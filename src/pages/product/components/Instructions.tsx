@@ -1,30 +1,26 @@
 import { useCallback, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { 
-    Button, Col, Form,
-    Input,
-    Row, Space, UploadFile 
-} from 'antd'
+import { Button, Col, Form, Input, Row, Space } from 'antd'
 import toast from 'react-hot-toast'
 import _ from 'lodash'
-import { useCreateInstructionMutation, useUploadExcelCharacteristicsMutation } from 'services'
+import { useCreateInstructionMutation } from 'services'
 import { 
     BorderBox, LanguageToggle, StyledText, 
     FormItem, StyledTextL2, ImageUpload, FileUpload 
 } from 'components'
-import { languages } from 'utils/index'
-import { Characteristic, Instruction, Product } from 'types/product/product';
+import { Instruction } from 'types/product/instruction'
+import { Product } from 'types/product/product';
 import { ID, LANGUAGE } from 'types/others/api'
+import { languages } from 'utils/index'
 
-interface CharacteristicsProps {
+interface InstructionsProps {
     product: Product.DTO
     category: string
 }
 
-export function Characteristics({ product, category }: CharacteristicsProps) {
+export function Instructions({ product, category }: InstructionsProps) {
     const navigate = useNavigate();
     const [language, setLanguage] = useState<LANGUAGE>(LANGUAGE.RU)
-    const [fileCharacteristics, setFileCharacteristics] = useState<UploadFile[]>([])
     const [instruction, setInstruction] = useState<Instruction.DTOLocal>({ 
         file: [], 
         image: [], 
@@ -35,8 +31,7 @@ export function Characteristics({ product, category }: CharacteristicsProps) {
         ],
     })
 
-    const [uploadExcelCharacteristics, { isLoading: loading1 }] = useUploadExcelCharacteristicsMutation()
-    const [createInstruction, { isLoading: loading2 }] = useCreateInstructionMutation()
+    const [createInstruction, { isLoading: loading }] = useCreateInstructionMutation()
 
     // ---------------- Product Instruction ----------------
 
@@ -47,7 +42,7 @@ export function Characteristics({ product, category }: CharacteristicsProps) {
         }))
     }, [])
 
-    const changeInstructionInfo = useCallback((key: keyof Instruction.Language, value: string) => {
+    const changeInstructionInfo = useCallback((key: keyof Instruction.EXLanguage, value: string) => {
         setInstruction(prev => ({
             ...prev,
             languages: prev.languages.map(el => {
@@ -62,7 +57,7 @@ export function Characteristics({ product, category }: CharacteristicsProps) {
         }))
     }, [language])
 
-    const getValue = useCallback((key: keyof Instruction.Language) => {
+    const getValue = useCallback((key: keyof Instruction.EXLanguage) => {
         const foundIdx = instruction.languages.findIndex(el => el.language === language)
         if(foundIdx !== -1) {
             return instruction.languages[foundIdx][key]
@@ -72,12 +67,6 @@ export function Characteristics({ product, category }: CharacteristicsProps) {
 
     // ---------------- Submit ----------------
     const onFinish = () => {
-
-        const dataCharacteristics: Characteristic.UploadExcel = {
-            product: product.id,
-            file: fileCharacteristics[0]?.response?.id as ID
-        }
-
         const dataInstruction: Instruction.DTOUpload = {
             product: product.id,
             languages: instruction.languages,
@@ -86,13 +75,12 @@ export function Characteristics({ product, category }: CharacteristicsProps) {
         }
 
         const promises = [
-            uploadExcelCharacteristics(dataCharacteristics).unwrap(),
             createInstruction(dataInstruction).unwrap(),
         ];
 
         Promise.all(promises)
             .then(() => {
-                toast.success("Характеристики и инструкция успешно добавлены.");
+                toast.success("Инструкции по продукту успешно добавлены.");
                 navigate({
                     pathname: '/product/list',
                     search: `?category=${category}`
@@ -104,16 +92,6 @@ export function Characteristics({ product, category }: CharacteristicsProps) {
     return (
         <Form autoComplete="off" onFinish={onFinish} style={{ maxWidth: 1000 }}>
             <Row gutter={[0, 20]}>
-                <Col span={24}>
-                    <BorderBox>
-                        <StyledTextL2>Характеристики</StyledTextL2>
-                        <FileUpload
-                            label='Загрузить Excel'
-                            fileList={fileCharacteristics} 
-                            onChange={(info) => setFileCharacteristics(info.fileList)}
-                        />
-                    </BorderBox>
-                </Col>
                 <Col span={24}>
                     <BorderBox>
                         <StyledTextL2>Руководство пользователя</StyledTextL2>
@@ -171,7 +149,7 @@ export function Characteristics({ product, category }: CharacteristicsProps) {
                             type="primary"
                             htmlType="submit"
                             shape="round"
-                            loading={loading1 || loading2}
+                            loading={loading}
                         >
                             Сохранить
                         </Button>

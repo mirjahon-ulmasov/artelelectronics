@@ -1,4 +1,4 @@
-import { Advantage } from 'types/product/product'
+import { Advantage } from 'types/product/advantage'
 import { ID } from 'types/others/api'
 import { api } from '../auth/baseQuery'
 

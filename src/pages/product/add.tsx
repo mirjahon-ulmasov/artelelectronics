@@ -4,8 +4,8 @@ import {
     Row, Space, Typography 
 } from 'antd'
 import { 
-    Advantages, Characteristics, 
-    Main, Variants, VariantImages, SAPCode 
+    Advantages, Main, Variants, 
+    VariantImages, SAPCode, Instructions 
 } from './components'
 import { useFetchProductQuery } from 'services'
 import { useQuery } from 'hooks/useQuery'
@@ -19,8 +19,8 @@ export default function AddProduct() {
     const [progress, setProgress] = useState(1)
     const [productID, setProductID] = useState<ID>('')
 
-    const { data: product } = useFetchProductQuery(44, {
-        // skip: !productID
+    const { data: product } = useFetchProductQuery(productID, {
+        skip: !productID
     })
 
     const getButtonType = useCallback((idx: number): ButtonProps => {
@@ -46,7 +46,7 @@ export default function AddProduct() {
                         <Button {...getButtonType(3)} onClick={() => setProgress(3)}>Изображений</Button>
                         <Button {...getButtonType(4)} onClick={() => setProgress(4)}>SAP Code</Button>
                         <Button {...getButtonType(5)} onClick={() => setProgress(5)}>Преимущества</Button>
-                        <Button {...getButtonType(6)} onClick={() => setProgress(6)}>Характеристики</Button>
+                        <Button {...getButtonType(6)} onClick={() => setProgress(6)}>Инструкции</Button>
                     </Space>
                 </Col>
                 <Col span={24}>
@@ -88,7 +88,7 @@ export default function AddProduct() {
                                 />
                             )}
                             {progress === 6 && (
-                                <Characteristics 
+                                <Instructions 
                                     product={product} 
                                     category={category}
                                 />

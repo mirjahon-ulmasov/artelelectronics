@@ -56,5 +56,4 @@ export enum ROLE {
 export interface Language {
     title: string
     language: LANGUAGE
-    is_active?: boolean
 }

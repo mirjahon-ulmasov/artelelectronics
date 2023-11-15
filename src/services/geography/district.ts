@@ -28,7 +28,7 @@ export const districtAPI = districtWithTags.injectEndpoints({
             }),
             providesTags: () => ['District'],
         }),
-        createDistrict: build.mutation<unknown, District.DTOCreation>({
+        createDistrict: build.mutation<unknown, District.DTOLocal>({
             query: data => ({
                 url: '/district/',
                 method: 'POST',
@@ -36,7 +36,7 @@ export const districtAPI = districtWithTags.injectEndpoints({
             }),
             invalidatesTags: ['District'],
         }),
-        updateDistrict: build.mutation<unknown, District.DTOCreation>({
+        updateDistrict: build.mutation<unknown, District.DTOLocal>({
             query: data => ({
                 url: `/district/${data.id}/`,
                 method: 'PUT',

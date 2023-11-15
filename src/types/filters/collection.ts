@@ -13,13 +13,13 @@ export declare namespace Collection {
         is_active?: boolean
     }
 
-    interface DTOCreation extends Omit<DTO, 'id' | 'image' | 'categories'> {
+    interface DTOLocal extends Omit<DTO, 'id' | 'image' | 'categories'> {
         id?: ID
         image: UploadFile[]
         categories: number[]
     }
 
-    interface DTOUpload extends Omit<DTOCreation, 'image' | 'categories'> {
+    interface DTOUpload extends Omit<DTOLocal, 'image' | 'categories'> {
         image: ID
         categories: { category: ID }[]
     }

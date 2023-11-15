@@ -61,7 +61,7 @@ export function Main({ onClick, onSetID, category }: MainProps) {
     }, [language])
 
 
-    const getValue = useCallback((key: keyof Omit<Product.ExLanguage, 'is_active'>) => {
+    const getValue = useCallback((key: keyof Product.ExLanguage) => {
         const foundIdx = product.languages.findIndex(el => el.language === language)
         if(foundIdx !== -1) {
             return product.languages[foundIdx][key]

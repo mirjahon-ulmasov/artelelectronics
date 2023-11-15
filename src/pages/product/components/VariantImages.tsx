@@ -4,13 +4,14 @@ import { Button, Col, Divider, Form, Row, Space } from 'antd'
 import toast from 'react-hot-toast'
 import _ from 'lodash'
 import { v4 as uuid } from 'uuid'
+import { PlusOutlined } from '@ant-design/icons';
 import { useCreateProductVariantImagesMutation, useFetchProductVariantsQuery } from 'services'
 import { 
     CustomSelect, BorderBox, FormItem, 
     StyledTextL2, ImageUpload, StyledText, Color, TrashIcon 
 } from 'components'
-import { Product, VariantImage } from 'types/product/product';
-import { PlusOutlined } from '@ant-design/icons';
+import { VariantImage } from 'types/product/variant_image';
+import { Product } from 'types/product/product';
 import { ID } from 'types/others/api'
 
 interface VariantImageProps {

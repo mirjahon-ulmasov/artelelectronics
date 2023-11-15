@@ -10,9 +10,10 @@ import {
     BorderBox, LanguageToggle, StyledText, 
     FormItem, StyledTextL2, ImageUpload 
 } from 'components'
-import { languages } from 'utils/index'
-import { Advantage, Product } from 'types/product/product';
+import { Advantage } from 'types/product/advantage';
+import { Product } from 'types/product/product';
 import { ID, LANGUAGE } from 'types/others/api'
+import { languages } from 'utils/index'
 
 interface AdvantagesProps {
     onClick: () => void
@@ -67,27 +68,28 @@ export function Advantages({ onClick, product, category }: AdvantagesProps) {
         }))
     }, [])
 
-    const changeAdvantageInfo = useCallback((key: keyof Advantage.Language, value: string, uuid: string) => {
-        setAdvantages(prev => prev.map(advantage => {
-            if(advantage.uuid === uuid) {
-                return {
-                    ...advantage,
-                    languages: advantage.languages.map(el => {
-                        if(el.language === language) {
-                            return {
-                                ...el,
-                                [key]: value
+    const changeAdvantageInfo = useCallback(
+        (key: keyof Advantage.EXLanguage, value: string, uuid: string) => {
+            setAdvantages(prev => prev.map(advantage => {
+                if(advantage.uuid === uuid) {
+                    return {
+                        ...advantage,
+                        languages: advantage.languages.map(el => {
+                            if(el.language === language) {
+                                return {
+                                    ...el,
+                                    [key]: value
+                                }
                             }
-                        }
-                        return el
-                    })
+                            return el
+                        })
+                    }
                 }
-            }
-            return advantage
-        }))
+                return advantage
+            }))
     }, [language])
 
-    const getValue = useCallback((advantage: Advantage.DTOLocal, key: keyof Advantage.Language) => {
+    const getValue = useCallback((advantage: Advantage.DTOLocal, key: keyof Advantage.EXLanguage) => {
         const foundIdx = advantage.languages.findIndex(el => el.language === language)
         if(foundIdx !== -1) {
             return advantage.languages[foundIdx][key]

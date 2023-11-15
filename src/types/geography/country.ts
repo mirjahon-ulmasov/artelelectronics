@@ -14,12 +14,12 @@ export declare namespace Country {
         is_active?: boolean
     }
 
-    interface DTOCreation extends Omit<DTO, 'id' | 'flag'> {
+    interface DTOLocal extends Omit<DTO, 'id' | 'flag'> {
         id?: ID
         flag: UploadFile[]
     }
 
-    interface DTOUpload extends Omit<DTOCreation, 'flag'> {
+    interface DTOUpload extends Omit<DTOLocal, 'flag'> {
         flag: ID
     }
 }

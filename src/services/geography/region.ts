@@ -28,7 +28,7 @@ export const regionAPI = regionWithTags.injectEndpoints({
             }),
             providesTags: () => ['Region'],
         }),
-        createRegion: build.mutation<unknown, Region.DTOCreation>({
+        createRegion: build.mutation<unknown, Region.DTOLocal>({
             query: data => ({
                 url: '/region/',
                 method: 'POST',
@@ -36,7 +36,7 @@ export const regionAPI = regionWithTags.injectEndpoints({
             }),
             invalidatesTags: ['Region'],
         }),
-        updateRegion: build.mutation<unknown, Region.DTOCreation>({
+        updateRegion: build.mutation<unknown, Region.DTOLocal>({
             query: data => ({
                 url: `/region/${data.id}/`,
                 method: 'PUT',

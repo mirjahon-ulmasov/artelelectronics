@@ -1,4 +1,4 @@
-import { VariantImage } from 'types/product/product'
+import { VariantImage } from 'types/product/variant_image'
 import { ID } from 'types/others/api'
 import { api } from '../auth/baseQuery'
 

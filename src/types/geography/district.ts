@@ -12,7 +12,7 @@ export declare namespace District {
         is_active?: boolean
     }
 
-    interface DTOCreation extends Omit<DTO, 'id'> {
+    interface DTOLocal extends Omit<DTO, 'id'> {
         id?: ID
         region: ID
     }

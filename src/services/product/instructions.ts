@@ -1,4 +1,4 @@
-import { Instruction } from 'types/product/product'
+import { Instruction } from 'types/product/instruction'
 import { ID } from 'types/others/api'
 import { api } from '../auth/baseQuery'
 

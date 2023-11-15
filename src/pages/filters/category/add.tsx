@@ -4,7 +4,7 @@ import { Button, Col, Form, Input, Row, Space, Typography } from 'antd'
 import toast from 'react-hot-toast'
 import { BorderBox, FileUpload, FormItem, ImageUpload, LanguageToggle, StyledText } from 'components'
 import { useCreateCategoryMutation } from 'services'
-import { ID, LANGUAGE } from 'types/others/api'
+import { ID, LANGUAGE, Language } from 'types/others/api'
 import { Category } from 'types/filters/category'
 import { languages } from 'utils/index'
 
@@ -13,7 +13,7 @@ const { Title } = Typography
 export default function AddCategory() {
     const navigate = useNavigate()
     const [language, setLanguage] = useState<LANGUAGE>(LANGUAGE.RU)
-    const [category, setCategory] = useState<Category.DTOCreation>({
+    const [category, setCategory] = useState<Category.DTOLocal>({
         parent: null,
         image: [],
         secondary_file: [],
@@ -26,14 +26,14 @@ export default function AddCategory() {
     })
     const [createCategory, { isLoading: createLoading }] = useCreateCategoryMutation()
 
-    const changeCategory = useCallback((key: keyof Category.DTOCreation, value: unknown) => {
+    const changeCategory = useCallback((key: keyof Category.DTOLocal, value: unknown) => {
         setCategory(prev => ({
             ...prev,
             [key]: value
         }))
     }, [])
 
-    const changeCategoryTitle = useCallback((key: keyof Category.Language, value: string) => {
+    const changeCategoryTitle = useCallback((key: keyof Language, value: string) => {
         setCategory(prev => ({
             ...prev,
             languages: prev.languages.map(el => {
@@ -48,7 +48,7 @@ export default function AddCategory() {
         }))
     }, [language])
 
-    const getValue = useCallback((key: keyof Category.Language) => {
+    const getValue = useCallback((key: keyof Language) => {
         const foundIdx = category.languages.findIndex(el => el.language === language)
         if(foundIdx !== -1) {
             return category.languages[foundIdx][key] as string

@@ -64,16 +64,17 @@ export function SAPCode({ onClick, product, category }: SAPCodeProps) {
 
     // ---------------- Product Utility ----------------
 
-    function changeProductUtility(key: keyof Pick<ProductUtility.DTOLocal, 'file' | 'is_default'>, value: unknown) {
-        setProductUtility(prev => ({
-            ...prev,
-            [key]: value
-        }))
-    }
+    const changeProductUtility = useCallback(
+        (key: keyof Pick<ProductUtility.DTOLocal, 'file' | 'is_default'>, value: unknown) => {
+            setProductUtility(prev => ({
+                ...prev,
+                [key]: value
+            }))
+    }, [])
 
     // ---------------- Product Utility Item ----------------
     
-    function addNewUtilityItem() {
+    const addNewUtilityItem = useCallback(() => {
         setProductUtility(prev => ({
             ...prev,
             items: [
@@ -93,9 +94,9 @@ export function SAPCode({ onClick, product, category }: SAPCodeProps) {
                 }
             ]
         }))
-    }
+    }, [product.brand.id, product.category.id, product.id])
 
-    function changeProductUtilityItem(id: ID, key: keyof ProductUtility.UtilityItem, value: unknown) {
+    const changeProductUtilityItem = useCallback((id: ID, key: keyof ProductUtility.UtilityItem, value: unknown) => {
         setProductUtility(prev => ({
             ...prev,
             items: prev.items.map(item => {
@@ -108,9 +109,9 @@ export function SAPCode({ onClick, product, category }: SAPCodeProps) {
                 return item
             })
         }))
-    }
+    }, [])
 
-    function changeProductSecodaryUtility(id: ID, value: ID, idx: number) {
+    const changeProductSecodaryUtility = useCallback((id: ID, value: ID, idx: number)=> {
         setProductUtility(prev => ({
             ...prev,
             items: prev.items.map(item => {
@@ -126,7 +127,7 @@ export function SAPCode({ onClick, product, category }: SAPCodeProps) {
                 return item
             })
         }))
-    }
+    }, [])
 
     const deleteItem = useCallback((id: string) => {
         setProductUtility(prev => ({
@@ -135,9 +136,30 @@ export function SAPCode({ onClick, product, category }: SAPCodeProps) {
         }))
     }, [])
 
+    const reset = useCallback(() => {
+        setProductUtility({ 
+            product: product.id,
+            brand: product.brand.id,
+            is_default: false,
+            file: [],
+            items: [{
+                uuid: uuid(),
+                product: product.id,
+                brand: product.brand.id,
+                category: product.category.id,
+                variant: '',
+                primary_utility: '',
+                secondary_utilities: [],
+                code: '',
+                is_recommended: false,
+                is_new: false,
+                is_hot: false,
+            }]
+        })
+    }, [product.brand.id, product.category.id, product.id])
 
     // ---------------- Submit ----------------
-    const onFinish = useCallback((next: boolean) => {    
+    const onFinish = useCallback((again?: boolean, next?: boolean) => {    
 
         const dataUtility: ProductUtility.DTOUpload = {
             ...productUtility,
@@ -151,6 +173,10 @@ export function SAPCode({ onClick, product, category }: SAPCodeProps) {
         Promise.all(promises)
             .then(() => {
                 toast.success("Варианты продукта и видео успешно добавлены.");
+                if(again) {
+                    reset()
+                    return;
+                }
                 if(next) {
                     onClick()
                     return;
@@ -161,7 +187,7 @@ export function SAPCode({ onClick, product, category }: SAPCodeProps) {
                 })
             })
             .catch(() => toast.error("Что-то пошло не так"));
-    }, [addUtilityProduct, category, navigate, onClick, productUtility]);
+    }, [addUtilityProduct, category, navigate, onClick, productUtility, reset]);
 
 
     return (
@@ -369,20 +395,19 @@ export function SAPCode({ onClick, product, category }: SAPCodeProps) {
                     <Space size="large">
                         <Button
                             size="large"
-                            type="default"
-                            htmlType="submit"
                             shape="round"
+                            type="default"
                             loading={loading}
-                            onClick={() => onFinish(true)}
+                            onClick={() => onFinish()}
                         >
                             Сохранить
                         </Button>
-                        <Button 
+                        <Button
                             shape="round"
                             size="large"
                             type="primary"
-                            onClick={addNewUtilityItem}
-                            icon={<PlusOutlined />} 
+                            loading={loading}
+                            onClick={() => onFinish(true)}
                         >
                             Сохранить и добавить еще
                         </Button>
@@ -391,7 +416,7 @@ export function SAPCode({ onClick, product, category }: SAPCodeProps) {
                             size="large"
                             type="primary"
                             loading={loading}
-                            onClick={() => onFinish(true)}
+                            onClick={() => onFinish(false, true)}
                         >
                             Сохранить и продолжить
                         </Button>

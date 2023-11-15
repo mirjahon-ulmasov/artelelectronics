@@ -8,7 +8,7 @@ interface PropTypes {
     isRoot?: boolean
 }
 
-export function ProtectedRoute({ roles, isRoot = false }: PropTypes) {
+export function ProtectedRoute({ isRoot = false }: PropTypes) {
     const location = useLocation()
     const { isLoggedIn, user } = useAppSelector(state => state.auth)
 

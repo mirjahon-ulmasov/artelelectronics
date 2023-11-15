@@ -4,7 +4,7 @@ import { File, ID } from '../others/api'
 export declare namespace Brand {
     type List = DTO[]
 
-    interface DTOCreation {
+    interface DTOLocal {
         id?: ID
         title: string
         image: ID

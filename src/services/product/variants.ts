@@ -1,4 +1,4 @@
-import { Variant } from 'types/product/product'
+import { Variant } from 'types/product/variant'
 import { ID } from 'types/others/api'
 import { api } from '../auth/baseQuery'
 

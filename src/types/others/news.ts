@@ -15,7 +15,7 @@ export declare namespace News {
         languages: Content[]
     }
 
-    interface DTOCreation extends Omit<DTO, 'image' | 'id' | 'publish_date'> {
+    interface DTOLocal extends Omit<DTO, 'image' | 'id' | 'publish_date'> {
         id?: ID
         image: UploadFile[]
         publish_date: Dayjs | null

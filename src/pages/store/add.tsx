@@ -26,7 +26,7 @@ const store_types = [STORE.BRAND_SHOP, STORE.MARKETPLACE, STORE.PREMIUM_STORE]
 
 export default function AddStore() {
     const navigate = useNavigate()
-    const [store, setStore] = useState<Store.DTOCreation>({ 
+    const [store, setStore] = useState<Store.DTOLocal>({ 
         title: '',
         latitude: '',
         longitude: '',
@@ -60,7 +60,7 @@ export default function AddStore() {
     )
     const [createStore, { isLoading: createLoading }] = useCreateStoreMutation()
 
-    const changeStore = useCallback((key: keyof Store.DTOCreation, value: unknown) => {
+    const changeStore = useCallback((key: keyof Store.DTOLocal, value: unknown) => {
         setStore(prev => ({
             ...prev,
             [key]: value

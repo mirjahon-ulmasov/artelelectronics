@@ -16,7 +16,7 @@ interface SiderProps {
 function Sidebar({ userRole }: SiderProps) {
     const location = useLocation();
     const [links, setLinks] = useState<Route[]>([]);
-    const [hoveredIdx, setHoveredIdx] = useState<ID>('');
+    const [_, setHoveredIdx] = useState<ID>('');
 
     const { data: collections } = useFetchCollectionsQuery({
         is_active: true

@@ -20,7 +20,7 @@ export const brandAPI = brandWithTags.injectEndpoints({
             }),
             providesTags: () => ['Brand'],
         }),
-        createBrand: build.mutation<unknown, Brand.DTOCreation>({
+        createBrand: build.mutation<unknown, Brand.DTOLocal>({
             query: data => ({
                 url: '/brand/',
                 method: 'POST',
@@ -28,7 +28,7 @@ export const brandAPI = brandWithTags.injectEndpoints({
             }),
             invalidatesTags: ['Brand'],
         }),
-        updateBrand: build.mutation<unknown, Brand.DTOCreation>({
+        updateBrand: build.mutation<unknown, Brand.DTOLocal>({
             query: data => ({
                 url: `/brand/${data.id}/`,
                 method: 'PUT',

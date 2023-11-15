@@ -5,7 +5,7 @@ import toast from 'react-hot-toast'
 import { BorderBox, CustomSelect, FormItem, LanguageToggle } from 'components'
 import { useCreateDistrictMutation, useFetchRegionsQuery } from 'services'
 import { District } from 'types/geography/district'
-import { ID, LANGUAGE } from 'types/others/api'
+import { ID, LANGUAGE, Language } from 'types/others/api'
 import { languages } from 'utils/index'
 
 const { Title } = Typography
@@ -13,7 +13,7 @@ const { Title } = Typography
 export default function AddDistrict() {
     const navigate = useNavigate()
     const [language, setLanguage] = useState<LANGUAGE>(LANGUAGE.RU)
-    const [district, setDistrict] = useState<District.DTOCreation>({
+    const [district, setDistrict] = useState<District.DTOLocal>({
         region: '',
         latitude: '',
         longitude: '',
@@ -26,14 +26,14 @@ export default function AddDistrict() {
     const { data: regions, isLoading: loadingRegion } = useFetchRegionsQuery({})
     const [createDistrict, { isLoading: createLoading }] = useCreateDistrictMutation()
 
-    const changeDistrict = useCallback((key: keyof District.DTOCreation, value: unknown) => {
+    const changeDistrict = useCallback((key: keyof District.DTOLocal, value: unknown) => {
         setDistrict(prev => ({
             ...prev,
             [key]: value
         }))
     }, [])
 
-    const changeDistrictTitle = useCallback((key: keyof District.Language, value: string) => {
+    const changeDistrictTitle = useCallback((key: keyof Language, value: string) => {
         setDistrict(prev => ({
             ...prev,
             languages: prev.languages.map(el => {
@@ -48,7 +48,7 @@ export default function AddDistrict() {
         }))
     }, [language])
 
-    const getValue = useCallback((key: keyof District.Language) => {
+    const getValue = useCallback((key: keyof Language) => {
         const foundIdx = district.languages.findIndex(el => el.language === language)
         if(foundIdx !== -1) {
             return district.languages[foundIdx][key] as string

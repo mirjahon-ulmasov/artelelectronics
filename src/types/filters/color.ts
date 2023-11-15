@@ -13,12 +13,12 @@ export declare namespace Color {
         is_active?: boolean
     }
 
-    interface DTOCreation extends Omit<DTO, 'id' | 'image'> {
+    interface DTOLocal extends Omit<DTO, 'id' | 'image'> {
         id?: ID
         image: UploadFile[]
     }
 
-    interface DTOUpload extends Omit<DTOCreation, 'image'> {
+    interface DTOUpload extends Omit<DTOLocal, 'image'> {
         image: ID
     }
 }

@@ -4,7 +4,7 @@ import { Button, Col, Form, Input, Row, Space, Typography } from 'antd'
 import toast from 'react-hot-toast'
 import { BorderBox, FormItem, ImageUpload, LanguageToggle, StyledText } from 'components'
 import { useCreateCountryMutation } from 'services'
-import { ID, LANGUAGE } from 'types/others/api'
+import { ID, LANGUAGE, Language } from 'types/others/api'
 import { Country } from 'types/geography/country'
 import { languages } from 'utils/index'
 
@@ -13,7 +13,7 @@ const { Title } = Typography
 export default function AddCountry() {
     const navigate = useNavigate()
     const [language, setLanguage] = useState<LANGUAGE>(LANGUAGE.RU)
-    const [country, setCountry] = useState<Country.DTOCreation>({
+    const [country, setCountry] = useState<Country.DTOLocal>({
         flag: [],
         IP: '',
         country_code: '',
@@ -25,14 +25,14 @@ export default function AddCountry() {
     })
     const [createCountry, { isLoading: createLoading }] = useCreateCountryMutation()
 
-    const changeCountry = useCallback((key: keyof Country.DTOCreation, value: unknown) => {
+    const changeCountry = useCallback((key: keyof Country.DTOLocal, value: unknown) => {
         setCountry(prev => ({
             ...prev,
             [key]: value
         }))
     }, [])
 
-    const changeCountryTitle = useCallback((key: keyof Country.Language, value: string) => {
+    const changeCountryTitle = useCallback((key: keyof Language, value: string) => {
         setCountry(prev => ({
             ...prev,
             languages: prev.languages.map(el => {
@@ -47,7 +47,7 @@ export default function AddCountry() {
         }))
     }, [language])
 
-    const getValue = useCallback((key: keyof Country.Language) => {
+    const getValue = useCallback((key: keyof Language) => {
         const foundIdx = country.languages.findIndex(el => el.language === language)
         if(foundIdx !== -1) {
             return country.languages[foundIdx][key] as string

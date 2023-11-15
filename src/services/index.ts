@@ -17,7 +17,6 @@ export * from './product/main'
 export * from './product/variants'
 export * from './product/variant_images'
 export * from './product/advantages'
-export * from './product/characteristics'
 export * from './product/instructions'
 export * from './product/utilities'
 

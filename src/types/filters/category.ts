@@ -15,7 +15,7 @@ export declare namespace Category {
         is_active: boolean
     }
 
-    interface DTOCreation {
+    interface DTOLocal {
         id?: ID
         parent: ID | null
         image: UploadFile[]
@@ -24,7 +24,7 @@ export declare namespace Category {
         languages: Language[]
     }
 
-    interface DTOUpload extends Omit<DTOCreation, 'image' | 'secondary_file'> {
+    interface DTOUpload extends Omit<DTOLocal, 'image' | 'secondary_file'> {
         image: ID
         secondary_file: ID
     }

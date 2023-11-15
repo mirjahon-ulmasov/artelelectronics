@@ -4,7 +4,7 @@ import { Button, Col, Form, Input, Row, Space, Typography } from 'antd'
 import toast from 'react-hot-toast'
 import { BorderBox, CustomSelect, FormItem, ImageUpload, LanguageToggle, StyledText } from 'components'
 import { useCreateCollectionMutation, useFetchCategoriesQuery } from 'services'
-import { ID, LANGUAGE } from 'types/others/api'
+import { ID, LANGUAGE, Language } from 'types/others/api'
 import { Collection } from 'types/filters/collection'
 import { languages } from 'utils/index'
 
@@ -13,7 +13,7 @@ const { Title } = Typography
 export default function AddCollection() {
     const navigate = useNavigate()
     const [language, setLanguage] = useState<LANGUAGE>(LANGUAGE.RU)
-    const [collection, setCollection] = useState<Collection.DTOCreation>({
+    const [collection, setCollection] = useState<Collection.DTOLocal>({
         image: [],
         categories: [],
         languages: [
@@ -25,14 +25,14 @@ export default function AddCollection() {
     const { data: categories, isLoading: loadingCategory } = useFetchCategoriesQuery({})
     const [createCollection, { isLoading: createLoading }] = useCreateCollectionMutation()
 
-    const changeCollection = useCallback((key: keyof Collection.DTOCreation, value: unknown) => {
+    const changeCollection = useCallback((key: keyof Collection.DTOLocal, value: unknown) => {
         setCollection(prev => ({
             ...prev,
             [key]: value
         }))
     }, [])
 
-    const changeCollectionTitle = useCallback((key: keyof Collection.Language, value: string) => {
+    const changeCollectionTitle = useCallback((key: keyof Language, value: string) => {
         setCollection(prev => ({
             ...prev,
             languages: prev.languages.map(el => {
@@ -47,7 +47,7 @@ export default function AddCollection() {
         }))
     }, [language])
 
-    const getValue = useCallback((key: keyof Collection.Language) => {
+    const getValue = useCallback((key: keyof Language) => {
         const foundIdx = collection.languages.findIndex(el => el.language === language)
         if(foundIdx !== -1) {
             return collection.languages[foundIdx][key] as string
