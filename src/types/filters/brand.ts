@@ -1,16 +1,9 @@
+import { UploadFile } from 'antd'
 import { File, ID } from '../others/api'
 
 // -------------- Brand --------------
 export declare namespace Brand {
     type List = DTO[]
-
-    interface DTOLocal {
-        id?: ID
-        title: string
-        image: ID
-        secondary_image: ID
-        custom_order: number
-    }
 
     interface DTO {
         id: ID
@@ -19,5 +12,18 @@ export declare namespace Brand {
         secondary_image: File
         custom_order: number
         is_active: boolean
+    }
+
+    interface DTOLocal {
+        id?: ID
+        title: string
+        image: UploadFile[]
+        secondary_image: UploadFile[]
+        custom_order: number
+    }
+
+    interface DTOUpload extends Omit<DTOLocal, 'image' | 'secondary_image'> {
+        image: ID
+        secondary_image: ID
     }
 }

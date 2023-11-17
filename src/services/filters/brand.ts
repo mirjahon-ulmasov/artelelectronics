@@ -7,7 +7,8 @@ const brandWithTags = api.enhanceEndpoints({
 })
 
 interface SearchParams {
-    category?: number | string
+    category?: ID
+    is_active?: boolean
 }
 
 export const brandAPI = brandWithTags.injectEndpoints({
@@ -20,7 +21,7 @@ export const brandAPI = brandWithTags.injectEndpoints({
             }),
             providesTags: () => ['Brand'],
         }),
-        createBrand: build.mutation<unknown, Brand.DTOLocal>({
+        createBrand: build.mutation<unknown, Brand.DTOUpload>({
             query: data => ({
                 url: '/brand/',
                 method: 'POST',
@@ -28,7 +29,7 @@ export const brandAPI = brandWithTags.injectEndpoints({
             }),
             invalidatesTags: ['Brand'],
         }),
-        updateBrand: build.mutation<unknown, Brand.DTOLocal>({
+        updateBrand: build.mutation<unknown, Brand.DTOUpload>({
             query: data => ({
                 url: `/brand/${data.id}/`,
                 method: 'PUT',

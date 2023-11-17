@@ -42,11 +42,11 @@ export default function AddProduct() {
                 <Col span={24}>
                     <Space>
                         <Button {...getButtonType(1)}>Главная</Button>
-                        <Button {...getButtonType(2)} onClick={() => setProgress(2)}>Варианты</Button>
-                        <Button {...getButtonType(3)} onClick={() => setProgress(3)}>Изображений</Button>
-                        <Button {...getButtonType(4)} onClick={() => setProgress(4)}>SAP Code</Button>
-                        <Button {...getButtonType(5)} onClick={() => setProgress(5)}>Преимущества</Button>
-                        <Button {...getButtonType(6)} onClick={() => setProgress(6)}>Инструкции</Button>
+                        <Button {...getButtonType(2)}>Варианты</Button>
+                        <Button {...getButtonType(3)}>Изображений</Button>
+                        <Button {...getButtonType(4)}>SAP Code</Button>
+                        <Button {...getButtonType(5)}>Преимущества</Button>
+                        <Button {...getButtonType(6)}>Инструкции</Button>
                     </Space>
                 </Col>
                 <Col span={24}>

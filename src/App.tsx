@@ -3,7 +3,7 @@ import {
     ProtectedRoute, NotFound, Login, Report, 
     Product, MainPage, Color, News, Store,
     Country, Region, District, Collection,
-    Category
+    Category, Brand
 } from 'pages';
 import { ROLE } from 'types/others/api';
 
@@ -22,6 +22,7 @@ export default function App() {
                 <Route path="color/*" element={<Color />} />
                 <Route path="collection/*" element={<Collection />} />
                 <Route path="category/*" element={<Category />} />
+                <Route path="brand/*" element={<Brand />} />
 
                 {/* ---------- Geography ---------- */}
                 <Route path="country/*" element={<Country />} />
