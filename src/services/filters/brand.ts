@@ -21,6 +21,13 @@ export const brandAPI = brandWithTags.injectEndpoints({
             }),
             providesTags: () => ['Brand'],
         }),
+        fetchBrand: build.query<Brand.DTO, ID>({
+            query: id => ({
+                url: `/brand/${id}/admin_detail_view/`,
+                method: 'GET',
+            }),
+            providesTags: () => ['Brand'],
+        }),
         createBrand: build.mutation<unknown, Brand.DTOUpload>({
             query: data => ({
                 url: '/brand/',
@@ -55,6 +62,7 @@ export const brandAPI = brandWithTags.injectEndpoints({
 })
 
 export const {
+    useFetchBrandQuery,
     useFetchBrandsQuery,
     useCreateBrandMutation,
     useUpdateBrandMutation,

@@ -3,10 +3,9 @@ import { useLocation, useNavigate } from 'react-router-dom'
 import { Button, Col, Row, Table, TableProps, Typography } from 'antd'
 import type { ColumnsType, FilterValue, SorterResult } from 'antd/es/table/interface'
 import toast from 'react-hot-toast'
-import { Status } from 'components'
 import { 
     useDeleteProductMutation, useFetchBrandsQuery, 
-    useFetchProductsQuery, usePublishProductMutation 
+    useFetchProductsQuery 
 } from 'services/index'
 import { useQuery } from 'hooks/useQuery'
 import { Product } from 'types/product/product'
@@ -28,7 +27,6 @@ export default function Products() {
     const [sorters, setSorters] = useState<SorterResult<TableDTO>[]>([]);    
     const [filters, setFilters] = useState<Record<string, FilterValue | null>>({})  
 
-    const [publishProduct, { isLoading: publishLoading }] = usePublishProductMutation()   
     const [deleteProduct, { isLoading: deleteLoading }] = useDeleteProductMutation()   
 
     const { data: brands } = useFetchBrandsQuery({})
@@ -80,13 +78,6 @@ export default function Products() {
             .catch(() => toast.error('Что-то пошло не так'))
     }, [deleteProduct])
 
-    const publishProductHandler = useCallback((id: ID, is_published: boolean) => {
-        publishProduct({ id, is_published }).unwrap()
-            .then(() => toast.success('Продукт успешно изменен'))
-            .catch(() => toast.error('Что-то пошло не так'))
-
-    }, [publishProduct])
-
     const columns: ColumnsType<TableDTO> = [
         {
             title: 'Название',
@@ -115,37 +106,17 @@ export default function Products() {
             render: (_, record) => record.category?.title,
         },
         {
-            title: 'Опубликовано',
-            dataIndex: 'is_published',
-            key: 'is_published',
-            render: (_, record) => (
-                <Status value={record.is_published} type='active'>
-                    {record.is_published ? 'опубликован' : 'не опубликовано'}
-                </Status>
-            ),
-            filters: [
-                { text: 'опубликован', value: true },
-                { text: 'не опубликовано', value: false },
-            ],
-            filterSearch: true,
-        },
-        {
             title: 'Действия',
             key: 'action',
-            width: 420,
+            width: 300,
             render: (_, record) => (
                <Row>
-                    <Col flex="160px">
-                        <Button type='text' loading={publishLoading} onClick={() => publishProductHandler(record.id, !record.is_published)}>
-                            {record.is_published ? 'Не публиковать' : 'Публиковать'}
-                        </Button>
-                    </Col>
-                    <Col flex="100px">
+                    <Col>
                         <Button type='text' danger loading={deleteLoading} onClick={() => deleteProductHandler(record.id)}>
                             Удалить
                         </Button>
                     </Col>
-                    <Col flex="100px">
+                    <Col>
                         <Button type='text' onClick={() => navigate({ pathname: `/product/${record.id}/edit`, search })}>
                             Изменить
                         </Button>
@@ -171,7 +142,7 @@ export default function Products() {
                 columns={columns}
                 dataSource={dataSource}
                 onChange={handleChange}
-                scroll={{ y: 600, x: 1500 }}
+                scroll={{ y: 600, x: 1000 }}
             />
         </Fragment>
     )

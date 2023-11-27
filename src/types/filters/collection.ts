@@ -16,7 +16,7 @@ export declare namespace Collection {
     interface DTOLocal extends Omit<DTO, 'id' | 'image' | 'categories'> {
         id?: ID
         image: UploadFile[]
-        categories: number[]
+        categories: ID[]
     }
 
     interface DTOUpload extends Omit<DTOLocal, 'image' | 'categories'> {

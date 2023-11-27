@@ -85,7 +85,11 @@ export default function Brands() {
             render: (_, record) => (
                <Row>
                     <Col flex="100px">
-                        <Button type='text' danger loading={deleteLoading} onClick={() => deleteBrandHandler(record.id)}>
+                        <Button 
+                            danger type='text' 
+                            loading={deleteLoading} 
+                            onClick={() => deleteBrandHandler(record.id)}
+                        >
                             Удалить
                         </Button>
                     </Col>

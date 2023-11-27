@@ -249,7 +249,7 @@ export function SAPCode({ onClick, product, category }: SAPCodeProps) {
                                         placeholder="Выберите"
                                         loading={variantsLoading}
                                         options={variants?.map(variant => ({
-                                            value: variant.color.id,
+                                            value: variant.id,
                                             label: (
                                                 <div className='d-flex gap-12 jc-start'>
                                                     <Color link={variant.color.image.file} />

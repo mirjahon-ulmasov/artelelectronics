@@ -1,6 +1,6 @@
 import { Fragment, useCallback, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Button, Col, Form, Input, Row, Space, Typography } from 'antd'
+import { Button, Col, Form, Input, InputNumber, Row, Space, Typography } from 'antd'
 import toast from 'react-hot-toast'
 import { FormItem, ImageUpload, StyledText } from 'components'
 import { useCreateBrandMutation } from 'services'
@@ -25,7 +25,6 @@ export default function AddBrand() {
             [key]: value
         }))
     }, [])
-
 
     // ---------------- Submit ----------------
     const onFinish = useCallback(() => {
@@ -64,6 +63,21 @@ export default function AddBrand() {
                                 placeholder="Название"
                                 value={brand.title}
                                 onChange={e => changeBrand('title', e.target.value)} 
+                            />
+                        </FormItem>
+                    </Col>
+                    <Col span={24}>
+                        <FormItem
+                            label="Порядок"
+                            labelCol={{ span: 24 }}
+                            wrapperCol={{ span: 24 }}
+                        >
+                            <InputNumber
+                                size="large"
+                                placeholder="4"
+                                style={{ width: 200 }}
+                                value={brand?.custom_order}
+                                onChange={num => changeBrand('custom_order', num)} 
                             />
                         </FormItem>
                     </Col>

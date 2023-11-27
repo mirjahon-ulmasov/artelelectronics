@@ -20,6 +20,13 @@ export const collectionAPI = collectionWithTags.injectEndpoints({
             }),
             providesTags: () => ['Collection'],
         }),
+        fetchCollection: build.query<Collection.DTO, ID>({
+            query: id => ({
+                url: `/collection/${id}/admin_detail_view/`,
+                method: 'GET',
+            }),
+            providesTags: () => ['Collection'],
+        }),
         createCollection: build.mutation<unknown, Collection.DTOUpload>({
             query: data => ({
                 url: '/collection/create_with_category/',
@@ -33,6 +40,17 @@ export const collectionAPI = collectionWithTags.injectEndpoints({
                 url: `/collection/${data.id}/`,
                 method: 'PUT',
                 body: data,
+            }),
+            invalidatesTags: ['Collection'],
+        }),
+        addCategoryToCollection: build.mutation<unknown, { 
+            body: { category: ID }[], 
+            id: ID 
+        }>({
+            query: ({ body, id }) => ({
+                url: `/collection/${id}/add_category/`,
+                method: 'POST',
+                body,
             }),
             invalidatesTags: ['Collection'],
         }),
@@ -54,9 +72,11 @@ export const collectionAPI = collectionWithTags.injectEndpoints({
 })
 
 export const {
+    useFetchCollectionQuery,
     useFetchCollectionsQuery,
     useCreateCollectionMutation,
     useUpdateCollectionMutation,
     useDeleteCollectionMutation,
-    useActivateCollectionMutation
+    useActivateCollectionMutation,
+    useAddCategoryToCollectionMutation,
 } = collectionAPI
