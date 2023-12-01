@@ -84,7 +84,7 @@ export function Main({ onClick, onSetID, category }: MainProps) {
                 toast.success("Продукт успешно создан")
                 if(next) {
                     onClick()
-                    onSetID(response.id)
+                    onSetID(response.slug)
                     return;
                 }
                 navigate({
@@ -172,51 +172,6 @@ export function Main({ onClick, onSetID, category }: MainProps) {
                         </FormItem>
                     </BorderBox>
                 </Col>
-                {/* <Col span={24}>
-                    <BorderBox>
-                        <StyledText>Выбрать товар</StyledText>
-                        <Space size="large">
-                            <Form.Item
-                                valuePropName="checked"
-                                labelCol={{ span: 24 }}
-                                wrapperCol={{ span: 24 }}
-                            >
-                                <Checkbox
-                                    checked={product.is_hot}
-                                    onChange={e => changeProduct('is_hot', e.target.checked)}
-                                >
-                                    <StyledText>Хитовый товар</StyledText>
-                                </Checkbox>
-                            </Form.Item>
-                            <Form.Item
-                                valuePropName="checked"
-                                labelCol={{ span: 24 }}
-                                wrapperCol={{ span: 24 }}
-                            >
-                                 <Checkbox
-                                    checked={product.is_new}
-                                    onChange={e => changeProduct('is_new', e.target.checked)}
-                                >
-                                    <StyledText>Новый товар</StyledText>
-                                </Checkbox>
-                            </Form.Item>
-                            <Form.Item
-                                valuePropName="checked"
-                                labelCol={{ span: 24 }}
-                                wrapperCol={{ span: 24 }}
-                            >
-                                 <Checkbox
-                                    checked={product.is_recommended}
-                                    onChange={e => changeProduct('is_recommended', e.target.checked)}
-                                >
-                                    <StyledText>
-                                        Рекомендованный товар
-                                    </StyledText>
-                                </Checkbox>
-                            </Form.Item>
-                        </Space>
-                    </BorderBox>
-                </Col> */}
                 <Col span={24} className='mt-2'>
                     <Space size="large">
                         <Button

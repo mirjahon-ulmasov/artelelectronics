@@ -9,16 +9,20 @@ export * from './filters/color'
 export * from './filters/collection'
 export * from './filters/category'
 export * from './filters/category_type'
-export * from './filters/category_utility'
+export * from './filters/category_property'
 
 
 // ------------ Product ------------
-export * from './product/main'
 export * from './product/variants'
 export * from './product/variant_images'
+export * from './product/utilities'
+
+export * from './product/main'
+export * from './product/properties'
+export * from './product/colors'
+export * from './product/images'
 export * from './product/advantages'
 export * from './product/instructions'
-export * from './product/utilities'
 
 
 // ------------ Geography ------------

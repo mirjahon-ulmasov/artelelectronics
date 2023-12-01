@@ -9,7 +9,6 @@ const productWithTags = api.enhanceEndpoints({
 interface SearchParams {
     brand?: ID
     category?: ID
-    subcategory?: ID
     is_published?: boolean
     is_active?: boolean
 }
@@ -44,14 +43,6 @@ export const productAPI = productWithTags.injectEndpoints({
             }),
             invalidatesTags: () => [{ type: 'Product', id: 'LIST' }],
         }),
-        add360View: build.mutation<unknown, Product.View360>({
-            query: data => ({
-                url: `/product/${data.id}/set_dynamic_file/`,
-                method: 'PATCH',
-                body: data,
-            }),
-            invalidatesTags: () => [{ type: 'Product', id: 'DETAIL' }],
-        }),
         deleteProduct: build.mutation<unknown, ID>({
             query: id => ({
                 url: `/product/${id}/`,
@@ -73,6 +64,14 @@ export const productAPI = productWithTags.injectEndpoints({
                 body: data
             }),
             invalidatesTags: () => [{ type: 'Product', id: 'LIST' }],
+        }),
+        add360View: build.mutation<unknown, Product.View360>({
+            query: data => ({
+                url: `/product/${data.id}/set_dynamic_file/`,
+                method: 'PATCH',
+                body: data,
+            }),
+            invalidatesTags: () => [{ type: 'Product', id: 'DETAIL' }],
         }),
     }),
 })

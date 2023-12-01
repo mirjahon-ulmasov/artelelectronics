@@ -112,12 +112,20 @@ export default function Products() {
             render: (_, record) => (
                <Row>
                     <Col>
-                        <Button type='text' danger loading={deleteLoading} onClick={() => deleteProductHandler(record.id)}>
+                        <Button 
+                            danger 
+                            type='text' 
+                            loading={deleteLoading} 
+                            onClick={() => deleteProductHandler(record.slug)}
+                        >
                             Удалить
                         </Button>
                     </Col>
                     <Col>
-                        <Button type='text' onClick={() => navigate({ pathname: `/product/${record.id}/edit`, search })}>
+                        <Button 
+                            type='text' 
+                            onClick={() => navigate({ pathname: `/product/${record.slug}/edit`, search })}
+                        >
                             Изменить
                         </Button>
                     </Col>  

@@ -1,5 +1,4 @@
 import { File, ID, Language } from '../others/api'
-import { Variant } from './variant'
 import { Advantage } from './advantage'
 
 // -------------- Product --------------
@@ -8,11 +7,11 @@ export declare namespace Product {
 
     interface DTO {
         id: ID
+        slug: ID
         brand: Brand
         category: Category
         dynamic_view?: File
         languages: ExLanguage[]
-        variants: Variant.List
         advantages: Advantage.List
         is_published: boolean
         is_active?: boolean

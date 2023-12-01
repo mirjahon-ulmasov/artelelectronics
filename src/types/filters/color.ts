@@ -13,6 +13,11 @@ export declare namespace Color {
         is_active?: boolean
     }
 
+    interface DTOWithoutLanguages extends Omit<DTO, 'languages'> {
+        title: string
+        language: string
+    }
+
     interface DTOLocal extends Omit<DTO, 'id' | 'image'> {
         id?: ID
         image: UploadFile[]

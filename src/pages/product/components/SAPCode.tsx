@@ -9,7 +9,8 @@ import _ from 'lodash'
 import { v4 as uuid } from 'uuid'
 import { PlusOutlined } from '@ant-design/icons';
 import { 
-    useCreateProductUtilityMutation, useFetchCategoryUtilitiesQuery, 
+    useCreateProductUtilityMutation,
+    useFetchProductPropertiesQuery, 
     useFetchProductVariantsQuery 
 } from 'services'
 import { 
@@ -52,13 +53,11 @@ export function SAPCode({ onClick, product, category }: SAPCodeProps) {
     const { data: variants, isLoading: variantsLoading } = useFetchProductVariantsQuery({
         product: product.id
     })
-    const { data: primaryUtility } = useFetchCategoryUtilitiesQuery({
-        category,
-        is_primary: true
+    const { data: primaryUtility } = useFetchProductPropertiesQuery({
+        product: product.id    
     })
-    const { data: secondaryUtilities } = useFetchCategoryUtilitiesQuery({
-        category,
-        is_primary: false
+    const { data: secondaryUtilities } = useFetchProductPropertiesQuery({
+        product: product.id    
     })
     const [addUtilityProduct, { isLoading: loading }] = useCreateProductUtilityMutation()
 

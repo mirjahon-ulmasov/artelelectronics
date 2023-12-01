@@ -52,18 +52,17 @@ export declare namespace CategoryType {
     }
 }
 
-export declare namespace CategoryUtility {
+export declare namespace CategoryProperty {
     type List = DTO[]
 
     interface DTO {
         id?: ID
         category: ID
-        is_primary: boolean
         languages: Language[]
-        items: UtilityItem[]
+        items: PropertyItem[]
     }
     
-    interface UtilityItem {
+    interface PropertyItem {
         id?: ID
         languages: Language[]
     }
