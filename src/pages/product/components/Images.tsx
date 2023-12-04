@@ -66,8 +66,22 @@ export function Images({ onClick, product, category }: ImageProps) {
         }))
     }, [])
 
+    const reset = useCallback(() => {
+        setProdImage({
+            product: product.id,
+            color: '',
+            image: [],
+            is_default: true
+        })
+        setProdImages({
+            product: product.id,
+            color: '',
+            images: []
+        })
+    }, [product.id])
+
     // ---------------- Submit ----------------
-    const onFinish = useCallback((next: boolean) => {
+    const onFinish = useCallback((again?: boolean, next?: boolean) => {    
         const product_image: ProductImage.DTOUpload = {
             ...prodImage,
             image: prodImage.image[0]?.response?.id as ID
@@ -85,7 +99,11 @@ export function Images({ onClick, product, category }: ImageProps) {
 
         Promise.all(promises)
             .then(() => {
-                toast.success("Варианты продукта и видео успешно добавлены.");
+                toast.success("Изображения успешно добавлены в продукт");
+                if(again) {
+                    reset()
+                    return;
+                }
                 if(next) {
                     onClick()
                     return;
@@ -96,7 +114,7 @@ export function Images({ onClick, product, category }: ImageProps) {
                 })
             })
             .catch(() => toast.error("Что-то пошло не так"));
-    }, [category, createProductImage, createProductImages, navigate, onClick, prodImage, prodImages]);
+    }, [category, createProductImage, createProductImages, navigate, onClick, prodImage, prodImages, reset]);
 
 
     return (
@@ -155,7 +173,7 @@ export function Images({ onClick, product, category }: ImageProps) {
                             htmlType="submit"
                             shape="round"
                             loading={createLoading1 || createLoading2}
-                            onClick={() => onFinish(true)}
+                            onClick={() => onFinish()}
                         >
                             Сохранить
                         </Button>
@@ -165,6 +183,15 @@ export function Images({ onClick, product, category }: ImageProps) {
                             type="primary"
                             loading={createLoading1 || createLoading2}
                             onClick={() => onFinish(true)}
+                        >
+                            Сохранить и добавить еще
+                        </Button>
+                        <Button
+                            shape="round"
+                            size="large"
+                            type="primary"
+                            loading={createLoading1 || createLoading2}
+                            onClick={() => onFinish(false, true)}
                         >
                             Сохранить и продолжить
                         </Button>
