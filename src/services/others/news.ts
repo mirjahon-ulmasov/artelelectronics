@@ -21,7 +21,7 @@ export const newsAPI = newsWithTags.injectEndpoints({
         }),
         fetchNews: build.query<News.DTO, ID>({
             query: id => ({
-                url: `/news/${id}/`,
+                url: `/news/${id}/admin_detail_view/`,
                 method: 'GET',
             }),
             providesTags: () => ['News'],

@@ -14,8 +14,8 @@ import {
 import { useCreateNewsMutation } from 'services'
 import { formatDate, languages } from 'utils/index'
 import { modules, formats } from 'utils/richtext'
-import { News } from 'types/others/news'
 import { ID, LANGUAGE } from 'types/others/api'
+import { News } from 'types/others/news'
 
 const { Title } = Typography
 
@@ -91,7 +91,7 @@ export default function AddNews() {
 
     return (
         <Fragment>
-            <Title level={3}>Добавить новость</Title>
+            <Title level={3}>Добавить новости</Title>
             <Form
                 autoComplete="off"
                 onFinish={onFinish}
