@@ -23,8 +23,12 @@ export declare namespace ProductProperty {
         }[]
     }
 
-    interface DTO extends Omit<DTOUpload, 'id'> {
+    interface DTO extends Omit<DTOUpload, 'id' | 'items'> {
         id: ID
+        items: {
+            id: ID
+            languages: Language[]
+        }[]
     }
 }
 

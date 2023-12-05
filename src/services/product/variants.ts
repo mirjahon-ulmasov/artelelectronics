@@ -1,4 +1,4 @@
-import { Variant } from 'types/product/variant'
+import { ProductVariant } from 'types/product/variant'
 import { ID } from 'types/others/api'
 import { api } from '../auth/baseQuery'
 
@@ -12,7 +12,7 @@ interface SearchParams {
 
 export const productVariantsAPI = productVariantsWithTags.injectEndpoints({
     endpoints: build => ({
-        fetchProductVariants: build.query<Variant.List, SearchParams>({
+        fetchProductVariants: build.query<ProductVariant.List, SearchParams>({
             query: params => ({
                 url: '/product_variant/admin_view/',
                 method: 'GET',
@@ -20,26 +20,17 @@ export const productVariantsAPI = productVariantsWithTags.injectEndpoints({
             }),
             providesTags: () => ['ProductVariant'],
         }),
-        createProductVariant: build.mutation<unknown, Variant.DTOUpload>({
-            query: data => ({
-                url: '/product_variant/',
-                method: 'POST',
-                body: data,
+        fetchProductVariant: build.query<ProductVariant.DTO, ID>({
+            query: id => ({
+                url: `/product_variant/${id}/admin_detail_view/`,
+                method: 'GET',
             }),
-            invalidatesTags: ['ProductVariant'],
+            providesTags: () => ['ProductVariant'],
         }),
-        createProductVariants: build.mutation<unknown, Variant.DTOUpload[]>({
+        createProductVariants: build.mutation<unknown, ProductVariant.DTOUpload>({
             query: data => ({
                 url: '/product_variant/multiple_create/',
                 method: 'POST',
-                body: data,
-            }),
-            invalidatesTags: ['ProductVariant'],
-        }),
-        updateProductVariant: build.mutation<unknown, Variant.DTOUpload>({
-            query: data => ({
-                url: `/product_variant/${data.id}/`,
-                method: 'PUT',
                 body: data,
             }),
             invalidatesTags: ['ProductVariant'],
@@ -56,8 +47,7 @@ export const productVariantsAPI = productVariantsWithTags.injectEndpoints({
 
 export const {
     useFetchProductVariantsQuery,
-    useCreateProductVariantMutation,
+    useFetchProductVariantQuery,
     useCreateProductVariantsMutation,
-    useUpdateProductVariantMutation,
     useDeleteProductVariantMutation
 } = productVariantsAPI

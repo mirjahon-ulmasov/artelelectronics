@@ -7,9 +7,10 @@ export declare namespace Product {
 
     interface DTO {
         id: ID
-        slug: ID
+        slug: string
         brand: Brand
         category: Category
+        external_url: string
         dynamic_view?: File
         languages: ExLanguage[]
         advantages: Advantage.List
@@ -22,6 +23,7 @@ export declare namespace Product {
         brand: ID
         category: ID
         category_type: ID
+        external_url: string
         languages: ExLanguage[]
     }
 

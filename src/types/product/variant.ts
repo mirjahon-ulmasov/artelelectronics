@@ -1,36 +1,46 @@
-import { UploadFile } from "antd"
-import { BucketFile, File, ID } from "../others/api"
+import { UploadFile } from 'antd'
+import { ID, Language } from '../others/api'
 
-// -------------- Variant --------------
-export declare namespace Variant {
+// -------------- Product Variant --------------
+export declare namespace ProductVariant {
     type List = DTO[]
+    interface DTOLocal {
+        id?: ID
+        product: ID
+        file: UploadFile[]
+        items: VariantItem[]
+    }
+
+    interface DTOUpload extends Omit<DTOLocal, 'uuid' | 'file'> {
+        file: ID
+    }
 
     interface DTO {
         id: ID
-        color: Color
-        default_image: File
-        is_default: boolean
-        product_images?: BucketFile[]
+        slug: string
+        brand: ID
+        category: ID
+        product: ID
+        color: ID
+        properties: ID[]
+        sap_code: string
+        is_recommended: boolean
+        is_new: boolean
+        is_hot: boolean
+        languages: Language[]
         is_active?: boolean
     }
 
-    interface DTOLocal {
-        id?: ID
-        color: ID
-        default_image: UploadFile[]
-        is_default: boolean
+    interface VariantItem {
         uuid: string
-    }
-
-    interface DTOUpload extends Omit<DTOLocal, 'uuid' | 'default_image'> {
+        brand: ID
+        category: ID
         product: ID
-        default_image: ID
-    }
-
-    interface Color {
-        id: ID
-        image: File
-        code: string
-        title: string
+        color: ID
+        properties: ID[]
+        sap_code: string
+        is_recommended: boolean
+        is_new: boolean
+        is_hot: boolean
     }
 }

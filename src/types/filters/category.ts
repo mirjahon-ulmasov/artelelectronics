@@ -1,5 +1,6 @@
 import { UploadFile } from 'antd'
 import { File, ID, Language } from '../others/api'
+import { Color } from './color'
 
 // -------------- Category --------------
 export declare namespace Category {
@@ -7,7 +8,7 @@ export declare namespace Category {
 
     interface DTO {
         id: ID
-        parent: ParentCategory | null
+        parent: null
         image: File
         secondary_file: File
         custom_order: number
@@ -17,7 +18,7 @@ export declare namespace Category {
 
     interface DTOLocal {
         id?: ID
-        parent: ID | null
+        parent: null
         image: UploadFile[]
         secondary_file: UploadFile[]
         custom_order: number
@@ -27,17 +28,6 @@ export declare namespace Category {
     interface DTOUpload extends Omit<DTOLocal, 'image' | 'secondary_file'> {
         image: ID
         secondary_file: ID
-    }
-
-    interface ParentCategory {
-        id: ID
-        title: string
-    }
-
-    interface Utility {
-        id: ID
-        title: string
-        items: { id: ID; title: string }[]
     }
 }
 
@@ -68,3 +58,22 @@ export declare namespace CategoryProperty {
     }
 }
 
+export declare namespace CategoryColor {
+    type List = DTO[]
+
+    interface DTO {
+        id: ID
+        category: {
+            id: ID
+            title: string
+            slug: string
+        }
+        color: Color.DTOWithoutLanguages
+    }
+    
+    interface DTOUpload {
+        id?: ID
+        category: ID
+        colors: ID[]
+    }
+}

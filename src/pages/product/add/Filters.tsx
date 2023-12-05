@@ -4,9 +4,9 @@ import { Button, Col, Form, Row, Space, UploadFile } from 'antd'
 import toast from 'react-hot-toast'
 import _ from 'lodash'
 import { 
-    useFetchColorsQuery, useCreateProductColorMutation, 
-    useFetchCategoryPropertiesQuery, useImportCategoryPropertiesMutation,
-    useAdd360ViewMutation
+    useCreateProductColorMutation, useFetchCategoryPropertiesQuery, 
+    useImportCategoryPropertiesMutation, useAdd360ViewMutation,
+    useFetchCategoryColorsQuery
 } from 'services'
 import { 
     CustomSelect, BorderBox, FormItem, 
@@ -25,6 +25,7 @@ interface FilterProps {
 export function Filters({ onClick, product, category }: FilterProps) {
     const navigate = useNavigate();
     const [view360, setView360] = useState<UploadFile[]>([])
+
     const [prodColors, setProdColors] = useState<ProductColor.DTOUpload>({
         product: product.id,
         colors: []
@@ -34,13 +35,14 @@ export function Filters({ onClick, product, category }: FilterProps) {
         properties: []
     })
 
-    // TODO - change useFetchColorsQuery
-    const { data: colors, isLoading: colorsLoading } = useFetchColorsQuery({})
-    const [createProductColors, { isLoading: createLoading }] = useCreateProductColorMutation()
-
+    const { data: colors, isLoading: colorsLoading } = useFetchCategoryColorsQuery({
+        category: product.category.id
+    })
     const { data: properties, isLoading: propertiesLoading } = useFetchCategoryPropertiesQuery({
         category: product.category.id
     })
+
+    const [createProductColors, { isLoading: createLoading }] = useCreateProductColorMutation()
     const [importCategoryProperties, { isLoading: importLoading }] = useImportCategoryPropertiesMutation()
     const [add360View, { isLoading: loading360 }] = useAdd360ViewMutation()
 
@@ -88,7 +90,7 @@ export function Filters({ onClick, product, category }: FilterProps) {
     const onFinish = useCallback((next: boolean) => {
 
         const data360: Product.View360 = {
-            id: product.id,
+            id: product.slug,
             dynamic_file: view360[0]?.response?.id as ID
         }
 
@@ -119,7 +121,7 @@ export function Filters({ onClick, product, category }: FilterProps) {
                 })
             })
             .catch(() => toast.error("Что-то пошло не так"));
-    }, [add360View, category, createProductColors, importCategoryProperties, navigate, onClick, prodColors, prodProperties, product.id, view360]);
+    }, [add360View, category, createProductColors, importCategoryProperties, navigate, onClick, prodColors, prodProperties, product.slug, view360]);
 
 
     return (
@@ -152,12 +154,12 @@ export function Filters({ onClick, product, category }: FilterProps) {
                                     placeholder="Выберите"
                                     loading={colorsLoading}
                                     onChange={changeProdColors}
-                                    options={colors?.map(color => ({
-                                        value: color.id,
+                                    options={colors?.map(categoryColor => ({
+                                        value: categoryColor.color.id,
                                         label: (
                                             <div className='d-flex gap-12 jc-start'>
-                                                <Color link={color.image.file} />
-                                                {color.languages[1]?.title}
+                                                <Color link={categoryColor.color.image.file} />
+                                                {categoryColor.color.title}
                                             </div>
                                         ),
                                     }))}

@@ -23,7 +23,7 @@ export const productAPI = productWithTags.injectEndpoints({
             }),
             providesTags: () => [{ type: 'Product', id: 'LIST' }],
         }),
-        fetchProduct: build.query<Product.DTO, ID>({
+        fetchProduct: build.query<Product.DTO, string>({
             query: id => `/product/${id}/admin_detail_view/`,
             providesTags: () => [{ type: 'Product', id: 'DETAIL' }],
         }),

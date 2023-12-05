@@ -3,13 +3,15 @@ import {
     Button, ButtonProps, Col,
     Row, Space, Typography 
 } from 'antd'
-import { 
-    Advantages, Main, Variants, 
-    VariantImages, SAPCode, Instructions, Filters, Images 
-} from './components'
 import { useFetchProductQuery } from 'services'
 import { useQuery } from 'hooks/useQuery'
-import { ID } from 'types/others/api'
+
+import { Main } from './Main'
+import { Filters } from './Filters'
+import { Images } from './Images'
+import { Variants } from './Variants'
+import { Advantages } from './Advantages'
+import { Instructions } from './Instructions'
 
 const { Title } = Typography
 
@@ -17,7 +19,7 @@ export default function AddProduct() {
     const query = useQuery();
     const category = query.get("category") ?? ''
     const [progress, setProgress] = useState(1)
-    const [productID, setProductID] = useState<ID>('test-title-en') // 10
+    const [productID, setProductID] = useState('')
 
     const { data: product } = useFetchProductQuery(productID, {
         skip: !productID
@@ -44,8 +46,7 @@ export default function AddProduct() {
                         <Button {...getButtonType(1)}>Главная</Button>
                         <Button {...getButtonType(2)} onClick={() => setProgress(2)}>Фильтры</Button>
                         <Button {...getButtonType(3)} onClick={() => setProgress(3)}>Изображений</Button>
-                        {/* <Button {...getButtonType(2)} onClick={() => setProgress(2)}>Варианты</Button> */}
-                        <Button {...getButtonType(4)} onClick={() => setProgress(4)}>SAP Code</Button>
+                        <Button {...getButtonType(4)} onClick={() => setProgress(4)}>Варианты</Button>
                         <Button {...getButtonType(5)} onClick={() => setProgress(5)}>Преимущества</Button>
                         <Button {...getButtonType(6)} onClick={() => setProgress(6)}>Инструкции</Button>
                     </Space>
@@ -55,7 +56,7 @@ export default function AddProduct() {
                         <Main
                             category={category}
                             onClick={goNextForm} 
-                            onSetID={(id: ID) => setProductID(id)} 
+                            onSetID={(id) => setProductID(id)} 
                         />
                     )}
                     {product && (
@@ -74,22 +75,8 @@ export default function AddProduct() {
                                     category={category}
                                 />
                             )}
-                            {/* {progress === 2 && (
-                                <Variants 
-                                    onClick={goNextForm} 
-                                    product={product} 
-                                    category={category}
-                                />
-                            )}
-                            {progress === 3 && (
-                                <VariantImages 
-                                    onClick={goNextForm} 
-                                    product={product} 
-                                    category={category}
-                                />
-                            )} */}
                             {progress === 4 && (
-                                <SAPCode 
+                                <Variants 
                                     onClick={goNextForm} 
                                     product={product} 
                                     category={category}

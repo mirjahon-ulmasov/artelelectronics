@@ -11,7 +11,7 @@ import { languages } from 'utils/index'
 
 interface MainProps {
     onClick: () => void
-    onSetID: (id: ID) => void
+    onSetID: (id: string) => void
     category: ID
 }
 
@@ -22,6 +22,7 @@ export function Main({ onClick, onSetID, category }: MainProps) {
         brand: '',
         category,
         category_type: '',
+        external_url: '',
         languages: [
             { title: '', secondary_title: "", language: LANGUAGE.EN },
             { title: '', secondary_title: "", language: LANGUAGE.RU },
@@ -168,6 +169,15 @@ export function Main({ onClick, onSetID, category }: MainProps) {
                                 }))}
                                 value={product.category_type || undefined}
                                 onChange={(value: ID) => changeProduct('category_type', value)}
+                            />
+                        </FormItem>
+                        <FormItem label="Внешний URL-адрес" labelCol={{ span: 24 }} wrapperCol={{ span: 24 }}>
+                            <Input.TextArea
+                                rows={5}
+                                size="large"
+                                placeholder="Внешний URL-адрес"
+                                value={product.external_url}
+                                onChange={e => changeProduct('external_url', e.target.value)}
                             />
                         </FormItem>
                     </BorderBox>
