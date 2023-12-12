@@ -2,6 +2,7 @@ import { Fragment, useCallback, useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Button, Col, Popover, Row, Table, Typography } from 'antd'
 import type { ColumnsType } from 'antd/es/table/interface'
+import { v4 as uuid } from 'uuid'
 import toast from 'react-hot-toast'
 import { useDeleteCategoryMutation, useFetchCategoriesQuery } from 'services'
 import { Category } from 'types/filters/category'
@@ -22,10 +23,7 @@ export default function Categories() {
     })
 
     const dataSource: TableDTO[] = useMemo(() => {
-        return categories?.map((el, idx) => ({
-            ...el,
-            key: idx.toString()
-        })) || []
+        return categories?.map(el => ({ ...el, key: uuid() })) || []
     }, [categories])
 
     const deleteCategoryHandler = useCallback((id: ID) => {
@@ -51,16 +49,51 @@ export default function Categories() {
             dataIndex: 'secondary_file',
             key: 'secondary_file',
             ellipsis: true,
-            render: (_, record) => (
+            render: (_, record) => record.secondary_file ? (
                 <Popover content={content(record.secondary_file?.file)} trigger="click">
-                    <Button type='default' size='small' shape='round'>Превью</Button>
+                    <Button type='default' size='small' shape='round'>Просмотреть</Button>
                 </Popover>
+            ) : '',
+        },
+        {
+            title: 'Цвета',
+            dataIndex: 'colors',
+            key: 'colors',
+            width: 150,
+            ellipsis: true,
+            render: (_, record) => (
+                <Button type='text' onClick={() => navigate({ pathname: `/category/${record.id}/color` })}>
+                    Войти
+                </Button>
+            ),
+        },
+        {
+            title: 'Типы',
+            dataIndex: 'types',
+            key: 'types',
+            width: 150,
+            ellipsis: true,
+            render: (_, record) => (
+                <Button type='text' onClick={() => navigate({ pathname: `/category/${record.id}/type` })}>
+                    Войти
+                </Button>
+            ),
+        },
+        {
+            title: 'Свойства',
+            dataIndex: 'properties',
+            key: 'properties',
+            width: 150,
+            ellipsis: true,
+            render: (_, record) => (
+                <Button type='text' onClick={() => navigate({ pathname: `/category/${record.id}/property` })}>
+                    Войти
+                </Button>
             ),
         },
         {
             title: 'Действия',
             key: 'action',
-            width: 300,
             render: (_, record) => (
                <Row>
                     <Col flex="100px">
@@ -92,7 +125,7 @@ export default function Categories() {
                 pagination={false}
                 columns={columns}
                 dataSource={dataSource}
-                scroll={{ y: 600, x: 800 }}
+                scroll={{ y: 600, x: 1200 }}
             />
         </Fragment>
     )

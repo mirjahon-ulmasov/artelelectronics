@@ -23,6 +23,13 @@ export const categoryAPI = categoryWithTags.injectEndpoints({
             }),
             providesTags: () => ['Category'],
         }),
+        fetchCategory: build.query<Category.DTO, ID>({
+            query: id => ({
+                url: `/category/${id}/admin_detail_view/`,
+                method: 'GET',
+            }),
+            providesTags: () => ['Category'],
+        }),
         createCategory: build.mutation<unknown, Category.DTOUpload>({
             query: data => ({
                 url: '/category/',
@@ -57,6 +64,7 @@ export const categoryAPI = categoryWithTags.injectEndpoints({
 })
 
 export const {
+    useFetchCategoryQuery,
     useFetchCategoriesQuery,
     useCreateCategoryMutation,
     useUpdateCategoryMutation,

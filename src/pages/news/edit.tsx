@@ -10,13 +10,13 @@ import { v4 as uuid } from 'uuid'
 import ReactQuill from 'react-quill'
 import { 
     FormItem, ImageUpload, StyledText,
-    BorderBox, LanguageToggle, CustomDatePicker 
+    BorderBox, LanguageToggle, CustomDatePicker, CustomSelect 
 } from 'components'
 import { useFetchNewsQuery, useUpdateNewsMutation } from 'services'
-import { formatDate, languages } from 'utils/index'
+import { formatDate, getNewsType, languages } from 'utils/index'
 import { modules, formats } from 'utils/richtext'
 import { ID, LANGUAGE } from 'types/others/api'
-import { News } from 'types/others/news'
+import { NEWS, News } from 'types/others/news'
 
 const { Title } = Typography
 
@@ -33,6 +33,7 @@ export default function EditNews() {
         image: [],
         publish_date: dayjs(),
         add_to_carousel: false,
+        news_type: NEWS.ARTICLE,
         external_source_url: '',
     })
 
@@ -200,13 +201,29 @@ export default function EditNews() {
                             />
                         </FormItem>
                     </Col>
-                    <Col span={24}>
+                    <Col span={12}>
+                        <FormItem
+                            label="Тип новости"
+                            labelCol={{ span: 24 }}
+                            wrapperCol={{ span: 24 }}
+                        >
+                            <CustomSelect
+                                size="large"
+                                placeholder="Выберите"
+                                options={getNewsType}
+                                value={news.news_type}
+                                onChange={e => changeNews('news_type', e)}
+                            />
+                        </FormItem>
+                    </Col>
+                    <Col span={12}>
                         <Form.Item
                             valuePropName="checked"
                             labelCol={{ span: 24 }}
                             wrapperCol={{ span: 24 }}
                         >
                             <Checkbox
+                                style={{ marginTop: 40 }}
                                 checked={news.add_to_carousel}
                                 onChange={e => changeNews('add_to_carousel', e.target.checked)}
                             >

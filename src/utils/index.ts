@@ -1,7 +1,8 @@
 import dayjs, { Dayjs } from 'dayjs'
 import { Language } from 'components/LanguageToggle'
-import { LANGUAGE } from 'types/others/api'
 import { DAYS, STORE } from 'types/others/store'
+import { LANGUAGE } from 'types/others/api'
+import { NEWS } from 'types/others/news'
 
 export type format = 'client' | 'car' | 'order' | 'active'
 
@@ -9,6 +10,11 @@ export const languages: Language[] = [
     { label: 'Ru', value: LANGUAGE.RU },
     { label: 'Uz', value: LANGUAGE.UZ },
     { label: 'En', value: LANGUAGE.EN },
+]
+
+export const getNewsType = [
+    { label: 'Статьи', value: NEWS.ARTICLE },
+    { label: 'Мероприятия', value: NEWS.EVENT },
 ]
 
 export function formatPhone(data: string) {

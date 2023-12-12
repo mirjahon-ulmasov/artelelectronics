@@ -37,8 +37,12 @@ export declare namespace CategoryType {
     interface DTO {
         id?: ID
         category: ID
-        languages: Language[]
+        languages: EXLanguage[]
         is_active?: boolean
+    }
+
+    interface EXLanguage extends Language {
+        originalTitle?: string
     }
 }
 

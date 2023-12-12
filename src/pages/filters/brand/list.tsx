@@ -63,18 +63,18 @@ export default function Brands() {
             ellipsis: true,
             render: (_, record) => (
                 <Popover content={content(record.image?.file)} trigger="click">
-                    <Button type='default' size='small' shape='round'>Превью</Button>
+                    <Button type='default' size='small' shape='round'>Просмотреть</Button>
                 </Popover>
             ),
         },
         {
-            title: 'Вторичный логотип',
+            title: '2-й логотип',
             dataIndex: 'secondary_image',
             key: 'secondary_image',
             ellipsis: true,
             render: (_, record) => (
                 <Popover content={content(record.secondary_image?.file)} trigger="click">
-                    <Button type='default' size='small' shape='round'>Превью</Button>
+                    <Button type='default' size='small' shape='round'>Просмотреть</Button>
                 </Popover>
             ),
         },
