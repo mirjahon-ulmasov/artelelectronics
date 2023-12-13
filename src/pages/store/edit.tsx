@@ -1,3 +1,5 @@
+import { NotFound } from "..";
+
 export default function EditStore() {
-    return <div>EditColor</div>
+    return <NotFound />
 }

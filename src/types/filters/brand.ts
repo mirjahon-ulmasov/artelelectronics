@@ -10,6 +10,7 @@ export declare namespace Brand {
         title: string
         image: File
         secondary_image: File
+        third_image: File
         custom_order: number
         is_active: boolean
     }
@@ -19,11 +20,13 @@ export declare namespace Brand {
         title: string
         image: UploadFile[]
         secondary_image: UploadFile[]
+        third_image: UploadFile[]
         custom_order: number
     }
 
-    interface DTOUpload extends Omit<DTOLocal, 'image' | 'secondary_image'> {
+    interface DTOUpload extends Omit<DTOLocal, 'image' | 'secondary_image' | 'third_image'> {
         image: ID
         secondary_image: ID
+        third_image: ID
     }
 }

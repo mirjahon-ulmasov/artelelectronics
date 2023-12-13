@@ -28,33 +28,11 @@ export const categoryColorAPI = categoryColorWithTags.injectEndpoints({
             }),
             providesTags: () => ['CategoryColor'],
         }),
-        createCategoryColor: build.mutation<unknown, CategoryColor.DTOUpload>({
+        addCategoryColor: build.mutation<unknown, CategoryColor.DTOUpload>({
             query: data => ({
-                url: '/category_color/multiple_create/',
+                url: '/category_color/multiple_update/',
                 method: 'POST',
                 body: data,
-            }),
-            invalidatesTags: ['CategoryColor'],
-        }),
-        updateCategoryColor: build.mutation<unknown, CategoryColor.DTOUpload>({
-            query: data => ({
-                url: `/category_color/${data.id}/`,
-                method: 'PUT',
-                body: data,
-            }),
-            invalidatesTags: ['CategoryColor'],
-        }),
-        deleteCategoryColor: build.mutation<unknown, ID>({
-            query: id => ({
-                url: `/category_color/${id}/`,
-                method: 'DELETE',
-            }),
-            invalidatesTags: ['CategoryColor'],
-        }),
-        activateCategoryColor: build.mutation<unknown, ID>({
-            query: id => ({
-                url: `/category_color/${id}/activate/`,
-                method: 'PATCH',
             }),
             invalidatesTags: ['CategoryColor'],
         }),
@@ -64,8 +42,5 @@ export const categoryColorAPI = categoryColorWithTags.injectEndpoints({
 export const {
     useFetchCategoryColorQuery,
     useFetchCategoryColorsQuery,
-    useCreateCategoryColorMutation,
-    useUpdateCategoryColorMutation,
-    useDeleteCategoryColorMutation,
-    useActivateCategoryColorMutation,
+    useAddCategoryColorMutation,
 } = categoryColorAPI

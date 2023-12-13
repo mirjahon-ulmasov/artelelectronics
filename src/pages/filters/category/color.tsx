@@ -3,7 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { Button, Col, Form, Row, Space, Typography } from 'antd'
 import toast from 'react-hot-toast'
 import { 
-    useCreateCategoryColorMutation, useFetchCategoryColorsQuery, 
+    useAddCategoryColorMutation, useFetchCategoryColorsQuery, 
     useFetchCategoryQuery, useFetchColorsQuery 
 } from 'services'
 import { FormItem, CustomSelect, Color } from 'components'
@@ -21,12 +21,14 @@ export default function CategoryColor() {
     })
 
     const { data: category } = useFetchCategoryQuery(categoryID as ID)
-    const { data: colors, isLoading: colorsLoading } = useFetchColorsQuery({})
+    const { data: colors, isLoading: colorsLoading } = useFetchColorsQuery({
+        is_active: true
+    })
     const { data: categoryColors, isError } = useFetchCategoryColorsQuery({
         category: categoryID
     })
 
-    const [ createCategory, { isLoading: createLoading }] = useCreateCategoryColorMutation()
+    const [ addCategoryColor, { isLoading: createLoading }] = useAddCategoryColorMutation()
 
     useEffect(() => {
         if(isError) return;
@@ -41,7 +43,7 @@ export default function CategoryColor() {
     const onFinish = useCallback(() => {  
     
         const promises = [
-            createCategory(categoryColor).unwrap(),
+            addCategoryColor(categoryColor).unwrap(),
         ];
     
         Promise.all(promises)
@@ -50,7 +52,7 @@ export default function CategoryColor() {
                 navigate("/category/list")
             })
             .catch(() => toast.error("Не удалось добавить цвет категории"))
-    }, [categoryColor, createCategory, navigate])
+    }, [categoryColor, addCategoryColor, navigate])
     
     return (
         <Fragment>

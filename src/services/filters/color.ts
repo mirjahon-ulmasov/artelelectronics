@@ -13,8 +13,16 @@ interface SearchParams {
 export const colorAPI = colorWithTags.injectEndpoints({
     endpoints: build => ({
         fetchColors: build.query<Color.List, SearchParams>({
-            query: () => ({
+            query: params => ({
                 url: '/color/admin_view/',
+                method: 'GET',
+                params
+            }),
+            providesTags: () => ['Color'],
+        }),
+        fetchColor: build.query<Color.DTO, ID>({
+            query: id => ({
+                url: `/color/${id}/admin_detail_view/`,
                 method: 'GET',
             }),
             providesTags: () => ['Color'],
@@ -53,6 +61,7 @@ export const colorAPI = colorWithTags.injectEndpoints({
 })
 
 export const {
+    useFetchColorQuery,
     useFetchColorsQuery,
     useCreateColorMutation,
     useUpdateColorMutation,

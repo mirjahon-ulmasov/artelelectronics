@@ -22,20 +22,27 @@ export default function EditBrand() {
         if(!brandData) return;
         setBrand({
             ...brandData,
-            image: [{
+            image: brandData.image ? [{
                 uid: uuid(),
-                response: brandData?.image,
+                response: brandData.image,
                 status: 'done',
-                name: `${brandData?.title}.png`,
-                url: brandData?.image.file
-            }],
-            secondary_image: [{
+                name: `${brandData.title}.png`,
+                url: brandData.image.file
+            }] : [],
+            secondary_image: brandData.secondary_image ? [{
                 uid: uuid(),
-                response: brandData?.secondary_image,
+                response: brandData.secondary_image,
                 status: 'done',
-                name: `${brandData?.title}.png`,
-                url: brandData?.secondary_image.file
-            }]
+                name: `${brandData.title}.png`,
+                url: brandData.secondary_image?.file
+            }] : [],
+            third_image: brandData.third_image ? [{
+                uid: uuid(),
+                response: brandData.third_image,
+                status: 'done',
+                name: `${brandData.title}.png`,
+                url: brandData.third_image?.file
+            }] : []
         })
     }, [brandData])
 
@@ -58,6 +65,7 @@ export default function EditBrand() {
             ...brand,
             image: brand.image[0]?.response?.id as ID,
             secondary_image: brand.secondary_image[0]?.response?.id as ID,
+            third_image: brand.third_image[0]?.response?.id as ID,
         }
 
         updateBrand(data)
@@ -75,10 +83,10 @@ export default function EditBrand() {
             <Form
                 autoComplete="off"
                 onFinish={onFinish}
-                style={{ maxWidth: 550 }}
+                style={{ maxWidth: 800 }}
             >
-                <Row gutter={[0, 8]} className='mt-1'>
-                    <Col span={24}>
+                <Row gutter={[16, 8]} className='mt-1'>
+                    <Col span={12}>
                         <FormItem
                             label="Название"
                             labelCol={{ span: 24 }}
@@ -92,7 +100,7 @@ export default function EditBrand() {
                             />
                         </FormItem>
                     </Col>
-                    <Col span={24}>
+                    <Col span={12}>
                         <FormItem
                             label="Порядок"
                             labelCol={{ span: 24 }}
@@ -107,7 +115,7 @@ export default function EditBrand() {
                             />
                         </FormItem>
                     </Col>
-                    <Col span={12} className="mt-1">
+                    <Col span={8} className="mt-1">
                         <ImageUpload
                             maxCount={1}
                             fileList={brand?.image} 
@@ -115,13 +123,21 @@ export default function EditBrand() {
                         />
                         <StyledText>Загрузить главный логотип</StyledText>
                     </Col>
-                    <Col span={12} className="mt-1">
+                    <Col span={8} className="mt-1">
                         <ImageUpload
                             maxCount={1}
                             fileList={brand?.secondary_image} 
                             onChange={(info) => changeBrand('secondary_image', info.fileList)}
                         />
                         <StyledText>Загрузить второй логотип</StyledText>
+                    </Col>
+                    <Col span={8} className="mt-1">
+                        <ImageUpload
+                            maxCount={1}
+                            fileList={brand?.third_image} 
+                            onChange={(info) => changeBrand('third_image', info.fileList)}
+                        />
+                        <StyledText>Загрузить третий логотип</StyledText>
                     </Col>
                     <Col span={24} className="mt-2">
                         <Space size="large">

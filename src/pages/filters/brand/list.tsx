@@ -55,28 +55,40 @@ export default function Brands() {
             dataIndex: 'custom_order',
             key: 'custom_order',
             ellipsis: true,
+            width: 100
         },
         {
             title: 'Главный логотип',
             dataIndex: 'image',
             key: 'image',
             ellipsis: true,
-            render: (_, record) => (
+            render: (_, record) => record.image ? (
                 <Popover content={content(record.image?.file)} trigger="click">
                     <Button type='default' size='small' shape='round'>Просмотреть</Button>
                 </Popover>
-            ),
+            ) : '',
         },
         {
             title: '2-й логотип',
             dataIndex: 'secondary_image',
             key: 'secondary_image',
             ellipsis: true,
-            render: (_, record) => (
+            render: (_, record) => record.secondary_image ? (
                 <Popover content={content(record.secondary_image?.file)} trigger="click">
                     <Button type='default' size='small' shape='round'>Просмотреть</Button>
                 </Popover>
-            ),
+            ) : '',
+        },
+        {
+            title: '3-й логотип',
+            dataIndex: 'third_image',
+            key: 'third_image',
+            ellipsis: true,
+            render: (_, record) => record.third_image ? (
+                <Popover content={content(record.third_image?.file)} trigger="click">
+                    <Button type='default' size='small' shape='round'>Просмотреть</Button>
+                </Popover>
+            ) : '',
         },
         {
             title: 'Действия',
@@ -117,7 +129,7 @@ export default function Brands() {
                 pagination={false}
                 columns={columns}
                 dataSource={dataSource}
-                scroll={{ y: 600, x: 800 }}
+                scroll={{ y: 600, x: 1200 }}
             />
         </Fragment>
     )

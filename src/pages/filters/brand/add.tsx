@@ -15,6 +15,7 @@ export default function AddBrand() {
         title: '',
         image: [],
         secondary_image: [],
+        third_image: [],
         custom_order: 0,
     })
     const [createBrand, { isLoading: createLoading }] = useCreateBrandMutation()
@@ -32,6 +33,7 @@ export default function AddBrand() {
             ...brand,
             image: brand.image[0]?.response?.id as ID,
             secondary_image: brand.secondary_image[0]?.response?.id as ID,
+            third_image: brand.third_image[0]?.response?.id as ID,
         }
 
         createBrand(data)
@@ -49,10 +51,10 @@ export default function AddBrand() {
             <Form
                 autoComplete="off"
                 onFinish={onFinish}
-                style={{ maxWidth: 550 }}
+                style={{ maxWidth: 800 }}
             >
-                <Row gutter={[0, 8]} className='mt-1'>
-                    <Col span={24}>
+                <Row gutter={[16, 8]} className='mt-1'>
+                    <Col span={12}>
                         <FormItem
                             label="Название"
                             labelCol={{ span: 24 }}
@@ -66,7 +68,7 @@ export default function AddBrand() {
                             />
                         </FormItem>
                     </Col>
-                    <Col span={24}>
+                    <Col span={12}>
                         <FormItem
                             label="Порядок"
                             labelCol={{ span: 24 }}
@@ -75,13 +77,12 @@ export default function AddBrand() {
                             <InputNumber
                                 size="large"
                                 placeholder="4"
-                                style={{ width: 200 }}
                                 value={brand?.custom_order}
                                 onChange={num => changeBrand('custom_order', num)} 
                             />
                         </FormItem>
                     </Col>
-                    <Col span={12} className="mt-1">
+                    <Col span={8} className="mt-1">
                         <ImageUpload
                             maxCount={1}
                             fileList={brand.image} 
@@ -89,13 +90,21 @@ export default function AddBrand() {
                         />
                         <StyledText>Загрузить главный логотип</StyledText>
                     </Col>
-                    <Col span={12} className="mt-1">
+                    <Col span={8} className="mt-1">
                         <ImageUpload
                             maxCount={1}
                             fileList={brand.secondary_image} 
                             onChange={(info) => changeBrand('secondary_image', info.fileList)}
                         />
                         <StyledText>Загрузить второй логотип</StyledText>
+                    </Col>
+                    <Col span={8} className="mt-1">
+                        <ImageUpload
+                            maxCount={1}
+                            fileList={brand.third_image} 
+                            onChange={(info) => changeBrand('third_image', info.fileList)}
+                        />
+                        <StyledText>Загрузить третий логотип</StyledText>
                     </Col>
                     <Col span={24} className="mt-2">
                         <Space size="large">

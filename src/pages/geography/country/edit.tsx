@@ -33,13 +33,13 @@ export default function EditCountry() {
         if(!countryData) return;
         setCountry({
             ...countryData,
-            flag: [{
+            flag: countryData.flag ? [{
                 uid: uuid(),
-                response: countryData?.flag,
+                response: countryData.flag,
                 status: 'done',
                 name: 'country.png',
-                url: countryData?.flag.file
-            }],
+                url: countryData.flag.file
+            }] : [],
         })
     }, [countryData])
 
@@ -124,7 +124,6 @@ export default function EditCountry() {
                     </Col>
                     <Col span={24}>
                         <FormItem
-                            name="country_code"
                             label="Код страны"
                             labelCol={{ span: 24 }}
                             wrapperCol={{ span: 24 }}
@@ -140,7 +139,6 @@ export default function EditCountry() {
                     </Col>
                     <Col span={24}>
                         <FormItem
-                            name="IP"
                             label="IP-адрес"
                             labelCol={{ span: 24 }}
                             wrapperCol={{ span: 24 }}

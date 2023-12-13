@@ -33,13 +33,13 @@ export default function EditCollection() {
         if(!collectionData) return;
         setCollection({
             ...collectionData,
-            image: [{
+            image: collectionData.image ? [{
                 uid: uuid(),
-                response: collectionData?.image,
+                response: collectionData.image,
                 status: 'done',
                 name: 'collection.png',
-                url: collectionData?.image?.file
-            }],
+                url: collectionData.image?.file
+            }] : [],
             categories: collectionData.categories.map(category => category.id)
         })
     }, [collectionData])
