@@ -31,9 +31,12 @@ export function Main({ onClick, onSetID, category }: MainProps) {
     })
 
     const [createProduct, { isLoading: createLoading }] = useCreateProductMutation()
-    const { data: brands, isLoading: brandsLoading } = useFetchBrandsQuery({})
+    const { data: brands, isLoading: brandsLoading } = useFetchBrandsQuery({
+        is_active: true
+    })
     const { data: category_types, isLoading: categoryTypesLoading } = useFetchCategoryTypesQuery({
-        category: category
+        category: category,
+        is_active: true
     })
 
     // ---------------- Product ----------------
@@ -112,7 +115,6 @@ export function Main({ onClick, onSetID, category }: MainProps) {
                             label="Название продукта"
                             labelCol={{ span: 24 }}
                             wrapperCol={{ span: 24 }}
-                            rules={[{ required: true, message: 'Пожалуйста заполните поле' }]}
                         >
                             <Input 
                                 size="large" 
@@ -125,7 +127,6 @@ export function Main({ onClick, onSetID, category }: MainProps) {
                             label="Вторичное название продукта"
                             labelCol={{ span: 24 }}
                             wrapperCol={{ span: 24 }}
-                            rules={[{ required: true, message: 'Пожалуйста заполните поле' }]}
                         >
                             <Input 
                                 size="large" 
@@ -157,7 +158,11 @@ export function Main({ onClick, onSetID, category }: MainProps) {
                                 onChange={(value: ID) => changeProduct('brand', value)}
                             />
                         </FormItem>
-                        <FormItem label="Тип названия категории" labelCol={{ span: 24 }} wrapperCol={{ span: 24 }}>
+                        <FormItem 
+                            label="Тип названия категории" 
+                            labelCol={{ span: 24 }} 
+                            wrapperCol={{ span: 24 }}
+                        >
                             <CustomSelect
                                 allowClear
                                 size="large"
@@ -171,7 +176,11 @@ export function Main({ onClick, onSetID, category }: MainProps) {
                                 onChange={(value: ID) => changeProduct('category_type', value)}
                             />
                         </FormItem>
-                        <FormItem label="Внешний URL-адрес" labelCol={{ span: 24 }} wrapperCol={{ span: 24 }}>
+                        <FormItem 
+                            label="Внешний URL-адрес" 
+                            labelCol={{ span: 24 }} 
+                            wrapperCol={{ span: 24 }}
+                        >
                             <Input.TextArea
                                 rows={5}
                                 size="large"

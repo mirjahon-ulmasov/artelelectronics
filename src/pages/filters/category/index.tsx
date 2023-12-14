@@ -15,7 +15,7 @@ export function Category() {
 			<Route path="/:categoryID/edit" element={<EditCategory />} />
 			<Route path="/:categoryID/type" element={<CategoryType />} />
 			<Route path="/:categoryID/color" element={<CategoryColor />} />
-			<Route path="/:categoryID/property" element={<CategoryProperty />} />
+			<Route path="/:categoryID/property/*" element={<CategoryProperty />} />
 		</Routes>
     );
 }

@@ -6,6 +6,7 @@ export declare namespace District {
 
     interface DTO {
         id: ID
+        region: ID
         latitude: string
         longitude: string
         languages: Language[]

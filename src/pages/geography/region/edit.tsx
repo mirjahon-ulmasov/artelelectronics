@@ -24,15 +24,14 @@ export default function EditRegion() {
     })
 
     const { data: regionData } = useFetchRegionQuery(regionID as ID)
-    const { data: countries, isLoading: loadingCountry } = useFetchCountriesQuery({})
+    const { data: countries, isLoading: loadingCountry } = useFetchCountriesQuery({
+        is_active: true
+    })
     const [updateRegion, { isLoading: updateLoading }] = useUpdateRegionMutation()
 
     useEffect(() => {
         if(!regionData) return;
-        setRegion(({
-            ...regionData,
-            country: 1 // TODO
-        }))
+        setRegion(regionData)
     }, [regionData])
 
     const changeRegion = useCallback((key: keyof Region.DTOLocal, value: unknown) => {

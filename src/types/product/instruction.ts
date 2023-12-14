@@ -1,5 +1,5 @@
-import { UploadFile } from "antd"
-import { ID, Language } from "../others/api"
+import { UploadFile } from 'antd'
+import { ID, Language } from '../others/api'
 
 // -------------- Instruction --------------
 export declare namespace Instruction {
@@ -8,7 +8,6 @@ export declare namespace Instruction {
     interface DTO {
         id: ID
         file: File
-        image: File
         is_active: boolean
         languages: EXLanguage[]
     }
@@ -16,17 +15,35 @@ export declare namespace Instruction {
     interface DTOLocal {
         id?: ID
         file: UploadFile[]
-        image: UploadFile[]
         languages: EXLanguage[]
     }
 
-    interface DTOUpload extends Omit<DTOLocal, 'file' | 'image'> {
+    interface DTOUpload extends Omit<DTOLocal, 'file'> {
         file: ID
-        image: ID
         product: ID
     }
 
     interface EXLanguage extends Language {
         description: string
+    }
+}
+
+export declare namespace InstructionImage {
+
+    interface DTOLocal {
+        images: ImageLocal[]
+    }
+    interface DTOUpload extends Omit<DTOLocal, 'images'> {
+        product_instruction: ID
+        images: ImageUpload[]
+    }
+
+    interface ImageLocal {
+        color: ID
+        image: UploadFile[]
+    }
+
+    interface ImageUpload extends Omit<ImageLocal, 'image'> { 
+        image: ID
     }
 }

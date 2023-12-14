@@ -24,9 +24,10 @@ export default function CategoryColor() {
     const { data: colors, isLoading: colorsLoading } = useFetchColorsQuery({
         is_active: true
     })
-    const { data: categoryColors, isError } = useFetchCategoryColorsQuery({
-        category: categoryID
-    })
+    const { data: categoryColors, isError } = useFetchCategoryColorsQuery(
+        { category: category?.slug },
+        { skip: !category?.slug }
+    )
 
     const [ addCategoryColor, { isLoading: createLoading }] = useAddCategoryColorMutation()
 

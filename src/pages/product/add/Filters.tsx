@@ -36,10 +36,10 @@ export function Filters({ onClick, product, category }: FilterProps) {
     })
 
     const { data: colors, isLoading: colorsLoading } = useFetchCategoryColorsQuery({
-        category: product.category.id
+        category: product.category.slug
     })
     const { data: properties, isLoading: propertiesLoading } = useFetchCategoryPropertiesQuery({
-        category: product.category.id
+        category: product.category.slug
     })
 
     const [createProductColors, { isLoading: createLoading }] = useCreateProductColorMutation()

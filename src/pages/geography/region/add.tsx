@@ -21,7 +21,9 @@ export default function AddRegion() {
             { title: '', language: LANGUAGE.EN },
         ]
     })
-    const { data: countries, isLoading: loadingCountry } = useFetchCountriesQuery({})
+    const { data: countries, isLoading: loadingCountry } = useFetchCountriesQuery({
+        is_active: true
+    })
     const [createRegion, { isLoading: createLoading }] = useCreateRegionMutation()
 
     const changeRegion = useCallback((key: keyof Region.DTOLocal, value: unknown) => {

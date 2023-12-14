@@ -29,6 +29,7 @@ export declare namespace Product {
 
     interface Category {
         id: ID
+        slug: string
         title: string
         is_active?: boolean
     }

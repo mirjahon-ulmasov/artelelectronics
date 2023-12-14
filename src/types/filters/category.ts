@@ -8,6 +8,7 @@ export declare namespace Category {
 
     interface DTO {
         id: ID
+        slug: string
         parent: null
         image: File
         secondary_file: File

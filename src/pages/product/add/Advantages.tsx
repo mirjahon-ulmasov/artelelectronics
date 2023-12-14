@@ -160,6 +160,7 @@ export function Advantages({ onClick, product, category }: AdvantagesProps) {
                         >
                             <Input.TextArea
                                 showCount
+                                maxLength={190}
                                 style={{ height: 120 }}
                                 placeholder="Описание"
                                 value={getValue(advantage, 'description')}

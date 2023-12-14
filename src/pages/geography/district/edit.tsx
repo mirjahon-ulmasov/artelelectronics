@@ -26,15 +26,14 @@ export default function EditDistrict() {
     })
 
     const { data: districtData } = useFetchDistrictQuery(districtID as ID)
-    const { data: regions, isLoading: loadingRegion } = useFetchRegionsQuery({})
+    const { data: regions, isLoading: loadingRegion } = useFetchRegionsQuery({
+        is_active: true,
+    })
     const [updateDistrict, { isLoading: updateLoading }] = useUpdateDistrictMutation()
 
     useEffect(() => {
         if(!districtData) return;
-        setDistrict({
-            ...districtData,
-            region: 1 // TODO
-        })
+        setDistrict(districtData)
     }, [districtData])
 
     const changeDistrict = useCallback((key: keyof District.DTOLocal, value: unknown) => {

@@ -3,15 +3,19 @@ import { useNavigate } from 'react-router-dom'
 import { Button, Col, Form, Input, Row, Space } from 'antd'
 import toast from 'react-hot-toast'
 import _ from 'lodash'
-import { useCreateInstructionMutation } from 'services'
 import { 
-    BorderBox, LanguageToggle, StyledText, 
-    FormItem, StyledTextL2, ImageUpload, FileUpload 
+    useCreateInstructionImagesMutation, useCreateInstructionMutation, 
+    useFetchProductColorsQuery 
+} from 'services'
+import { 
+    BorderBox, LanguageToggle, StyledText, Color,
+    FormItem, StyledTextL2, ImageUpload, FileUpload, CustomSelect 
 } from 'components'
-import { Instruction } from 'types/product/instruction'
+import { Instruction, InstructionImage } from 'types/product/instruction'
 import { Product } from 'types/product/product';
 import { ID, LANGUAGE } from 'types/others/api'
 import { languages } from 'utils/index'
+import { PlusOutlined } from '@ant-design/icons'
 
 interface InstructionsProps {
     product: Product.DTO
@@ -23,15 +27,23 @@ export function Instructions({ product, category }: InstructionsProps) {
     const [language, setLanguage] = useState<LANGUAGE>(LANGUAGE.RU)
     const [instruction, setInstruction] = useState<Instruction.DTOLocal>({ 
         file: [], 
-        image: [], 
         languages: [
             { title: '', description: '', language: LANGUAGE.UZ },
             { title: '', description: '', language: LANGUAGE.RU },
             { title: '', description: '', language: LANGUAGE.EN },
         ],
     })
+    const [instructionImages, setInstructionImages] = useState<InstructionImage.DTOLocal>({ 
+        images: [
+            { color: '', image: [] }
+        ]
+    })
 
+    const { data: colors, isLoading: colorsLoading } = useFetchProductColorsQuery({
+        product: product.id
+    })
     const [createInstruction, { isLoading: loading }] = useCreateInstructionMutation()
+    const [createInstructionImage, { isLoading: loadingImages }] = useCreateInstructionImagesMutation()
 
     // ---------------- Product Instruction ----------------
 
@@ -65,28 +77,59 @@ export function Instructions({ product, category }: InstructionsProps) {
         return ''
     }, [instruction.languages, language])
 
+
+    // ---------------- Instruction Image -------------------
+
+    const changeInstructionImage = useCallback(
+        (idx: number, key: keyof InstructionImage.ImageLocal, value: unknown) => {
+        setInstructionImages(prev => ({
+            ...prev,
+            images: prev.images.map((el, index) => {
+                if(index === idx) {
+                    return {
+                        ...el,
+                        [key]: value
+                    }
+                }
+                return el
+            })
+        }))
+    }, [])
+
+    const addNewInstructionImage = useCallback(() => {
+        setInstructionImages(prev => ({
+            ...prev,
+            images: [
+                ...prev.images,
+                { color: '', image: [] }
+            ]
+        }))
+    }, [])
+
     // ---------------- Submit ----------------
     const onFinish = () => {
         const dataInstruction: Instruction.DTOUpload = {
             product: product.id,
             languages: instruction.languages,
             file: instruction.file[0]?.response?.id as ID,
-            image: instruction.image[0]?.response?.id as ID
         }
 
-        const promises = [
-            createInstruction(dataInstruction).unwrap(),
-        ];
-
-        Promise.all(promises)
-            .then(() => {
+        createInstruction(dataInstruction).unwrap().then(res => {
+            const dataInstructionImages: InstructionImage.DTOUpload = {
+                product_instruction: res.id as ID,
+                images: instructionImages.images.map(el => ({
+                    ...el,
+                    image: el.image[0]?.response?.id as ID
+                }))
+            }
+            createInstructionImage(dataInstructionImages).unwrap().then(() => {
                 toast.success("Инструкции по продукту успешно добавлены.");
                 navigate({
                     pathname: '/product/list',
                     search: `?category=${category}`
                 })
-            })
-            .catch(() => toast.error("Что-то пошло не так"));
+            }).catch(() => toast.error("Что-то пошло не так"))
+        }).catch(() => toast.error("Что-то пошло не так"))
     };
 
     return (
@@ -127,14 +170,6 @@ export function Instructions({ product, category }: InstructionsProps) {
                                 onChange={e => changeInstructionInfo('description', e.target.value)}
                             />
                         </FormItem>
-                        <div>
-                            <ImageUpload
-                                maxCount={1}
-                                fileList={instruction.image} 
-                                onChange={(info) => changeInstruction('image', info.fileList)}
-                            />
-                            <StyledText>Загрузить фото</StyledText>
-                        </div>
                         <FileUpload
                             label='Загрузить Pdf'
                             fileList={instruction.file} 
@@ -142,6 +177,61 @@ export function Instructions({ product, category }: InstructionsProps) {
                         />
                     </BorderBox>
                 </Col>
+                <Col span={24}>
+                    <BorderBox>
+                        {instructionImages.images.map((el, index) => (
+                            <div className='d-flex fd-col gap-16 ai-start' key={index}>
+                                <FormItem
+                                    label="Цвет продукта"
+                                    style={{ width: 250 }}
+                                    labelCol={{ span: 24 }}
+                                    wrapperCol={{ span: 24 }}
+                                >
+                                    <CustomSelect
+                                        allowClear
+                                        size="large"
+                                        placeholder="Выберите"
+                                        loading={colorsLoading}
+                                        options={colors?.map(prodColor => ({
+                                            value: prodColor.color.id,
+                                            label: (
+                                                <div className='d-flex gap-12 jc-start'>
+                                                    <Color link={prodColor.color?.image?.file} />
+                                                    {prodColor.color.title}
+                                                </div>
+                                            ),
+                                        }))}
+                                        value={el.color || undefined}
+                                        onChange={(value: ID) => changeInstructionImage(
+                                            index, 'color', value, 
+                                        )}
+                                    />
+                                </FormItem>
+                                <div>
+                                    <ImageUpload
+                                        maxCount={1}
+                                        fileList={el.image} 
+                                        onChange={(info) => changeInstructionImage(index, 'image', info.fileList)}
+                                    />
+                                    <StyledText>Загрузить фото</StyledText>
+                                </div>
+                            </div>
+                        ))}
+                    </BorderBox>
+                    <div className='d-flex mt-1'>
+                        <Button 
+                            type='text' 
+                            size='large'
+                            shape='round'
+                            onClick={addNewInstructionImage}
+                            icon={<PlusOutlined />} 
+                            style={{ fontWeight: 400 }} 
+                        >
+                            Добавить еще
+                        </Button>
+                    </div>
+                </Col>
+
                 <Col span={24} className='mt-2'>
                     <Space size="large">
                         <Button
@@ -149,7 +239,7 @@ export function Instructions({ product, category }: InstructionsProps) {
                             type="primary"
                             htmlType="submit"
                             shape="round"
-                            loading={loading}
+                            loading={loading || loadingImages}
                         >
                             Сохранить
                         </Button>

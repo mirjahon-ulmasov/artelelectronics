@@ -1,4 +1,4 @@
-import { Instruction } from 'types/product/instruction'
+import { Instruction, InstructionImage } from 'types/product/instruction'
 import { ID } from 'types/others/api'
 import { api } from '../auth/baseQuery'
 
@@ -20,9 +20,17 @@ export const instructionsAPI = instructionsWithTags.injectEndpoints({
             }),
             providesTags: () => ['Instruction'],
         }),
-        createInstruction: build.mutation<unknown, Instruction.DTOUpload>({
+        createInstruction: build.mutation<Instruction.DTOUpload, Instruction.DTOUpload>({
             query: data => ({
                 url: '/product_instruction/',
+                method: 'POST',
+                body: data,
+            }),
+            invalidatesTags: ['Instruction'],
+        }),
+        createInstructionImages: build.mutation<unknown, InstructionImage.DTOUpload>({
+            query: data => ({
+                url: '/instruction_image/bulk_create/',
                 method: 'POST',
                 body: data,
             }),
@@ -56,6 +64,7 @@ export const instructionsAPI = instructionsWithTags.injectEndpoints({
 export const {
     useFetchInstructionsQuery,
     useCreateInstructionMutation,
+    useCreateInstructionImagesMutation,
     useUpdateInstructionMutation,
     useDeleteInstructionMutation,
     useActivateInstructionMutation,

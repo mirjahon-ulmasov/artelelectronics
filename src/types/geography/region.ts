@@ -6,6 +6,7 @@ export declare namespace Region {
 
     interface DTO {
         id: ID
+        country: ID
         languages: Language[]
         is_active?: boolean
     }

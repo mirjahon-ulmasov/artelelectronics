@@ -23,7 +23,9 @@ export default function AddDistrict() {
             { title: '', language: LANGUAGE.EN },
         ]
     })
-    const { data: regions, isLoading: loadingRegion } = useFetchRegionsQuery({})
+    const { data: regions, isLoading: loadingRegion } = useFetchRegionsQuery({
+        is_active: true
+    })
     const [createDistrict, { isLoading: createLoading }] = useCreateDistrictMutation()
 
     const changeDistrict = useCallback((key: keyof District.DTOLocal, value: unknown) => {
