@@ -32,3 +32,4 @@ export * from './geography/district'
 // ------------ Others ------------
 export * from './others/news'
 export * from './others/store'
+export * from './others/media'

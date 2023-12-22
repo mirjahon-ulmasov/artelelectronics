@@ -1,4 +1,4 @@
-import { Fragment, useCallback, useState } from 'react'
+import { Fragment, useCallback, useMemo, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import toast from 'react-hot-toast'
 import { 
@@ -6,16 +6,15 @@ import {
     Form, Input, Row, Space, Typography 
 } from 'antd'
 import dayjs from 'dayjs'
-import ReactQuill from 'react-quill'
 import { 
     FormItem, ImageUpload, StyledText,
     BorderBox, LanguageToggle, CustomDatePicker, CustomSelect 
 } from 'components'
 import { useCreateNewsMutation } from 'services'
 import { formatDate, getNewsType, languages } from 'utils/index'
-import { modules, formats } from 'utils/richtext'
 import { ID, LANGUAGE } from 'types/others/api'
 import { NEWS, News } from 'types/others/news'
+import CustomizedReactQuill from 'components/ReactQuill'
 
 const { Title } = Typography
 
@@ -48,7 +47,7 @@ export default function AddNews() {
     }, [])
 
     const changeNewsContent = useCallback((key: keyof News.Content, value: string) => {
-
+        console.log(key, value);
         if (key === 'content' && value === '<p><br></p>') return;
 
         setNews(prev => ({
@@ -88,7 +87,7 @@ export default function AddNews() {
                 navigate("/news/list")
             })
             .catch(() => toast.error("Не удалось добавить новость"))
-    }   
+    }
 
     return (
         <Fragment>
@@ -141,11 +140,8 @@ export default function AddNews() {
                                 wrapperCol={{ span: 24 }}
                                 rules={[{ required: true, message: 'Пожалуйста заполните поле' }]}
                             >
-                                <ReactQuill
-                                    theme="snow"
-                                    modules={modules}
-                                    formats={formats}
-                                    onChange={value => changeNewsContent('content', value)}
+                                <CustomizedReactQuill
+                                    onChange={(value) => changeNewsContent('content', value)}
                                     value={getValue('content')}
                                 />
                             </FormItem>
