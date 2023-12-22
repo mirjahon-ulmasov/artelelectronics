@@ -2,7 +2,7 @@ import { File as BucketFile } from 'types/others/api'
 import { api } from '../auth/baseQuery'
 
 const mediaWithTags = api.enhanceEndpoints({
-    addTagTypes: ['Store'],
+    addTagTypes: ['Media'],
 })
 
 export const mediaAPI = mediaWithTags.injectEndpoints({
@@ -13,7 +13,7 @@ export const mediaAPI = mediaWithTags.injectEndpoints({
                 method: 'POST',
                 body: data
             }),
-            invalidatesTags: ['Store'],
+            invalidatesTags: ['Media'],
         }),
     }),
 })
