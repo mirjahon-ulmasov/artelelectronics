@@ -47,7 +47,6 @@ export default function AddNews() {
     }, [])
 
     const changeNewsContent = useCallback((key: keyof News.Content, value: string) => {
-        console.log(key, value);
         if (key === 'content' && value === '<p><br></p>') return;
 
         setNews(prev => ({
