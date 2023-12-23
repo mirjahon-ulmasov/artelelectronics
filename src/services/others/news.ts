@@ -13,9 +13,10 @@ interface SearchParams {
 export const newsAPI = newsWithTags.injectEndpoints({
     endpoints: build => ({
         fetchNewsList: build.query<News.List, SearchParams>({
-            query: () => ({
+            query: params => ({
                 url: '/news/admin_view/',
                 method: 'GET',
+                params
             }),
             providesTags: () => ['News'],
         }),

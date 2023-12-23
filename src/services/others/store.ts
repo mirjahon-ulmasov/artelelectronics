@@ -13,9 +13,10 @@ interface SearchParams {
 export const storeAPI = storeWithTags.injectEndpoints({
     endpoints: build => ({
         fetchStores: build.query<Store.List, SearchParams>({
-            query: () => ({
+            query: params => ({
                 url: '/store/admin_view/',
                 method: 'GET',
+                params
             }),
             providesTags: () => ['Store'],
         }),

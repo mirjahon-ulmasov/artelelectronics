@@ -14,7 +14,7 @@ export declare namespace Product {
         dynamic_view?: File
         languages: ExLanguage[]
         advantages: Advantage.List
-        is_published: boolean
+        is_published?: boolean
         is_active?: boolean
     }
 

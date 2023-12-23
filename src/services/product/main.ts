@@ -57,9 +57,9 @@ export const productAPI = productWithTags.injectEndpoints({
             }),
             invalidatesTags: () => [{ type: 'Product', id: 'LIST' }],
         }),
-        publishProduct: build.mutation<unknown, { id: ID, is_published: boolean }>({
+        publishProduct: build.mutation<unknown, { slug: string, is_published: boolean }>({
             query: data => ({
-                url: `/product/${data.id}/publish/`,
+                url: `/product/${data.slug}/publish/`,
                 method: 'PATCH',
                 body: data
             }),

@@ -3,13 +3,16 @@ import { useLocation, useNavigate } from 'react-router-dom'
 import { Button, Col, Row, Table, TableProps, Typography } from 'antd'
 import type { ColumnsType, FilterValue, SorterResult } from 'antd/es/table/interface'
 import toast from 'react-hot-toast'
+import { isArray } from 'lodash'
+import { v4 as uuid } from 'uuid'
 import { 
     useDeleteProductMutation, useFetchBrandsQuery, 
-    useFetchProductsQuery 
+    useFetchProductsQuery, 
+    usePublishProductMutation
 } from 'services/index'
+import { Status } from 'components/Status'
 import { useQuery } from 'hooks/useQuery'
 import { Product } from 'types/product/product'
-import { isArray } from 'lodash'
 import { ID } from 'types/others/api'
 
 const { Title } = Typography
@@ -27,7 +30,15 @@ export default function Products() {
     const [sorters, setSorters] = useState<SorterResult<TableDTO>[]>([]);    
     const [filters, setFilters] = useState<Record<string, FilterValue | null>>({})  
 
-    const [deleteProduct, { isLoading: deleteLoading }] = useDeleteProductMutation()   
+    const [
+        deleteProduct, 
+        { isLoading: deleteLoading, originalArgs: deletedArgs }
+    ] = useDeleteProductMutation() 
+
+    const [
+        publishProduct, 
+        { isLoading: publishLoading, originalArgs: publishedArgs }
+    ] = usePublishProductMutation()   
 
     const { data: brands } = useFetchBrandsQuery({})
     const { data: products } = useFetchProductsQuery({
@@ -45,10 +56,7 @@ export default function Products() {
     })
 
     const dataSource: TableDTO[] = useMemo(() => {
-        return products?.map((el, idx) => ({
-            ...el,
-            key: idx.toString()
-        })) || []
+        return products?.map(el => ({ ...el, key: uuid() })) || []
     }, [products])
 
     // ---------------- Table Change ----------------
@@ -78,6 +86,12 @@ export default function Products() {
             .catch(() => toast.error('Что-то пошло не так'))
     }, [deleteProduct])
 
+    const publishProductHandler = useCallback((slug: string, is_published: boolean) => {
+        publishProduct({ slug, is_published }).unwrap()
+            .then(() => toast.success('Статус новости успешно изменен'))
+            .catch(() => toast.error('Что-то пошло не так'))
+    }, [publishProduct])
+
     const columns: ColumnsType<TableDTO> = [
         {
             title: 'Название',
@@ -106,29 +120,48 @@ export default function Products() {
             render: (_, record) => record.category?.title,
         },
         {
+            title: 'Статус',
+            dataIndex: 'is_published',
+            key: 'is_published',
+            ellipsis: true,
+            width: 200,
+            render: (_, record) => record.is_published 
+                ? <Status type='active' value>Опубликовано</Status> 
+                : <Status type='active' value={false}>Не опубликовано</Status>,
+        },
+        {
             title: 'Действия',
             key: 'action',
-            width: 300,
+            width: 420,
             render: (_, record) => (
                <Row>
-                    <Col>
+                    <Col flex="100px">
                         <Button 
                             danger 
                             type='text' 
-                            loading={deleteLoading} 
+                            loading={deleteLoading && deletedArgs === record.slug} 
                             onClick={() => deleteProductHandler(record.slug)}
                         >
                             Удалить
                         </Button>
                     </Col>
-                    <Col>
+                    <Col flex="100px">
                         <Button 
                             type='text' 
                             onClick={() => navigate({ pathname: `/product/${record.slug}/edit`, search })}
                         >
                             Изменить
                         </Button>
-                    </Col>  
+                    </Col>
+                    <Col flex="100px">
+                        <Button
+                            type='text' 
+                            loading={publishLoading && publishedArgs?.slug === record.slug} 
+                            onClick={() => publishProductHandler(record.slug, !record.is_published)}
+                        >
+                           {record.is_published ? 'Не публиковать' : 'Публиковать'}
+                        </Button>
+                    </Col>
                </Row>
             ),
         },

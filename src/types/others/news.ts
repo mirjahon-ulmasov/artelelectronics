@@ -9,11 +9,13 @@ export declare namespace News {
     interface DTO {
         id: ID
         image: File
-        publish_date: string
         news_type: NEWS
+        publish_date: string
         external_source_url: string
-        add_to_carousel: boolean
         languages: Content[]
+        add_to_carousel: boolean
+        is_published?: boolean
+        is_active?: boolean
     }
 
     interface DTOLocal extends Omit<DTO, 'image' | 'id' | 'publish_date'> {
@@ -37,6 +39,6 @@ export declare namespace News {
 }
 
 export enum NEWS {
-    ARTICLE = "article",
-    EVENT = "event",
+    ARTICLE = 'article',
+    EVENT = 'event',
 }
