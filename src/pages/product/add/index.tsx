@@ -12,6 +12,7 @@ import { Images } from './Images'
 import { Variants } from './Variants'
 import { Advantages } from './Advantages'
 import { Instructions } from './Instructions'
+import { Videos } from './Videos'
 
 const { Title } = Typography
 
@@ -46,9 +47,10 @@ export default function AddProduct() {
                         <Button {...getButtonType(1)}>Главная</Button>
                         <Button {...getButtonType(2)} onClick={() => setProgress(2)}>Фильтры</Button>
                         <Button {...getButtonType(3)} onClick={() => setProgress(3)}>Изображений</Button>
-                        <Button {...getButtonType(4)} onClick={() => setProgress(4)}>Варианты</Button>
-                        <Button {...getButtonType(5)} onClick={() => setProgress(5)}>Преимущества</Button>
-                        <Button {...getButtonType(6)} onClick={() => setProgress(6)}>Инструкции</Button>
+                        <Button {...getButtonType(4)} onClick={() => setProgress(4)}>Видео</Button>
+                        <Button {...getButtonType(5)} onClick={() => setProgress(5)}>Варианты</Button>
+                        <Button {...getButtonType(6)} onClick={() => setProgress(6)}>Преимущества</Button>
+                        <Button {...getButtonType(7)} onClick={() => setProgress(7)}>Инструкции</Button>
                     </Space>
                 </Col>
                 <Col span={24}>
@@ -76,20 +78,27 @@ export default function AddProduct() {
                                 />
                             )}
                             {progress === 4 && (
-                                <Variants 
+                                <Videos 
                                     onClick={goNextForm} 
                                     product={product} 
                                     category={category}
                                 />
                             )}
                             {progress === 5 && (
-                                <Advantages 
+                                <Variants 
                                     onClick={goNextForm} 
                                     product={product} 
                                     category={category}
                                 />
                             )}
                             {progress === 6 && (
+                                <Advantages 
+                                    onClick={goNextForm} 
+                                    product={product} 
+                                    category={category}
+                                />
+                            )}
+                            {progress === 7 && (
                                 <Instructions 
                                     product={product} 
                                     category={category}
