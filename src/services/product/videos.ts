@@ -27,7 +27,7 @@ export const prodVideosAPI = prodVideosWithTags.injectEndpoints({
             }),
             providesTags: () => ['ProductVideo'],
         }),
-        createProductVideo: build.mutation<unknown, ProductVideo.DTOUpload>({
+        create360Video: build.mutation<unknown, ProductVideo.DTOUpload>({
             query: data => ({
                 url: '/product_video/',
                 method: 'POST',
@@ -42,12 +42,21 @@ export const prodVideosAPI = prodVideosWithTags.injectEndpoints({
             }),
             invalidatesTags: ['ProductVideo'],
         }),
+        createFeaturedVideo: build.mutation<unknown, ProductVideo.DTOUpload>({
+            query: data => ({
+                url: '/product_featured_video/',
+                method: 'POST',
+                body: data,
+            }),
+            invalidatesTags: ['ProductVideo'],
+        }),
     }),
 })
 
 export const {
     useFetchProductVideoQuery,
     useFetchProductVideosQuery,
-    useCreateProductVideoMutation,
-    useDeleteProductVideoMutation
+    useCreate360VideoMutation,
+    useDeleteProductVideoMutation,
+    useCreateFeaturedVideoMutation
 } = prodVideosAPI

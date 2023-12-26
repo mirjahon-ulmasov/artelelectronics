@@ -11,8 +11,9 @@ import {
     FileUpload,
 } from 'components'
 import {
-    useCreateProductVideoMutation,
+    useCreate360VideoMutation,
     useFetchProductColorsQuery,
+    useCreateFeaturedVideoMutation
 } from 'services'
 import { ID } from 'types/others/api'
 import { Product } from 'types/product/product'
@@ -26,7 +27,13 @@ interface VideoProps {
 
 export function Videos({ onClick, product, category }: VideoProps) {
     const navigate = useNavigate()
-    const [prodVideo, setProdVideo] = useState<ProductVideo.DTOLocal>({
+    const [_360Video, set360Video] = useState<ProductVideo.DTOLocal>({
+        product: product.id,
+        color: '',
+        video: []
+    })
+
+    const [featuredVideo, setFeaturedVideo] = useState<ProductVideo.DTOLocal>({
         product: product.id,
         color: '',
         video: []
@@ -37,24 +44,40 @@ export function Videos({ onClick, product, category }: VideoProps) {
             product: product.id,
         })
 
-    const [createProductVideo, { isLoading: createLoading1 }] =
-        useCreateProductVideoMutation()
+    const [create360Video, { isLoading: createLoading1 }] =
+        useCreate360VideoMutation()
+
+    const [createFeaturedVideo, { isLoading: createLoading2 }] =
+        useCreateFeaturedVideoMutation()
 
     // ---------------- Product Variants ----------------
 
     const changeProdColor = useCallback((color: ID) => {
-        setProdVideo(prev => ({ ...prev, color }))
+        set360Video(prev => ({ ...prev, color }))
     }, [])
 
-    const changeProdVideo = useCallback((video: UploadFile[]) => {
-        setProdVideo(prev => ({
+    const change_360Video = useCallback((video: UploadFile[]) => {
+        set360Video(prev => ({
+            ...prev,
+            video
+        }))
+    }, [])
+
+    const changeFeaturedVideo = useCallback((video: UploadFile[]) => {
+        setFeaturedVideo(prev => ({
             ...prev,
             video
         }))
     }, [])
 
     const reset = useCallback(() => {
-        setProdVideo({
+        set360Video({
+            product: product.id,
+            color: '',
+            video: []
+        })
+
+        setFeaturedVideo({
             product: product.id,
             color: '',
             video: []
@@ -64,13 +87,19 @@ export function Videos({ onClick, product, category }: VideoProps) {
     // ---------------- Submit ----------------
     const onFinish = useCallback(
         (again?: boolean, next?: boolean) => {
-            const product_video: ProductVideo.DTOUpload = {
-                ...prodVideo,
-                video: prodVideo.video[0]?.response?.id as ID,
+            const _360_video: ProductVideo.DTOUpload = {
+                ..._360Video,
+                video: _360Video.video[0]?.response?.id as ID,
+            }
+
+            const featured_video: ProductVideo.DTOUpload = {
+                ...featuredVideo,
+                video: featuredVideo.video[0]?.response?.id as ID,
             }
 
             const promises = [
-                createProductVideo(product_video).unwrap()
+                create360Video(_360_video).unwrap(),
+                createFeaturedVideo(featured_video).unwrap()
             ]
 
             Promise.all(promises)
@@ -93,10 +122,12 @@ export function Videos({ onClick, product, category }: VideoProps) {
         },
         [
             category,
-            createProductVideo,
+            create360Video,
             navigate,
             onClick,
-            prodVideo,
+            _360Video,
+            createFeaturedVideo,
+            featuredVideo,
             reset,
         ]
     )
@@ -116,7 +147,7 @@ export function Videos({ onClick, product, category }: VideoProps) {
                             <CustomSelect
                                 allowClear
                                 size="large"
-                                value={prodVideo.color || undefined}
+                                value={_360Video.color || undefined}
                                 placeholder="Выберите"
                                 loading={colorsLoading}
                                 onChange={(value: ID) => changeProdColor(value)}
@@ -135,16 +166,23 @@ export function Videos({ onClick, product, category }: VideoProps) {
                                 }))}
                             ></CustomSelect>
                         </FormItem>
-                        <div>
-                            <BorderBox>
-                                <StyledTextL2>Видео продукта</StyledTextL2>
-                                <FileUpload
-                                    label='Загрузить видео'
-                                    fileList={prodVideo.video} 
-                                    onChange={(info) => changeProdVideo(info.fileList)}
-                                />
-                            </BorderBox>
-                        </div>
+                        <BorderBox>
+                            <StyledTextL2>360 видео продукта</StyledTextL2>
+                            <FileUpload
+                                label='Загрузить видео'
+                                fileList={_360Video.video} 
+                                onChange={(info) => change_360Video(info.fileList)}
+                            />
+                        </BorderBox>
+
+                        <BorderBox>
+                            <StyledTextL2>Магазин видео продукта</StyledTextL2>
+                            <FileUpload
+                                label='Загрузить видео'
+                                fileList={featuredVideo.video} 
+                                onChange={(info) => changeFeaturedVideo(info.fileList)}
+                            />
+                        </BorderBox>
                     </BorderBox>
                 </Col>
                 <Col span={24} className="mt-2">
