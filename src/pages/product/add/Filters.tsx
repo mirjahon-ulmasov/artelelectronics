@@ -1,16 +1,16 @@
 import { useCallback, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Button, Col, Form, Row, Space, UploadFile } from 'antd'
+import { Button, Col, Form, Row, Space } from 'antd'
 import toast from 'react-hot-toast'
 import _ from 'lodash'
 import { 
     useCreateProductColorMutation, useFetchCategoryPropertiesQuery, 
-    useImportCategoryPropertiesMutation, useAdd360ViewMutation,
+    useImportCategoryPropertiesMutation,
     useFetchCategoryColorsQuery
 } from 'services'
 import { 
     CustomSelect, BorderBox, FormItem, 
-    StyledTextL2, Color, FileUpload 
+    StyledTextL2, Color 
 } from 'components'
 import { ProductColor, ProductProperty } from 'types/product/property'
 import { Product } from 'types/product/product';
@@ -24,7 +24,6 @@ interface FilterProps {
 
 export function Filters({ onClick, product, category }: FilterProps) {
     const navigate = useNavigate();
-    // const [view360, setView360] = useState<UploadFile[]>([])
 
     const [prodColors, setProdColors] = useState<ProductColor.DTOUpload>({
         product: product.id,
@@ -44,7 +43,6 @@ export function Filters({ onClick, product, category }: FilterProps) {
 
     const [createProductColors, { isLoading: createLoading }] = useCreateProductColorMutation()
     const [importCategoryProperties, { isLoading: importLoading }] = useImportCategoryPropertiesMutation()
-    // const [add360View, { isLoading: loading360 }] = useAdd360ViewMutation()
 
     // ---------------- Product Colors ----------------
     function changeProdColors(colors: ID[]) {       
@@ -88,12 +86,6 @@ export function Filters({ onClick, product, category }: FilterProps) {
 
     // ---------------- Submit ----------------
     const onFinish = useCallback((next: boolean) => {
-
-        // const data360: Product.View360 = {
-        //     id: product.slug,
-        //     dynamic_file: view360[0]?.response?.id as ID
-        // }
-
         const properties: ProductProperty.DTOImport = {
             ...prodProperties,
             properties: prodProperties.properties.filter(property => property.items.length > 0)
@@ -103,10 +95,6 @@ export function Filters({ onClick, product, category }: FilterProps) {
             createProductColors(prodColors).unwrap(),
             importCategoryProperties(properties).unwrap(),
         ];
-
-        // if(data360.dynamic_file) {
-        //     promises.push(add360View(data360).unwrap())
-        // }
 
         Promise.all(promises)
             .then(() => {
@@ -127,16 +115,6 @@ export function Filters({ onClick, product, category }: FilterProps) {
     return (
         <Form autoComplete="off" style={{ maxWidth: 1000 }}>
             <Row gutter={[0, 20]}>
-                {/* <Col span={24}>
-                    <BorderBox>
-                        <StyledTextL2>Видео продукта</StyledTextL2>
-                        <FileUpload
-                            label='Загрузить видео'
-                            fileList={view360} 
-                            onChange={(info) => setView360(info.fileList)}
-                        />
-                    </BorderBox>
-                </Col> */}
                 <Col span={24}>
                     <BorderBox>
                         <StyledTextL2>Фильтры продукта</StyledTextL2>
