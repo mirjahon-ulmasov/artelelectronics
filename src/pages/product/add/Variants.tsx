@@ -152,6 +152,16 @@ export function Variants({ onClick, product, category }: VariantsProps) {
             }))
         }
 
+        // check if all properties are filled
+        const areAllPropertiesFilled = variant.items.every(item => {
+            return item.properties.length === properties?.length
+        })
+
+        if (!areAllPropertiesFilled) {
+            toast.error("Пожалуйста, заполните все свойства.");
+            return;
+        }
+
         const promises = [
             createVariant(variant).unwrap(),
         ];
@@ -242,6 +252,7 @@ export function Variants({ onClick, product, category }: VariantsProps) {
                                         style={{ width: 250 }}
                                         labelCol={{ span: 24 }}
                                         wrapperCol={{ span: 24 }}
+                                        required={true}
                                     >
                                         <CustomSelect
                                             allowClear
