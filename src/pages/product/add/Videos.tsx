@@ -54,6 +54,7 @@ export function Videos({ onClick, product, category }: VideoProps) {
 
     const changeProdColor = useCallback((color: ID) => {
         set360Video(prev => ({ ...prev, color }))
+        setFeaturedVideo(prev => ({ ...prev, color }))
     }, [])
 
     const change_360Video = useCallback((video: UploadFile[]) => {
@@ -192,7 +193,7 @@ export function Videos({ onClick, product, category }: VideoProps) {
                             type="default"
                             htmlType="submit"
                             shape="round"
-                            loading={createLoading1}
+                            loading={createLoading1 || createLoading2}
                             onClick={() => onFinish()}
                         >
                             Сохранить
@@ -201,7 +202,7 @@ export function Videos({ onClick, product, category }: VideoProps) {
                             shape="round"
                             size="large"
                             type="primary"
-                            loading={createLoading1}
+                            loading={createLoading1 || createLoading2}
                             onClick={() => onFinish(true)}
                         >
                             Сохранить и добавить еще
@@ -210,7 +211,7 @@ export function Videos({ onClick, product, category }: VideoProps) {
                             shape="round"
                             size="large"
                             type="primary"
-                            loading={createLoading1}
+                            loading={createLoading1 || createLoading2}
                             onClick={() => onFinish(false, true)}
                         >
                             Сохранить и продолжить
