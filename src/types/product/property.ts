@@ -27,8 +27,13 @@ export declare namespace ProductProperty {
         id: ID
         items: {
             id: ID
-            languages: Language[]
+            title: string
         }[]
+        property: {
+            id: ID
+            slug: string
+            title: string
+        }
     }
 }
 

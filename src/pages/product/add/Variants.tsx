@@ -152,6 +152,16 @@ export function Variants({ onClick, product, category }: VariantsProps) {
             }))
         }
 
+        // check if all properties are filled
+        const areAllPropertiesFilled = variant.items.every(item => {
+            return item.properties.length === properties?.length
+        })
+
+        if (!areAllPropertiesFilled) {
+            toast.error("Пожалуйста, заполните все свойства.");
+            return;
+        }
+
         const promises = [
             createVariant(variant).unwrap(),
         ];
@@ -238,10 +248,11 @@ export function Variants({ onClick, product, category }: VariantsProps) {
                                 {properties?.map((property, idx) => (
                                     <FormItem
                                         key={property.id}
-                                        label={property.languages[1]?.title}
+                                        label={property.property.title}
                                         style={{ width: 250 }}
                                         labelCol={{ span: 24 }}
                                         wrapperCol={{ span: 24 }}
+                                        required={true}
                                     >
                                         <CustomSelect
                                             allowClear
@@ -250,7 +261,7 @@ export function Variants({ onClick, product, category }: VariantsProps) {
                                             loading={propertiesLoading}
                                             options={property.items?.map(item => ({
                                                 value: item.id,
-                                                label: item.languages[1]?.title,
+                                                label: item.title,
                                             }))}
                                             value={prodVariant.properties[idx]}
                                             onChange={(value: ID) => changeProductVariantProperties(
